@@ -1,6 +1,6 @@
 {
   "name": "@bigcommerce/storefront-data-hooks",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/index.js",
   "repository": "git@github.com:bigcommerce-labs/storefront-data-hooks.git",
   "license": "MIT",
