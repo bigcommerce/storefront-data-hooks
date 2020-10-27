@@ -1,7 +1,7 @@
 {
   "name": "@bigcommerce/storefront-data-hooks",
-  "version": "1.0.1",
-  "main": "dist/index.js",
+  "version": "1.0.2",
+  "main": "index.js",
   "repository": "git@github.com:bigcommerce-labs/storefront-data-hooks.git",
   "license": "MIT",
   "files": [
@@ -11,7 +11,6 @@
     "cart",
     "commerce",
     "products",
-    "scripts",
     "wishlist"
   ],
   "scripts": {
