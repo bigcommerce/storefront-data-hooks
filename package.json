@@ -5,10 +5,18 @@
   "repository": "git@github.com:bigcommerce-labs/storefront-data-hooks.git",
   "license": "MIT",
   "files": [
-    "dist"
+    "*.js",
+    "*.d.ts",
+    "api",
+    "cart",
+    "commerce",
+    "products",
+    "scripts",
+    "wishlist"
   ],
   "scripts": {
-    "build": "rimraf dist && tsc && cp src/schema.d.ts dist/schema.d.ts",
+    "clean": "rimraf *.js *.d.ts api cart commerce products scripts wishlist",
+    "build": "npm run clean && tsc && cp src/schema.d.ts schema.d.ts",
     "prepublish": "npm run build"
   },
   "prettier": {

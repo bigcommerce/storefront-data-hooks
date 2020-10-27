@@ -1,2 +1,11 @@
 dist
 node_modules
+
+*.js
+*.d.ts
+api
+cart
+commerce
+products
+scripts
+wishlist
