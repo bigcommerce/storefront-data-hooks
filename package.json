@@ -17,7 +17,9 @@
   "scripts": {
     "clean": "rimraf *.js *.d.ts api cart commerce products scripts wishlist",
     "build": "npm run clean && tsc && cp src/schema.d.ts schema.d.ts",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "generate": "graphql-codegen",
+    "generate:definitions": "node src/scripts/generate-definitions.js"
   },
   "prettier": {
     "semi": false,
@@ -31,11 +33,17 @@
     "swr": "0.3.6"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^1.19.0",
+    "@graphql-codegen/schema-ast": "^1.17.8",
+    "@graphql-codegen/typescript": "^1.17.11",
+    "@graphql-codegen/typescript-operations": "^1.17.8",
+    "@manifoldco/swagger-to-ts": "^2.1.0",
     "@types/cookie": "^0.4.0",
     "@types/js-cookie": "^2.2.6",
     "@types/lodash.debounce": "^4.0.6",
     "@types/node": "^14.14.3",
     "@types/react": "^16.9.53",
+    "graphql": "^15.4.0",
     "next": "^9.5.5",
     "prettier": "^2.1.2",
     "rimraf": "^3.0.2",
