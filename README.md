@@ -8,4 +8,4 @@ UI hooks and data fetching methods built from the ground up for e-commerce appli
 - Code splitted data fetching methods for initial data population and static generation of content
 - Helpers to create the API endpoints that connect to the hooks, very well suited for Next.js applications
 
-While we're missing the docs, you can check how the package works in a live demo: [commerce-demo.vercel.app](https://commerce-demo.vercel.app/) ([repo](https://github.com/vercel/commerce))
+While we're missing the docs, you can check how the package works in a live demo: [demo.vercel.store](https://demo.vercel.store/) ([repo](https://github.com/vercel/commerce))
