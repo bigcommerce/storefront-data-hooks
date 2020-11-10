@@ -65,8 +65,9 @@ const App = ({ locale = 'en-US', children }) => {
   return (
     <CommerceProvider locale={locale}>
       {children}
-    </CommerceProvider>);
-};
+    </CommerceProvider>
+  )
+}
 ...
 ```
 
@@ -92,7 +93,7 @@ const LoginView = () => {
     <form onSubmit={handleLogin}>
       {children}
     </form>
-  );
+  )
 }
 ...
 ```
@@ -125,7 +126,7 @@ import useCustomer from '@bigcommerce/storefront-data-hooks/use-customer'
 ...
 
 const Profile = () => {
-  const { data } = useCustomer();
+  const { data } = useCustomer()
 
   if (!data) {
     return null
@@ -133,7 +134,7 @@ const Profile = () => {
 
   return (
     <div>Hello, {data.firstName}</div>
-  );
+  )
 }
 ```
 
@@ -161,7 +162,7 @@ const SignupView = () => {
     <form onSubmit={handleSignup}>
       {children}
     </form>
-  );
+  )
 }
 ...
 ```
