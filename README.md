@@ -55,7 +55,7 @@ BIGCOMMERCE_STORE_API_CLIENT_ID=<>
 
 ### CommerceProvider
 
-This component is a provider pattern component creates a creates a commerce context for it's children. It takes config values for the locale and an optional `fetcherRef` object for data fetching.
+This component is a provider pattern component that creates commerce context for it's children. It takes config values for the locale and an optional `fetcherRef` object for data fetching.
 
 ```
 ...
