@@ -57,15 +57,17 @@ BIGCOMMERCE_STORE_API_CLIENT_ID=<>
 
 This component is a provider pattern component that creates commerce context for it's children. It takes config values for the locale and an optional `fetcherRef` object for data fetching.
 
-```
+```jsx
 ...
 import { CommerceProvider } from '@bigcommerce/storefront-data-hooks'
 
 const App = ({ locale = 'en-US', children }) => {
-  return (<CommerceProvider locale={locale}>
-    {children}
-  </CommerceProvider>);
-};
+  return (
+    <CommerceProvider locale={locale}>
+      {children}
+    </CommerceProvider>
+  )
+}
 ...
 ```
 
@@ -73,7 +75,7 @@ const App = ({ locale = 'en-US', children }) => {
 
 Hook for bigcommerce user login functionality, returns `login` function to handle user login.
 
-```
+```jsx
 ...
 import useLogin from '@bigcommerce/storefront-data-hooks/use-login'
 
@@ -91,7 +93,7 @@ const LoginView = () => {
     <form onSubmit={handleLogin}>
       {children}
     </form>
-  );
+  )
 }
 ...
 ```
@@ -100,7 +102,7 @@ const LoginView = () => {
 
 Hook to logout user.
 
-```
+```jsx
 ...
 import useLogout from '@bigcommerce/storefront-data-hooks/use-logout'
 
@@ -118,13 +120,13 @@ const LogoutLink = () => {
 
 Hook for getting logged in customer data, and fetching customer info.
 
-```
+```jsx
 ...
 import useCustomer from '@bigcommerce/storefront-data-hooks/use-customer'
 ...
 
 const Profile = () => {
-  const { data } = useCustomer();
+  const { data } = useCustomer()
 
   if (!data) {
     return null
@@ -132,7 +134,7 @@ const Profile = () => {
 
   return (
     <div>Hello, {data.firstName}</div>
-  );
+  )
 }
 ```
 
@@ -140,7 +142,7 @@ const Profile = () => {
 
 Hook for bigcommerce user signup, returns `signup` function to handle user signups.
 
-```
+```jsx
 ...
 import useSignup from '@bigcommerce/storefront-data-hooks/use-login'
 
@@ -160,7 +162,7 @@ const SignupView = () => {
     <form onSubmit={handleSignup}>
       {children}
     </form>
-  );
+  )
 }
 ...
 ```
@@ -169,7 +171,7 @@ const SignupView = () => {
 
 Helper hook to format price according to commerce locale, and return discount if available.
 
-```
+```jsx
 import usePrice from '@bigcommerce/storefront-data-hooks/use-price'
 ...
   const { price, discount, basePrice } = usePrice(
@@ -187,7 +189,7 @@ import usePrice from '@bigcommerce/storefront-data-hooks/use-price'
 
 Returns the current cart data for use
 
-```
+```jsx
 ...
 import useCart from '@bigcommerce/storefront-data-hooks/cart/use-cart'
 
@@ -199,13 +201,13 @@ const CartNumber = () => {
   const { data } = useCart()
   const itemsCount = Object.values(data?.line_items ?? {}).reduce(countItems, 0)
 
-  return itemsCount > 0 && <span>{itemsCount}</span>
+  return itemsCount > 0 ? <span>{itemsCount}</span> : null
 }
 ```
 
 ### useAddItem
 
-```
+```jsx
 ...
 import useAddItem from '@bigcommerce/storefront-data-hooks/cart/use-add-item'
 
@@ -226,25 +228,28 @@ const AddToCartButton = ({ productId, variantId }) => {
 
 ### useUpdateItem
 
-```
+```jsx
 ...
 import useUpdateItem from '@bigcommerce/storefront-data-hooks/cart/use-update-item'
 
 const CartItem = ({ item }) => {
   const [quantity, setQuantity] = useState(item.quantity)
   const updateItem = useUpdateItem(item)
+  
   const updateQuantity = async (e) => {
     const val = e.target.value
     await updateItem({ quantity: val })
   }
 
-  return <input
-    type="number"
-    max={99}
-    min={0}
-    value={quantity}
-    onChange={updateQuantity}
-  />
+  return (
+    <input
+      type="number"
+      max={99}
+      min={0}
+      value={quantity}
+      onChange={updateQuantity}
+    />
+  )
 }
 ...
 ```
@@ -253,12 +258,13 @@ const CartItem = ({ item }) => {
 
 Provided with a cartItemId, will remove an item from the cart:
 
-```
+```jsx
 ...
 import useRemoveItem from '@bigcommerce/storefront-data-hooks/cart/use-remove-item'
 
 const RemoveButton = ({ item }) => {
   const removeItem = useRemoveItem()
+  
   const handleRemove = async () => {
     await removeItem({ id: item.id })
   }
@@ -272,15 +278,12 @@ const RemoveButton = ({ item }) => {
 
 Wishlist hooks are similar to cart hooks. See the below example for how to use `useWishlist`, `useAddItem`, and `useRemoveItem`.
 
-```
+```jsx
 import useAddItem from '@bigcommerce/storefront-data-hooks/wishlist/use-add-item'
 import useRemoveItem from '@bigcommerce/storefront-data-hooks/wishlist/use-remove-item'
 import useWishlist from '@bigcommerce/storefront-data-hooks/wishlist/use-wishlist'
 
-const WishlistButton = ({
-  productId,
-  variant,
-}) => {
+const WishlistButton = ({ productId, variant }) => {
   const addItem = useAddItem()
   const removeItem = useRemoveItem()
   const { data } = useWishlist()
@@ -291,7 +294,7 @@ const WishlistButton = ({
       item.variant_id === variant?.node.entityId
   )
 
-  const handleWishlistChange = async (e: any) => {
+  const handleWishlistChange = async (e) => {
     e.preventDefault()
 
     if (!customer) {
@@ -322,10 +325,9 @@ const WishlistButton = ({
 
 `useSearch` handles searching the bigcommerce storefront product catalog by catalog, brand, and query string.
 
-```
+```jsx
 ...
 import useSearch from '@bigcommerce/storefront-data-hooks/products/use-search'
-
 
 const SearchPage = ({ searchString, category, brand, sortStr }) => {
   const { data } = useSearch({
@@ -335,11 +337,13 @@ const SearchPage = ({ searchString, category, brand, sortStr }) => {
     sort: sortStr || '',
   })
 
-  return (<Grid layout="normal">
-    {data.products.map(({ node }) => (
-	  <ProductCard key={node.path} product={node} />
-    ))}
-  </Grid>)
+  return (
+    <Grid layout="normal">
+      {data.products.map(({ node }) => (
+        <ProductCard key={node.path} product={node} />
+      ))}
+    </Grid>
+  )
 }
 ```
 
@@ -347,7 +351,7 @@ const SearchPage = ({ searchString, category, brand, sortStr }) => {
 
 API function to retrieve a product list.
 
-```
+```js
 import { getConfig } from '@bigcommerce/storefront-data-hooks/api'
 import getAllProducts from '@bigcommerce/storefront-data-hooks/api/operations/get-all-products'
 
@@ -363,7 +367,7 @@ const { products } = await getAllProducts({
 API product to retrieve a single product when provided with the product
 slug string.
 
-```
+```js
 import { getConfig } from '@bigcommerce/storefront-data-hooks/api'
 import getProduct from '@bigcommerce/storefront-data-hooks/api/operations/get-product'
 
