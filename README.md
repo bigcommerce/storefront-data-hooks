@@ -38,7 +38,7 @@ UI hooks and data fetching methods built from the ground up for e-commerce appli
 To install:
 
 ```
-yarn add storefront-data-hooks
+yarn add @bigcommerce/storefront-data-hooks
 ```
 
 After install, the first thing you do is: <b>set your environment variables</b> in `.env.local`
@@ -235,7 +235,7 @@ import useUpdateItem from '@bigcommerce/storefront-data-hooks/cart/use-update-it
 const CartItem = ({ item }) => {
   const [quantity, setQuantity] = useState(item.quantity)
   const updateItem = useUpdateItem(item)
-  
+
   const updateQuantity = async (e) => {
     const val = e.target.value
     await updateItem({ quantity: val })
@@ -264,7 +264,7 @@ import useRemoveItem from '@bigcommerce/storefront-data-hooks/cart/use-remove-it
 
 const RemoveButton = ({ item }) => {
   const removeItem = useRemoveItem()
-  
+
   const handleRemove = async () => {
     await removeItem({ id: item.id })
   }
