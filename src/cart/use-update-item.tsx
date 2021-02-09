@@ -51,7 +51,7 @@ function extendHook(customFetcher: typeof fetcher, cfg?: { wait?: number }) {
           itemId: input.id ?? item?.id,
           item: {
             productId: input.productId ?? item?.product_id,
-            variantId: input.productId ?? item?.variant_id,
+            variantId: input.variantId ?? item?.variant_id,
             quantity: input.quantity,
           },
         })
