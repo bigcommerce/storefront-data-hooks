@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import type { HookFetcher } from './commerce/utils/types'
+import type { FetcherOptions, HookFetcher } from './commerce/utils/types'
 import { CommerceError } from './commerce/utils/errors'
 import useCommerceLogin from './commerce/use-login'
 import type { LoginBody } from './api/customers/login'
@@ -32,9 +32,17 @@ export const fetcher: HookFetcher<null, LoginBody> = (
 }
 
 export function extendHook(customFetcher: typeof fetcher) {
-  const useLogin = () => {
+
+  function useLogin(): (input: LoginInput) => Promise<null>;
+  function useLogin<T extends FetcherOptions>({ options }: { options: FetcherOptions } ): T extends FetcherOptions ?
+    (input: unknown) => Promise<null> :
+    (input: LoginInput) => Promise<null>;
+
+  function useLogin(params?: { options: FetcherOptions }) {
+    const options = params?.options || {}
     const { revalidate } = useCustomer()
-    const fn = useCommerceLogin<null, LoginInput>(defaultOpts, customFetcher)
+
+    const fn = useCommerceLogin<null, LoginInput>(options, customFetcher)
 
     return useCallback(
       async function login(input: LoginInput) {
