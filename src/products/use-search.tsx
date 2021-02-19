@@ -11,13 +11,17 @@ const defaultOpts = {
 export type SearchProductsInput = {
   search?: string
   categoryId?: number
+  categoryIds?: number[]
   brandId?: number
   sort?: string
 }
+export type SearchProductsPayload = Omit<SearchProductsInput, "categoryIds"> & {
+  stringifiedCategoryIds?: string // JSON.stringify(number[])
+}
 
-export const fetcher: HookFetcher<SearchProductsData, SearchProductsInput> = (
+export const fetcher: HookFetcher<SearchProductsData, SearchProductsPayload> = (
   options,
-  { search, categoryId, brandId, sort },
+  { search, categoryId, stringifiedCategoryIds, brandId, sort },
   fetch
 ) => {
   // Use a dummy base as we only care about the relative path
@@ -26,8 +30,13 @@ export const fetcher: HookFetcher<SearchProductsData, SearchProductsInput> = (
   if (search) url.searchParams.set('search', search)
   if (Number.isInteger(categoryId))
     url.searchParams.set('category', String(categoryId))
-  if (Number.isInteger(categoryId))
-    url.searchParams.set('brand', String(brandId))
+  const categoryIds: SearchProductsInput["categoryIds"] = JSON.parse(stringifiedCategoryIds || '')
+  if (
+    categoryIds &&
+    categoryIds.every((categoryId: number) => Number.isInteger(Number(categoryId)))
+  )
+    url.searchParams.set('categories', categoryIds.join(','))
+  if (Number.isInteger(brandId)) url.searchParams.set('brand', String(brandId))
   if (sort) url.searchParams.set('sort', sort)
 
   return fetch({
@@ -38,14 +47,19 @@ export const fetcher: HookFetcher<SearchProductsData, SearchProductsInput> = (
 
 export function extendHook(
   customFetcher: typeof fetcher,
-  swrOptions?: SwrOptions<SearchProductsData, SearchProductsInput>
+  swrOptions?: SwrOptions<SearchProductsData, SearchProductsPayload>
 ) {
   const useSearch = (input: SearchProductsInput = {}) => {
+    if (input.categoryId) {
+      console.warn(`categoryId (number) will be deprecated in favor of categoryIds (number[]) in the next major release.`)
+    }
+    // SWR doesn't support nested arrays as key, so it's necessary to stringify it
     const response = useCommerceSearch(
       defaultOpts,
       [
         ['search', input.search],
         ['categoryId', input.categoryId],
+        ['stringifiedCategoryIds', JSON.stringify(input.categoryIds)],
         ['brandId', input.brandId],
         ['sort', input.sort],
       ],
