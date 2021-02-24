@@ -30,9 +30,10 @@ export const fetcher: HookFetcher<SearchProductsData, SearchProductsPayload> = (
   if (search) url.searchParams.set('search', search)
   if (Number.isInteger(categoryId))
     url.searchParams.set('category', String(categoryId))
-  const categoryIds: SearchProductsInput["categoryIds"] = JSON.parse(stringifiedCategoryIds || '')
+  const categoryIds: SearchProductsInput["categoryIds"] = JSON.parse(stringifiedCategoryIds || '[]')
   if (
     categoryIds &&
+    categoryIds.length > 0 &&
     categoryIds.every((categoryId: number) => Number.isInteger(Number(categoryId)))
   )
     url.searchParams.set('categories', categoryIds.join(','))
