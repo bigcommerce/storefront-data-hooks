@@ -98,6 +98,18 @@ const LoginView = () => {
 ...
 ```
 
+#### Login SSO
+
+To authenticate a user using the Customer Login API, it's necessary to point the `useLogin` hook to your own authentication endpoint.
+
+```jsx
+const login = useLogin({
+  url: '/api/your-own-authentication',
+})
+```
+
+That authentication endpoint have to return a `Set-Cookie` header with `SHOP_TOKEN=your_customer_authentication_token`. [See an example.](https://gist.github.com/jorgemasta/c709b63501344970026f3a3e7646cc77)
+
 ### useLogout
 
 Hook to logout user.
