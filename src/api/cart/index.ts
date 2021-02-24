@@ -16,7 +16,7 @@ type OptionSelections = {
 
 export type ItemBody = {
   productId: number
-  variantId: number
+  variantId?: number
 	quantity?: number
 	optionSelections?: OptionSelections
 }

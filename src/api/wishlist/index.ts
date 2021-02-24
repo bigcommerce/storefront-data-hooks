@@ -16,7 +16,7 @@ export type { Wishlist, WishlistItem }
 
 export type ItemBody = {
   productId: number
-  variantId: number
+  variantId?: number
 }
 
 export type AddItemBody = { item: ItemBody }
