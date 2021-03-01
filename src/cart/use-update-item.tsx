@@ -3,7 +3,7 @@ import debounce from 'lodash.debounce'
 import type { HookFetcher } from '.././commerce/utils/types'
 import { CommerceError } from '.././commerce/utils/errors'
 import useCartUpdateItem from '.././commerce/cart/use-update-item'
-import type { ItemBody, UpdateItemBody } from '../api/cart'
+import type { ItemBody, PhysicalItem, UpdateItemBody } from '../api/cart'
 import { fetcher as removeFetcher } from './use-remove-item'
 import useCart, { Cart } from './use-cart'
 
@@ -38,7 +38,7 @@ export const fetcher: HookFetcher<Cart | null, UpdateItemBody> = (
 }
 
 function extendHook(customFetcher: typeof fetcher, cfg?: { wait?: number }) {
-  const useUpdateItem = (item?: any) => {
+  const useUpdateItem = (item: PhysicalItem) => {
     const { mutate } = useCart()
     const fn = useCartUpdateItem<Cart | null, UpdateItemBody>(
       defaultOpts,
@@ -51,7 +51,7 @@ function extendHook(customFetcher: typeof fetcher, cfg?: { wait?: number }) {
           itemId: input.id ?? item?.id,
           item: {
             productId: input.productId ?? item?.product_id,
-            variantId: input.productId ?? item?.variant_id,
+            variantId: input.variantId ?? item?.variant_id,
             quantity: input.quantity,
           },
         })

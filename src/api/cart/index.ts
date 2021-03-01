@@ -16,7 +16,7 @@ type OptionSelections = {
 
 export type ItemBody = {
   productId: number
-  variantId: number
+  variantId?: number
 	quantity?: number
 	optionSelections?: OptionSelections
 }
@@ -27,7 +27,85 @@ export type UpdateItemBody = { itemId: string; item: ItemBody }
 
 export type RemoveItemBody = { itemId: string }
 
-// TODO: this type should match:
+export type Coupon = {
+  code: string
+  id: string
+  coupon_type: string
+  discounted_amount: number
+}
+export type Discount = {
+  id: number
+  discounted_amount: number
+}
+export type Option = {
+  name?: string
+  name_id?: number
+  value?: string
+  value_id?: number
+}
+
+export type BaseItem = {
+  id: string
+  variant_id: number
+  product_id: number
+  sku?: string
+  name?: string
+  url?: string
+  quantity: number
+  is_taxable?: boolean
+  image_url?: string
+  discounts?: Discount[]
+  coupons?: Coupon[]
+  discount_amount?: number
+  coupon_amount?: number
+  list_price?: number
+  sale_price?: number
+  extended_list_price?: number
+  extended_sale_price?: number
+  options?: Option[]
+}
+
+export type CustomItem = {
+  id: string
+  sku?: string
+  name?: string
+  quantity?: number
+  list_price?: number
+  extended_list_price?: number
+}
+
+export type PhysicalItem = BaseItem & {
+  is_require_shipping?: boolean
+  gift_wrapping?: {
+    name?: string
+    message?: string
+    amount?: number
+  }
+}
+
+export type DigitalItem = BaseItem & {
+  download_file_urls?: string[]
+  download_page_url?: string
+  download_size: string
+}
+
+export type Gift_Certificate = {
+  id: string
+  name: string
+  theme: string
+  amount: number
+  is_taxable?: boolean
+  sender: {
+    name?: string
+    email?: string
+  }
+  receipt: {
+    name?: string
+    email?: string
+  }
+  message?: string
+}
+
 // https://developer.bigcommerce.com/api-reference/cart-checkout/server-server-cart-api/cart/getacart#responses
 export type Cart = {
   id: string
@@ -39,13 +117,17 @@ export type Cart = {
   base_amount: number
   discount_amount: number
   cart_amount: number
+  coupons?: Coupon[]
+  discounts?: Discount[]
   line_items: {
-    custom_items: any[]
-    digital_items: any[]
-    gift_certificates: any[]
-    physical_items: any[]
+    physical_items: PhysicalItem[]
+    digital_items: DigitalItem[]
+    gift_certificates: Gift_Certificate[]
+    custom_items: CustomItem[]
   }
-  // TODO: add missing fields
+  created_time: string
+  updated_time: string
+  channel_id: number
 }
 
 export type CartHandlers = {

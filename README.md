@@ -21,6 +21,7 @@ Table of Contents
          * [useSearch](#usesearch)
          * [getAllProducts](#getallproducts)
          * [getProduct](#getproduct)
+      * [Troubleshooting](#troubleshooting)
       * [More](#more)
 
 # BigCommerce Storefront Data Hooks
@@ -97,6 +98,18 @@ const LoginView = () => {
 }
 ...
 ```
+
+#### Login SSO
+
+To authenticate a user using the Customer Login API, it's necessary to point the `useLogin` hook to your own authentication endpoint.
+
+```jsx
+const login = useLogin({
+  url: '/api/your-own-authentication',
+})
+```
+
+That authentication endpoint have to return a `Set-Cookie` header with `SHOP_TOKEN=your_customer_authentication_token`. [See an example.](https://gist.github.com/jorgemasta/c709b63501344970026f3a3e7646cc77)
 
 ### useLogout
 
@@ -377,6 +390,16 @@ const { product } = await getProduct({
   preview,
 })
 ```
+
+## Troubleshooting
+<details>
+  <summary>When I try to create a customer with <code>useSignup</code>, I receive an error but the user is created</summary>
+
+  The `useSignup` hooks tries to login the user after creating it. Probably you have an error with the login. Checkout that your have your store **Open** since if the store is *Down for Maintenance* the users can't login.
+  ![image](https://user-images.githubusercontent.com/4943868/102613733-f46abd80-412a-11eb-8438-744be2351512.png)
+
+  Thanks @Strapazzon 🚀
+</details>
 
 ## More
 

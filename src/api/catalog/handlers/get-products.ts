@@ -11,7 +11,7 @@ const LIMIT = 12
 // Return current cart info
 const getProducts: ProductsHandlers['getProducts'] = async ({
   res,
-  body: { search, category, brand, sort },
+  body: { search, category, categories, brand, sort },
   config,
 }) => {
   // Use a dummy base as we only care about the relative path
@@ -22,8 +22,13 @@ const getProducts: ProductsHandlers['getProducts'] = async ({
 
   if (search) url.searchParams.set('keyword', search)
 
-  if (category && Number.isInteger(Number(category)))
-    url.searchParams.set('categories:in', category)
+  const categoriesIn = [...categories?.split(',') || [], category].reduce((acc, category) => {
+    if (category && Number.isInteger(Number(category))) return [...acc, category]
+    return acc
+  }, [] as string[])
+
+  if (categoriesIn.length > 0)
+    url.searchParams.set('categories:in', categoriesIn.join(','))
 
   if (brand && Number.isInteger(Number(brand)))
     url.searchParams.set('brand_id', brand)

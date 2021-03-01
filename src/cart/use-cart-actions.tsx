@@ -4,9 +4,9 @@ import useUpdateItem from './use-update-item'
 
 // This hook is probably not going to be used, but it's here
 // to show how a commerce should be structuring it
-export default function useCartActions() {
+export default function useCartActions(item: any) {
   const addItem = useAddItem()
-  const updateItem = useUpdateItem()
+  const updateItem = useUpdateItem(item)
   const removeItem = useRemoveItem()
 
   return { addItem, updateItem, removeItem }
