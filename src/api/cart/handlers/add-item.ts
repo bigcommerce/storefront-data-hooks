@@ -5,7 +5,7 @@ import type { CartHandlers } from '..'
 // Return current cart info
 const addItem: CartHandlers['addItem'] = async ({
   res,
-  body: { cartId, item },
+  body: { cartId, locale, item },
   config,
 }) => {
   if (!item) {
@@ -22,6 +22,9 @@ const addItem: CartHandlers['addItem'] = async ({
       line_items: [parseCartItem(item)],
       ...(!cartId && config.storeChannelId
         ? { channel_id: config.storeChannelId }
+        : {}),
+      ...(!cartId
+        ? { locale }
         : {}),
     }),
   }
