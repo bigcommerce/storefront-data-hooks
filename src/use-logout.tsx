@@ -5,7 +5,7 @@ import useCustomer from './use-customer'
 
 const defaultOpts = {
   url: '/api/bigcommerce/customers/logout',
-  method: 'GET',
+  method: 'POST',
 }
 
 export const fetcher: HookFetcher<null> = (options, _, fetch) => {

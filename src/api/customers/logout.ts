@@ -10,7 +10,7 @@ export type LogoutHandlers = {
   logout: BigcommerceHandler<null, { redirectTo?: string }>
 }
 
-const METHODS = ['GET']
+const METHODS = ['POST']
 
 const logoutApi: BigcommerceApiHandler<null, LogoutHandlers> = async (
   req,
