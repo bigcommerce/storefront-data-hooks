@@ -57,7 +57,7 @@ async function login({
 
   if (cookie && typeof cookie === 'string') {
     const { host } = request.headers
-    // Set the a TLD cookie to make it accessible on subdomains
+    // Set the cookie at TLD to make it accessible on subdomains
     cookie = cookie + `; Domain=${host?.includes(':') ? host?.slice(0, host.indexOf(':')) : host}`
 
     // In development, don't set a secure cookie or the browser will ignore it
