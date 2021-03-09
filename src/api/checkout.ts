@@ -5,7 +5,7 @@ import createApiHandler, {
 import { BigcommerceApiError } from './utils/errors'
 
 const METHODS = ['GET']
-const fullCheckout = true
+const fullCheckout = false
 
 // TODO: a complete implementation should have schema validation for `req.body`
 const checkoutApi: BigcommerceApiHandler<any> = async (req, res, config) => {
@@ -32,7 +32,6 @@ const checkoutApi: BigcommerceApiHandler<any> = async (req, res, config) => {
       return
     }
 
-    // TODO: make the embedded checkout work too!
     const html = `
       <!DOCTYPE html>
         <html lang="en">
