@@ -3,6 +3,7 @@ import login from '../../operations/login'
 import { SignupHandlers } from '../signup'
 
 const signup: SignupHandlers['signup'] = async ({
+  req,
   res,
   body: { firstName, lastName, email, password },
   config,
@@ -54,7 +55,7 @@ const signup: SignupHandlers['signup'] = async ({
   }
 
   // Login the customer right after creating it
-  await login({ variables: { email, password }, res, config })
+  await login({ variables: { email, password }, req, res, config })
 
   res.status(200).json({ data: null })
 }
