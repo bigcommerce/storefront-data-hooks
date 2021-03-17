@@ -23,14 +23,9 @@ export const fetcher: HookFetcher<Order[] | null, UseOrdersInput> = async (
 ) => {
   if (!customerId) return null
 
-  // Use a dummy base as we only care about the relative path
-  const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
-
-  url.searchParams.set('customer_id', String(customerId))
   const data = await fetch<OrdersData | null>({
+    ...defaultOpts,
     ...options,
-    url: url.pathname + url.search,
-    method: options?.method ?? defaultOpts.method,
   })
   return data?.orders ?? null
 }

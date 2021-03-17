@@ -105,7 +105,7 @@ export type OrdersData = {
 }
 
 export type OrdersHandlers = {
-  getOrders: BigcommerceHandler<OrdersData, { customer_id?: string }>
+  getOrders: BigcommerceHandler<OrdersData, { customerToken?: string }>
 }
 
 const METHODS = ['GET']
@@ -116,10 +116,15 @@ const ordersApi: BigcommerceApiHandler<
 > = async ( req, res, config, handlers) => {
   if (!isAllowedMethod(req, res, METHODS)) return
 
+  const { cookies } = req
+  const customerToken = cookies[config.customerCookie]
+
   try {
     // Return current orders info
     if (req.method === 'GET') {
-      const body = req.query
+      const body = {
+        customerToken,
+      }
       return await handlers['getOrders']({ req, res, config, body })
     }
 
