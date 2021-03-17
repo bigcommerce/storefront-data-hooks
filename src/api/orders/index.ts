@@ -13,7 +13,7 @@ type FormField = {
 
 // This type should match:
 // https://developer.bigcommerce.com/api-reference/store-management/orders/orders/getallorders#responses
-export type Order = {
+type Order = {
   id: number,
   date_modified: string,
   date_shipped: string,
@@ -100,24 +100,23 @@ export type Order = {
   default_currency_code: string,
 }
 
-export type OrdersData = {
-  orders: Order[]
-}
+export type Orders =  Order[]
 
 export type OrdersHandlers = {
-  getOrders: BigcommerceHandler<OrdersData, { customerToken?: string }>
+  getOrders: BigcommerceHandler<Orders, { customerToken?: string }>
 }
 
 const METHODS = ['GET']
 
 const ordersApi: BigcommerceApiHandler<
-  OrdersData,
+  Orders,
   OrdersHandlers
 > = async ( req, res, config, handlers) => {
   if (!isAllowedMethod(req, res, METHODS)) return
 
   const { cookies } = req
   const customerToken = cookies[config.customerCookie]
+
 
   try {
     // Return current orders info

@@ -1,4 +1,4 @@
-import type { Order, OrdersHandlers } from '..'
+import type { Orders, OrdersHandlers } from '..'
 import getCustomerId from '../../operations/get-customer-id'
 
 const getOrders: OrdersHandlers['getOrders'] = async ({
@@ -6,7 +6,7 @@ const getOrders: OrdersHandlers['getOrders'] = async ({
   body: { customerToken },
   config,
 }) => {
-  let result: Order[] = []
+  let result: Orders = []
   if (customerToken) {
     const customerId = customerToken && (await getCustomerId({ customerToken, config }))
 
@@ -25,7 +25,7 @@ const getOrders: OrdersHandlers['getOrders'] = async ({
     })
   }
 
-  res.status(200).json({ data: { orders: result } })
+  res.status(200).json({ data: result ?? null })
 }
 
 export default getOrders
