@@ -3,6 +3,7 @@ import createApiHandler, {
   BigcommerceHandler,
 } from '../utils/create-api-handler'
 import isAllowedMethod from '../utils/is-allowed-method'
+import warnDeprecatedMethod from '../utils/warn-deprecated-method'
 import { BigcommerceApiError } from '../utils/errors'
 import logout from './handlers/logout'
 
@@ -11,6 +12,7 @@ export type LogoutHandlers = {
 }
 
 const METHODS = ['POST']
+const DEPRECATED_METHODS = ['GET']
 
 const logoutApi: BigcommerceApiHandler<null, LogoutHandlers> = async (
   req,
@@ -18,7 +20,8 @@ const logoutApi: BigcommerceApiHandler<null, LogoutHandlers> = async (
   config,
   handlers
 ) => {
-  if (!isAllowedMethod(req, res, METHODS)) return
+  if (!isAllowedMethod(req, res, [...METHODS, ...DEPRECATED_METHODS])) return
+  warnDeprecatedMethod(req, DEPRECATED_METHODS)
 
   try {
     const redirectTo = req.query.redirect_to
