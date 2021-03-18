@@ -2,7 +2,7 @@
 ### Embedded checkout
 
 - Now the `SHOP_TOKEN` is set at TLD (Top Level Domain) so the subdomain (where the embedded checkout iframe lives) can access the token
-- Added a new section in the readme with some notes about how to make the checkout works
+- Added a new section in the readme with some notes about how to make the checkout work
 - Modified the `logout` endpoint to be `POST` to prevent unwanted caching
 
 *Resolves [#36](https://github.com/bigcommerce/storefront-data-hooks/issues/36)*
@@ -13,7 +13,7 @@
 Allow to fetch the orders using a new `useOrders` hook.
 
 - If the user is not logged in, nothing is returned.
-- If the user is logged in, it returns an array with his orders.
+- If the user is logged in, it returns an array with their orders.
 - Get the customer ID on the server (through the token) to avoid security issues.
 
 *Resolves [#25](https://github.com/bigcommerce/storefront-data-hooks/issues/25)*
