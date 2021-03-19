@@ -5,6 +5,7 @@ import type { LoginHandlers } from '../login'
 const invalidCredentials = /invalid credentials/i
 
 const loginHandler: LoginHandlers['login'] = async ({
+  req,
   res,
   body: { email, password },
   config,
@@ -21,7 +22,7 @@ const loginHandler: LoginHandlers['login'] = async ({
   // and numeric characters.
 
   try {
-    await login({ variables: { email, password }, config, res })
+    await login({ variables: { email, password }, config, req, res })
   } catch (error) {
     // Check if the email and password didn't match an existing account
     if (

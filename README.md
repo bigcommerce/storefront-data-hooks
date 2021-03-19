@@ -21,6 +21,7 @@ Table of Contents
          * [useSearch](#usesearch)
          * [getAllProducts](#getallproducts)
          * [getProduct](#getproduct)
+      * [Checkout](#checkout)
       * [Troubleshooting](#troubleshooting)
       * [More](#more)
 
@@ -390,6 +391,19 @@ const { product } = await getProduct({
   preview,
 })
 ```
+
+## Checkout
+
+> The checkout only works on **production** and with a custom domain
+
+The recommended method is the [Embedded Checkout](https://developer.bigcommerce.com/api-docs/storefronts/embedded-checkout/embedded-checkout-tutorial), follow the tutorial to create a channel and a site. Notes:
+
+- The channel should be of type `storefront`
+- The site url must be your production url (e.g: https://mystorefront.com)
+- This package takes care of the cart and redirect links creation
+- Your bigcommerce storefront must be a subdomain of your headless storefront (eg: https://bc.mystorefront.com)
+
+![example image](https://cdn-std.droplr.net/files/acc_896732/CSo83V)
 
 ## Troubleshooting
 <details>

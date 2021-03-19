@@ -21,7 +21,7 @@ export type ItemBody = {
 	optionSelections?: OptionSelections
 }
 
-export type AddItemBody = { item: ItemBody }
+export type AddItemBody = { item: ItemBody, locale?: string }
 
 export type UpdateItemBody = { itemId: string; item: ItemBody }
 
