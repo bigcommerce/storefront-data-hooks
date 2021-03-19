@@ -401,7 +401,7 @@ The recommended method is the [Embedded Checkout](https://developer.bigcommerce.
 - The channel should be of type `storefront`
 - The site url must be your production url (e.g: https://mystorefront.com)
 - This package takes care of the cart and redirect links creation
-- Your bigcommerce store must be a subdomain of your headless store (eg: https://bc.mystorefront.com)
+- Your bigcommerce storefront must be a subdomain of your headless storefront (eg: https://bc.mystorefront.com)
 
 ![example image](https://cdn-std.droplr.net/files/acc_896732/CSo83V)
 
