@@ -12,6 +12,7 @@ export type SearchProductsInput = {
   search?: string
   categoryId?: number
   categoryIds?: number[]
+  page?: number
   brandId?: number
   sort?: string
 }
@@ -21,13 +22,14 @@ export type SearchProductsPayload = Omit<SearchProductsInput, "categoryIds"> & {
 
 export const fetcher: HookFetcher<SearchProductsData, SearchProductsPayload> = (
   options,
-  { search, categoryId, stringifiedCategoryIds, brandId, sort },
+  { search, categoryId, stringifiedCategoryIds, brandId, sort, page },
   fetch
 ) => {
   // Use a dummy base as we only care about the relative path
   const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
 
   if (search) url.searchParams.set('search', search)
+  if (page) url.searchParams.set('page', String(page))
   if (Number.isInteger(categoryId))
     url.searchParams.set('category', String(categoryId))
   const categoryIds: SearchProductsInput["categoryIds"] = JSON.parse(stringifiedCategoryIds || '[]')
@@ -63,6 +65,7 @@ export function extendHook(
         ['stringifiedCategoryIds', JSON.stringify(input.categoryIds)],
         ['brandId', input.brandId],
         ['sort', input.sort],
+        ['page', input.page],
       ],
       customFetcher,
       { revalidateOnFocus: false, ...swrOptions }
