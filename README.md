@@ -106,7 +106,9 @@ To authenticate a user using the Customer Login API, it's necessary to point the
 
 ```jsx
 const login = useLogin({
-  url: '/api/your-own-authentication',
+  options: {
+    url: '/api/your-own-authentication'
+  },
 })
 ```
 
