@@ -54,6 +54,16 @@ type AggregatedInventory {
 }
 
 """
+Author
+"""
+type Author {
+  """
+  Author name.
+  """
+  name: String!
+}
+
+"""
 Brand
 """
 type Brand implements Node {
@@ -106,6 +116,7 @@ type Brand implements Node {
     after: String
     first: Int
     last: Int
+    hideOutOfStock: Boolean
   ): ProductConnection!
 
   """
@@ -360,6 +371,7 @@ type Category implements Node {
     after: String
     first: Int
     last: Int
+    hideOutOfStock: Boolean
   ): ProductConnection!
 
   """
@@ -695,6 +707,42 @@ type DisplayField {
 }
 
 """
+Distance
+"""
+type Distance {
+  """
+  Distance in specified length unit
+  """
+  value: Float!
+
+  """
+  Length unit
+  """
+  lengthUnit: LengthUnit!
+}
+
+"""
+Filter locations by the distance
+"""
+input DistanceFilter {
+  """
+  Radius of search in length units specified in lengthUnit argument
+  """
+  radius: Float!
+
+  """
+  Signed decimal degrees without compass direction
+  """
+  longitude: Float!
+
+  """
+  Signed decimal degrees without compass direction
+  """
+  latitude: Float!
+  lengthUnit: LengthUnit!
+}
+
+"""
 A form allowing selection and uploading of a file from the user's local computer.
 """
 type FileUploadFieldOption implements CatalogProductOption {
@@ -777,9 +825,11 @@ type Inventory {
   Locations
   """
   locations(
-    entityIds: [Int!]
-    codes: [String!]
-    typeIds: [String!]
+    entityIds: [Int!] = []
+    codes: [String!] = []
+    typeIds: [String!] = []
+    serviceTypeCodes: [String!] = []
+    distanceFilter: DistanceFilter
     before: String
     after: String
     first: Int
@@ -810,6 +860,34 @@ type InventoryByLocations {
   Indicates whether this product is in stock.
   """
   isInStock: Boolean!
+
+  """
+  Distance between location and specified longitude and latitude
+  """
+  locationDistance: Distance
+
+  """
+  Location type id.
+  """
+  locationEntityTypeId: String
+
+  """
+  Location service type codes.
+  """
+  locationEntityServiceTypeCodes: [String!]!
+
+  """
+  Location code.
+  """
+  locationEntityCode: String!
+}
+
+"""
+length unit
+"""
+enum LengthUnit {
+  Miles
+  Kilometres
 }
 
 """
@@ -1172,7 +1250,7 @@ The various prices that can be set on a product.
 """
 type Prices {
   """
-  Calculated price of the product.
+  Calculated price of the product.  Calculated price takes into account basePrice, salePrice, rules (modifier, option, option set) that apply to the product configuration, and customer group discounts.  It represents the in-cart price for a product configuration without bulk pricing rules.
   """
   price: Money!
 
@@ -1279,12 +1357,19 @@ type Product implements Node {
   """
   Absolute URL path for adding a product to customer's wishlist.
   """
-  addToWishlistUrl: String!
+  addToWishlistUrl: String! @deprecated(reason: "Deprecated.")
 
   """
   Prices object determined by supplied product ID, variant ID, and selected option IDs.
   """
-  prices(includeTax: Boolean = false, currencyCode: currencyCode): Prices
+  prices(
+    includeTax: Boolean = false
+
+    """
+    Please select a currency
+    """
+    currencyCode: currencyCode
+  ): Prices
 
   """
   The minimum and maximum price of this product based on variant pricing and/or modifier price rules.
@@ -1435,10 +1520,35 @@ type Product implements Node {
   ): MetafieldConnection!
 
   """
+  Universal product code.
+  """
+  upc: String
+
+  """
+  Manufacturer part number.
+  """
+  mpn: String
+
+  """
+  Global trade item number.
+  """
+  gtin: String
+
+  """
   Product creation date
   """
   createdAt: DateTimeExtended!
     @deprecated(reason: "Alpha version. Do not use in production.")
+
+  """
+  Reviews associated with the product.
+  """
+  reviews(
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): ReviewConnection!
 }
 
 """
@@ -1757,9 +1867,80 @@ type RelatedProductsEdge {
 }
 
 """
+Review
+"""
+type Review {
+  """
+  Unique ID for the product review.
+  """
+  entityId: Long!
+
+  """
+  Product review author.
+  """
+  author: Author!
+
+  """
+  Product review title.
+  """
+  title: String!
+
+  """
+  Product review text.
+  """
+  text: String!
+
+  """
+  Product review rating.
+  """
+  rating: Int!
+
+  """
+  Product review creation date.
+  """
+  createdAt: DateTimeExtended!
+}
+
+"""
+A connection to a list of items.
+"""
+type ReviewConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  A list of edges.
+  """
+  edges: [ReviewEdge]
+}
+
+"""
+An edge in a connection.
+"""
+type ReviewEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Review!
+
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+}
+
+"""
 Review Rating Summary
 """
 type Reviews {
+  """
+  Average rating of the product.
+  """
+  averageRating: Float!
+    @deprecated(reason: "Alpha version. Do not use in production.")
+
   """
   Total number of reviews on product.
   """
@@ -1824,6 +2005,7 @@ type Settings {
   Channel ID.
   """
   channelId: Long!
+  tax: TaxDisplaySettings
 }
 
 """
@@ -1853,6 +2035,7 @@ type Site {
     last: Int
     ids: [ID!] = []
     entityIds: [Int!] = []
+    hideOutOfStock: Boolean
   ): ProductConnection!
 
   """
@@ -1863,6 +2046,7 @@ type Site {
     after: String
     first: Int
     last: Int
+    hideOutOfStock: Boolean
   ): ProductConnection!
 
   """
@@ -1873,6 +2057,7 @@ type Site {
     after: String
     first: Int
     last: Int
+    hideOutOfStock: Boolean
   ): ProductConnection!
 
   """
@@ -1883,6 +2068,7 @@ type Site {
     after: String
     first: Int
     last: Int
+    hideOutOfStock: Boolean
   ): ProductConnection!
 
   """
@@ -1945,6 +2131,30 @@ type SwatchOptionValue implements CatalogProductOptionValue {
   Indicates whether this value is the chosen default selected value.
   """
   isDefault: Boolean!
+}
+
+"""
+
+"""
+type TaxDisplaySettings {
+  """
+  Tax display setting for Product Details Page.
+  """
+  pdp: TaxPriceDisplay!
+
+  """
+  Tax display setting for Product List Page.
+  """
+  plp: TaxPriceDisplay!
+}
+
+"""
+Tax setting can be set included or excluded (Tax setting can also be set to both on PDP/PLP).
+"""
+enum TaxPriceDisplay {
+  INC
+  EX
+  BOTH
 }
 
 """
@@ -2049,7 +2259,14 @@ type Variant implements Node {
   """
   Variant prices
   """
-  prices(includeTax: Boolean = false, currencyCode: currencyCode): Prices
+  prices(
+    includeTax: Boolean = false
+
+    """
+    Please select a currency
+    """
+    currencyCode: currencyCode
+  ): Prices
 
   """
   Variant inventory
@@ -2067,6 +2284,21 @@ type Variant implements Node {
     first: Int
     last: Int
   ): MetafieldConnection!
+
+  """
+  Universal product code.
+  """
+  upc: String
+
+  """
+  Manufacturer part number.
+  """
+  mpn: String
+
+  """
+  Global trade item number.
+  """
+  gtin: String
 }
 
 """
@@ -2118,6 +2350,10 @@ type VariantInventory {
   """
   byLocation(
     locationEntityIds: [Int!] = []
+    locationEntityCodes: [String!] = []
+    locationEntityTypeIds: [String!] = []
+    locationEntityServiceTypeCodes: [String!] = []
+    distanceFilter: DistanceFilter
     before: String
     after: String
     first: Int
@@ -2126,7 +2362,7 @@ type VariantInventory {
 }
 
 """
-Please select a currency
+Currency Code
 """
 enum currencyCode {
   ADP
@@ -2183,6 +2419,7 @@ enum currencyCode {
   BUK
   BWP
   BYB
+  BYN
   BYR
   BZD
   CAD
@@ -2200,6 +2437,8 @@ enum currencyCode {
   CRC
   CSD
   CSK
+  CUC
+  CUP
   CVE
   CYP
   CZK
@@ -2252,6 +2491,7 @@ enum currencyCode {
   INR
   IQD
   ISJ
+  IRR
   ISK
   ITL
   JMD
@@ -2261,6 +2501,7 @@ enum currencyCode {
   KGS
   KHR
   KMF
+  KPW
   KRH
   KRO
   KRW
