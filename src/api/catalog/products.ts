@@ -5,17 +5,33 @@ import createApiHandler, {
 } from '../utils/create-api-handler'
 import { BigcommerceApiError } from '../utils/errors'
 import type { ProductEdge } from '../operations/get-all-products'
-import getProducts from './handlers/get-products'
+import getProducts, { Meta } from './handlers/get-products'
 
 export type SearchProductsData = {
   products: ProductEdge[]
   found: boolean
+  pagination: Omit<Meta["pagination"], "links" | "current_page"> & {
+    pages: {
+      /**
+       * The page you are currently on within the collection.
+       */
+      current: Meta["pagination"]["current_page"],
+      /**
+       * The previous page within the same collection
+       */
+      previous?: number,
+      /**
+       * The next page within the same collection
+       */
+      next?: number
+    }
+  }
 }
 
 export type ProductsHandlers = {
   getProducts: BigcommerceHandler<
     SearchProductsData,
-    { search?: 'string'; category?: string; categories?: string, brand?: string; sort?: string }
+    { search?: 'string'; category?: string; categories?: string, brand?: string; sort?: string, page?: string }
   >
 }
 

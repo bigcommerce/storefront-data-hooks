@@ -1,3 +1,4 @@
+import omit from 'lodash.omit';
 import getAllProducts, { ProductEdge } from '../../operations/get-all-products'
 import type { ProductsHandlers } from '../products'
 
@@ -8,10 +9,52 @@ const SORT: { [key: string]: string | undefined } = {
 }
 const LIMIT = 12
 
+export type Meta = {
+  pagination: {
+    /**
+     * Total number of items in the collection response.
+     */
+    count: number
+    /**
+     * The page you are currently on within the collection.
+     */
+    current_page: number
+    /**
+     * Pagination links for the previous and next parts of the whole collection.
+     */
+    links?: {
+      /**
+       * Link to the current page returned in the response.
+         */
+      current?: string
+      /**
+       * Link to the next page returned in the response.
+         */
+      next?: string
+      /**
+       * Link to the previous page returned in the response.
+         */
+      previous?: string
+    }
+    /**
+     * The amount of items returned in the collection per page, controlled by the limit parameter.
+     */
+    per_page: number
+    /**
+     * Total number of items in the result set.
+     */
+    total: number
+    /**
+     * The total number of pages in the collection.
+     */
+    total_pages: number
+  }
+}
+
 // Return current cart info
 const getProducts: ProductsHandlers['getProducts'] = async ({
   res,
-  body: { search, category, categories, brand, sort },
+  body: { search, category, categories, brand, sort, page },
   config,
 }) => {
   // Use a dummy base as we only care about the relative path
@@ -21,6 +64,7 @@ const getProducts: ProductsHandlers['getProducts'] = async ({
   url.searchParams.set('limit', String(LIMIT))
 
   if (search) url.searchParams.set('keyword', search)
+  if (page) url.searchParams.set('page', page)
 
   const categoriesIn = [...categories?.split(',') || [], category].reduce((acc, category) => {
     if (category && Number.isInteger(Number(category))) return [...acc, category]
@@ -46,7 +90,7 @@ const getProducts: ProductsHandlers['getProducts'] = async ({
   // We only want the id of each product
   url.searchParams.set('include_fields', 'id')
 
-  const { data } = await config.storeApiFetch<{ data: { id: number }[] }>(
+  const { data, meta } = await config.storeApiFetch<{ data: { id: number }[], meta: Meta }>(
     url.pathname + url.search
   )
   const entityIds = data.map((p) => p.id)
@@ -72,7 +116,19 @@ const getProducts: ProductsHandlers['getProducts'] = async ({
     if (product) products.push(product)
   })
 
-  res.status(200).json({ data: { products, found } })
+  const pagination = {
+    ...omit(meta.pagination, ['links', 'current_page']),
+    pages: {
+      current: meta.pagination.current_page,
+      ...meta.pagination.links?.previous ? {
+        previous: meta.pagination.current_page - 1
+      } : {},
+      ...meta.pagination.links?.next ? {
+        next: meta.pagination.current_page + 1
+      } : {}
+    }
+  }
+  res.status(200).json({ data: { products, found, pagination } })
 }
 
 export default getProducts
