@@ -1,3 +1,23 @@
+# 1.3.0
+### Login SSO Documentation
+
+-  Fix a bug in the Login SSO sample code
+
+### Add pagination to `useSearch`
+
+- Update `README.me`
+- Add a new param to the `useSearch` hook: `page`
+- Get the results based on the provided `page`.
+
+*Resolves [#38](https://github.com/bigcommerce/storefront-data-hooks/issues/38)*
+
+### Return `basePrice` in the product query
+
+- Return `basePrice` in the product query
+- Update GraphQL schema to generate the updated types (also includes latest bigcommerce changes)
+
+*Related to [#37](https://github.com/bigcommerce/storefront-data-hooks/issues/37)*
+
 # 1.2.0
 ### Embedded checkout
 
