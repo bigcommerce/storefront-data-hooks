@@ -12,6 +12,10 @@ export const productPrices = /* GraphQL */ `
       value
       currencyCode
     }
+    basePrice {
+      value
+      currencyCode
+    }
   }
 `
 
