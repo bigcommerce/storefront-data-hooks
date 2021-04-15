@@ -1,4 +1,4 @@
-import type { Addresses, AddressHandlers } from ".."
+import type { AddressesResponse, AddressHandlers } from ".."
 import getCustomerId from "../../operations/get-customer-id"
 
 const getAddresses: AddressHandlers["getAddresses"] = async ({
@@ -6,7 +6,7 @@ const getAddresses: AddressHandlers["getAddresses"] = async ({
 	body: { customerToken },
 	config,
 }) => {
-	let result: Addresses = {}
+	let result: AddressesResponse = {}
 	if (customerToken) {
 		const customerId =
 			customerToken && (await getCustomerId({ customerToken, config }))

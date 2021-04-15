@@ -198,7 +198,7 @@ export type RemoveAddressBody = {
 }
 
 export type AddressHandlers = {
-	getAddresses: BigcommerceHandler<Addresses, GetAddressesBody>
+	getAddresses: BigcommerceHandler<AddressesResponse, GetAddressesBody>
 	addAddress: BigcommerceHandler<null, Partial<AddAddressBody>>
 	updateAddress: BigcommerceHandler<null, Partial<UpdateAddressBody>>
 	removeAddress: BigcommerceHandler<null, Partial<RemoveAddressBody>>
