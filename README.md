@@ -111,7 +111,9 @@ To authenticate a user using the Customer Login API, it's necessary to point the
 
 ```jsx
 const login = useLogin({
-  url: '/api/your-own-authentication',
+  options: {
+    url: '/api/your-own-authentication'
+  },
 })
 ```
 
@@ -342,7 +344,7 @@ const WishlistButton = ({ productId, variant }) => {
 
 ### useSearch
 
-`useSearch` handles searching the bigcommerce storefront product catalog by catalog, brand, and query string.
+`useSearch` handles searching the bigcommerce storefront product catalog by catalog, brand, and query string. It also allows pagination.
 
 ```jsx
 ...
@@ -354,13 +356,17 @@ const SearchPage = ({ searchString, category, brand, sortStr }) => {
     categoryId: category?.entityId,
     brandId: brand?.entityId,
     sort: sortStr || '',
+    page: 1
   })
+
+  const { products, pagination } = data
 
   return (
     <Grid layout="normal">
-      {data.products.map(({ node }) => (
+      {products.map(({ node }) => (
         <ProductCard key={node.path} product={node} />
       ))}
+      <Pagination {...pagination}>
     </Grid>
   )
 }
