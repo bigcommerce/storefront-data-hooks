@@ -1,18 +1,18 @@
 import { useCallback } from "react"
-import type { HookFetcher } from "./commerce/utils/types"
-import { CommerceError } from "./commerce/utils/errors"
-import useAddAddress from "./commerce/use-add-address"
-import type { AddressBody } from "./api/address/add-address"
+import type { HookFetcher } from "../commerce/utils/types"
+import { CommerceError } from "../commerce/utils/errors"
+import useAddAddress from "../commerce/use-add-address"
+import type { AddAddressBody } from "../api/address"
 import useAddresses from "./use-addresses"
 
 const defaultOpts = {
-	url: "/api/bigcommerce/customers/add-address",
+	url: "/api/bigcommerce/address",
 	method: "POST",
 }
 
-export type AddAddressInput = AddressBody
+export type AddAddressInput = AddAddressBody
 
-export const fetcher: HookFetcher<null, AddressBody> = (
+export const fetcher: HookFetcher<null, AddAddressBody> = (
 	options,
 	input,
 	fetch

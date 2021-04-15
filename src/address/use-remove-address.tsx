@@ -1,18 +1,18 @@
 import { useCallback } from "react"
-import type { HookFetcher } from "./commerce/utils/types"
-import { CommerceError } from "./commerce/utils/errors"
-import useRemoveAddress from "./commerce/use-remove-address"
-import type { Body } from "./api/address/remove-address"
+import type { HookFetcher } from "../commerce/utils/types"
+import { CommerceError } from "../commerce/utils/errors"
+import useRemoveAddress from "../commerce/use-remove-address"
+import type { RemoveAddressBody } from "../api/address"
 import useAddresses from "./use-addresses"
 
 const defaultOpts = {
-	url: "/api/bigcommerce/customers/remove-address",
-	method: "POST",
+	url: "/api/bigcommerce/address",
+	method: "DELETE",
 }
 
-export type AddAddressInput = Body
+export type RemoveAddressInput = RemoveAddressBody
 
-export const fetcher: HookFetcher<null, Body> = (options, { id }, fetch) => {
+export const fetcher: HookFetcher<null, RemoveAddressBody> = (options, { id }, fetch) => {
 	if (!id) {
 		throw new CommerceError({
 			message: "An id is required to remove an address",
@@ -29,13 +29,13 @@ export const fetcher: HookFetcher<null, Body> = (options, { id }, fetch) => {
 export function extendHook(customFetcher: typeof fetcher) {
 	const useRemoveAddressHook = () => {
 		const { revalidate } = useAddresses()
-		const fn = useRemoveAddress<null, AddAddressInput>(
+		const fn = useRemoveAddress<null, RemoveAddressInput>(
 			defaultOpts,
 			customFetcher
 		)
 
 		return useCallback(
-			async (input: AddAddressInput) => {
+			async (input: RemoveAddressInput) => {
 				const data = await fn(input)
 				await revalidate()
 				return data

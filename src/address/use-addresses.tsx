@@ -1,29 +1,29 @@
-import type { HookFetcher } from "./commerce/utils/types"
-import type { SwrOptions } from "./commerce/utils/use-data"
-import useData from "./commerce/utils/use-data"
+import type { HookFetcher } from "../commerce/utils/types"
+import type { SwrOptions } from "../commerce/utils/use-data"
+import useData from "../commerce/utils/use-data"
 
-import type { Addresses } from "./api/address"
-import useCustomer from "./use-customer"
+import type { AddressesResponse } from "../api/address"
+import useCustomer from "../use-customer"
 
 const defaultOpts = {
-	url: "/api/bigcommerce/customers/addresses",
+	url: "/api/bigcommerce/address",
 	method: "GET",
 }
 
-export type { Addresses }
+export type { AddressesResponse }
 
 export interface UseAddressesInput {
 	customerId?: number
 }
 
-export const fetcher: HookFetcher<Addresses | null, UseAddressesInput> = async (
+export const fetcher: HookFetcher<AddressesResponse | null, UseAddressesInput> = async (
 	options,
 	{ customerId },
 	fetch
 ) => {
 	if (!customerId) return null
 
-	return fetch<Addresses | null>({
+	return fetch<AddressesResponse | null>({
 		...defaultOpts,
 		...options,
 	})
@@ -31,7 +31,7 @@ export const fetcher: HookFetcher<Addresses | null, UseAddressesInput> = async (
 
 export function extendHook(
 	customFetcher: typeof fetcher,
-	swrOptions?: SwrOptions<Addresses | null, UseAddressesInput>
+	swrOptions?: SwrOptions<AddressesResponse | null, UseAddressesInput>
 ) {
 	const useAddresses = () => {
 		const { data: customer } = useCustomer()

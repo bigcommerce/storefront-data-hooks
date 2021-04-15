@@ -1,18 +1,18 @@
 import { useCallback } from "react"
-import type { HookFetcher } from "./commerce/utils/types"
-import { CommerceError } from "./commerce/utils/errors"
-import useUpdateAddress from "./commerce/use-update-address"
-import type { AddressBody } from "./api/address/update-address"
+import type { HookFetcher } from "../commerce/utils/types"
+import { CommerceError } from "../commerce/utils/errors"
+import useUpdateAddress from "../commerce/use-update-address"
+import type { UpdateAddressBody } from "../api/address"
 import useAddresses from "./use-addresses"
 
 const defaultOpts = {
-	url: "/api/bigcommerce/customers/update-address",
-	method: "POST",
+	url: "/api/bigcommerce/address",
+	method: "PUT",
 }
 
-export type AddAddressInput = AddressBody
+export type UpdateAddressInput = UpdateAddressBody
 
-export const fetcher: HookFetcher<null, AddressBody> = (
+export const fetcher: HookFetcher<null, UpdateAddressBody> = (
 	options,
 	input,
 	fetch
@@ -33,13 +33,13 @@ export const fetcher: HookFetcher<null, AddressBody> = (
 export function extendHook(customFetcher: typeof fetcher) {
 	const useUpdateAddressHook = () => {
 		const { revalidate } = useAddresses()
-		const fn = useUpdateAddress<null, AddAddressInput>(
+		const fn = useUpdateAddress<null, UpdateAddressInput>(
 			defaultOpts,
 			customFetcher
 		)
 
 		return useCallback(
-			async (input: AddAddressInput) => {
+			async (input: UpdateAddressInput) => {
 				const data = await fn(input)
 				await revalidate()
 				return data
