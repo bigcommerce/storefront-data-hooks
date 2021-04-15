@@ -3,7 +3,7 @@ import { BigcommerceApiError } from "../../utils/errors"
 import getCustomerId from "../../operations/get-customer-id"
 import type { AddAddressHandlers } from "../add-address"
 
-const signup: AddAddressHandlers["addAddress"] = async ({
+const addAddress: AddAddressHandlers["addAddress"] = async ({
 	req,
 	res,
 	body,
@@ -50,4 +50,4 @@ const signup: AddAddressHandlers["addAddress"] = async ({
 	res.status(200).json({ data: null })
 }
 
-export default signup
+export default addAddress
