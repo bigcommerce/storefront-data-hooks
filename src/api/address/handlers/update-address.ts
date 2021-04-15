@@ -34,7 +34,7 @@ const updateAddress: AddressHandlers["updateAddress"] = async ({
 			// If the customerToken is invalid, then this request is too
 			return res.status(404).json({
 				data: null,
-				errors: [{ message: "Orders not found" }],
+				errors: [{ message: 'Invalid request' }],
 			})
 		}
 

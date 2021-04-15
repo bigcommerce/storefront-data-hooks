@@ -22,28 +22,24 @@ const addAddress: AddressHandlers["addAddress"] = async ({
 		})
 	}
 
-	try {
-		const { cookies } = req
-		const customerToken = cookies[config.customerCookie]
+	const { cookies } = req
+	const customerToken = cookies[config.customerCookie] // FIXME: Unify this
 
-		const customerId =
-			customerToken && (await getCustomerId({ customerToken, config }))
+	const customerId =
+		customerToken && (await getCustomerId({ customerToken, config }))
 
-		if (!customerId) {
-			// If the customerToken is invalid, then this request is too
-			return res.status(404).json({
-				data: null,
-				errors: [{ message: "Orders not found" }],
-			})
-		}
-
-		await config.storeApiFetch("/v3/customers/addresses", {
-			method: "POST",
-			body: JSON.stringify([{ ...body, customer_id: customerId }]),
+	if (!customerId) {
+		// If the customerToken is invalid, then this request is too
+		return res.status(404).json({
+			data: null,
+			errors: [{ message: 'Invalid request' }],
 		})
-	} catch (error) {
-		throw error
 	}
+
+	await config.storeApiFetch("/v3/customers/addresses", {
+		method: "POST",
+		body: JSON.stringify([{ ...body, customer_id: customerId }]),
+	})
 
 	res.status(200).json({ data: null })
 }
