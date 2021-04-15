@@ -1,9 +1,7 @@
-import { BigcommerceApiError } from "../../utils/errors"
-// import { AddAddressHandlers } from "../add-address"
 import getCustomerId from "../../operations/get-customer-id"
-import type { AddAddressHandlers } from "../add-address"
+import type { AddressHandlers } from "../"
 
-const addAddress: AddAddressHandlers["addAddress"] = async ({
+const addAddress: AddressHandlers["addAddress"] = async ({
 	req,
 	res,
 	body,

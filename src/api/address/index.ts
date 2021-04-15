@@ -5,9 +5,13 @@ import createApiHandler, {
 } from "../utils/create-api-handler"
 import { BigcommerceApiError } from "../utils/errors"
 import getAddresses from "./handlers/get-addresses"
+import addAddress from "./handlers/add-address"
+import updateAddress from "./handlers/remove-address"
+import removeAddress from "./handlers/update-address"
 
 // This type should match:
-// https://developer.bigcommerce.com/api-reference/store-management/orders/orders/getallorders#responses
+// https://developer.bigcommerce.com/api-reference/store-management/customers-v3/customer-addresses/customersaddressesget#responses
+// TODO: Double check this
 export interface Address {
 	address1: string
 	address2: string
@@ -42,11 +46,47 @@ export interface Addresses {
 	meta?: Meta
 }
 
-export type AddressHandlers = {
-	getAddresses: BigcommerceHandler<Addresses, { customerToken?: string }>
+export type AddAddressBody = {
+	first_name: string
+	last_name: string
+	company: string
+	address1: string
+	address2: string
+	city: string
+	state_or_province: string
+	postal_code: string
+	country_code: string
+	phone: string
+	address_type: string
 }
 
-const METHODS = ["GET"]
+export type UpdateAddressBody = {
+	first_name: string
+	last_name: string
+	company: string
+	address1: string
+	address2: string
+	city: string
+	state_or_province: string
+	postal_code: string
+	country_code: string
+	phone: string
+	address_type: string
+	id: number
+}
+
+export type RemoveAddressBody = {
+	id: number
+}
+
+export type AddressHandlers = {
+	getAddresses: BigcommerceHandler<Addresses, { customerToken?: string }>
+	addAddress: BigcommerceHandler<Address, Partial<AddAddressBody>>
+	updateAddress: BigcommerceHandler<Address, Partial<UpdateAddressBody>>
+	removeAddress: BigcommerceHandler<null, Partial<Body>>
+}
+
+const METHODS = ['GET', 'POST', 'PUT', 'DELETE']
 
 const addressesApi: BigcommerceApiHandler<Addresses, AddressHandlers> = async (
 	req,
@@ -60,12 +100,29 @@ const addressesApi: BigcommerceApiHandler<Addresses, AddressHandlers> = async (
 	const customerToken = cookies[config.customerCookie]
 
 	try {
-		// Return current orders info
+		// Return all addresses
 		if (req.method === "GET") {
 			const body = {
 				customerToken,
 			}
 			return await handlers.getAddresses({ req, res, config, body })
+		}
+		// Create or add a new address
+		if (req.method === 'POST') {
+			const body = { ...req.body, cartId }
+			return await handlers['addAddress']({ req, res, config, body })
+		}
+
+		// Update an existing address
+		if (req.method === 'PUT') {
+			const body = { ...req.body, cartId }
+			return await handlers['updateAddress']({ req, res, config, body })
+		}
+
+		// Remove an address
+		if (req.method === 'DELETE') {
+			const body = { ...req.body, cartId }
+			return await handlers['removeAddress']({ req, res, config, body })
 		}
 	} catch (error) {
 		console.error(error)
@@ -79,6 +136,6 @@ const addressesApi: BigcommerceApiHandler<Addresses, AddressHandlers> = async (
 	}
 }
 
-export const handlers = { getAddresses }
+export const handlers = { getAddresses, addAddress, updateAddress, removeAddress }
 
 export default createApiHandler(addressesApi, handlers, {})

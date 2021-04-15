@@ -1,9 +1,7 @@
-import { BigcommerceApiError } from "../../utils/errors"
-// import { AddAddressHandlers } from "../add-address"
 import getCustomerId from "../../operations/get-customer-id"
-import type { RemoveAddressHandlers } from "../remove-address"
+import type { AddressHandlers } from ".."
 
-const signup: RemoveAddressHandlers["removeAddress"] = async ({
+const removeAddress: AddressHandlers["removeAddress"] = async ({
 	req,
 	res,
 	body: { id },
@@ -41,4 +39,4 @@ const signup: RemoveAddressHandlers["removeAddress"] = async ({
 	res.status(200).json({ data: null })
 }
 
-export default signup
+export default removeAddress
