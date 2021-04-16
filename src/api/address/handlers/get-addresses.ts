@@ -1,4 +1,6 @@
-import type { AddressesResponse, AddressHandlers } from ".."
+import omit from 'lodash.omit';
+
+import type { BigCommerceAddressesResponse, AddressHandlers } from ".."
 import getCustomerId from "../../operations/get-customer-id"
 
 const getAddresses: AddressHandlers["getAddresses"] = async ({
@@ -6,7 +8,7 @@ const getAddresses: AddressHandlers["getAddresses"] = async ({
 	body: { customerToken },
 	config,
 }) => {
-	let result: AddressesResponse = {}
+	let response: BigCommerceAddressesResponse = {}
 	if (customerToken) {
 		const customerId =
 			customerToken && (await getCustomerId({ customerToken, config }))
@@ -19,7 +21,7 @@ const getAddresses: AddressHandlers["getAddresses"] = async ({
 			})
 		}
 
-		result = await config.storeApiFetch(
+		response = await config.storeApiFetch(
 			`/v3/customers/addresses?customer_id%3Ain=${customerId}`,
 			{
 				headers: {
@@ -29,7 +31,25 @@ const getAddresses: AddressHandlers["getAddresses"] = async ({
 		)
 	}
 
-	res.status(200).json({ data: result ?? null })
+	if (!response || !response.data || !response.meta?.pagination) {
+		res.status(200).json({ data:  null })
+	} else {
+		res.status(200).json({ data: {
+			addresses: response.data,
+			pagination: {
+				...omit(response.meta.pagination, ['links', 'current_page']),
+				pages: {
+					current: response.meta.pagination.current_page,
+					...response.meta.pagination.links?.previous ? {
+						previous: response.meta.pagination.current_page - 1
+					} : {},
+					...response.meta.pagination.links?.next ? {
+						next: response.meta.pagination.current_page + 1
+					} : {}
+				}
+			}
+		}})
+	}
 }
 
 export default getAddresses

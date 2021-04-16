@@ -15,6 +15,7 @@ export type { AddressesResponse }
 export interface UseAddressesInput {
 	customerId?: number
 }
+// TODO: Add pagination support
 
 export const fetcher: HookFetcher<AddressesResponse | null, UseAddressesInput> = async (
 	options,

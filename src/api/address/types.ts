@@ -108,33 +108,53 @@ export interface Pagination {
   /**
    * Total number of items in the result set.
    */
-	 total?: number
+	 total: number
 	 /**
 		* Total number of items in the collection response.
 		*/
-	 count?: number
+	 count: number
 	 /**
 		* The amount of items returned in the collection per page, controlled by the limit parameter.
 		*/
-	 per_page?: number
+	 per_page: number
 	 /**
 		* The page you are currently on within the collection.
 		*/
-	 current_page?: number
+	 current_page: number
 	 /**
 		* The total number of pages in the collection.
 		*/
-	 total_pages?: number
-	 links?: Links
+	 total_pages: number
+	 links: Links
 }
 
 export interface Meta {
 	pagination: Pagination
 }
 
-export interface AddressesResponse {
+export interface BigCommerceAddressesResponse {
   data?: Address[]
   meta?: Meta
+}
+
+export type AddressesResponse = {
+  addresses: Address[]
+  pagination: Omit<Meta["pagination"], "links" | "current_page"> & {
+    pages: {
+      /**
+       * The page you are currently on within the collection.
+       */
+      current: Meta["pagination"]["current_page"],
+      /**
+       * The previous page within the same collection
+       */
+      previous?: number,
+      /**
+       * The next page within the same collection
+       */
+      next?: number
+    }
+  }
 }
 
 type AddressBody = {
