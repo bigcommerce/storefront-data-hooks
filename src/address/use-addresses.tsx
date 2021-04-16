@@ -1,6 +1,6 @@
 import type { HookFetcher } from "../commerce/utils/types"
 import type { SwrOptions } from "../commerce/utils/use-data"
-import useData from "../commerce/utils/use-data"
+import useCommerceAddresses from "../commerce/address/use-addresses"
 
 import type { AddressesResponse } from "../api/address"
 import useCustomer from "../use-customer"
@@ -42,7 +42,7 @@ export function extendHook(
 ) {
 	const useAddresses = (input?: UseAddressesInput) => {
 		const { data: customer } = useCustomer()
-		return useData(
+		return useCommerceAddresses(
 			defaultOpts,
 			[
 				["customerId", customer?.entityId],

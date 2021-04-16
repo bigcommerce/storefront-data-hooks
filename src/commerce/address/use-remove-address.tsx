@@ -1,4 +1,4 @@
-import useAction from "./utils/use-action"
+import useAction from "../utils/use-action"
 
 const useRemoveAddress = useAction
 

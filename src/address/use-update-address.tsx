@@ -1,7 +1,7 @@
 import { useCallback } from "react"
 import type { HookFetcher } from "../commerce/utils/types"
 import { CommerceError } from "../commerce/utils/errors"
-import useUpdateAddress from "../commerce/use-update-address"
+import useCommerceUpdateAddress from "../commerce/address/use-update-address"
 import type { UpdateAddressBody } from "../api/address"
 import useAddresses from "./use-addresses"
 
@@ -31,9 +31,9 @@ export const fetcher: HookFetcher<null, UpdateAddressBody> = (
 }
 
 export function extendHook(customFetcher: typeof fetcher) {
-	const useUpdateAddressHook = () => {
+	const useUpdateAddress = () => {
 		const { revalidate } = useAddresses()
-		const fn = useUpdateAddress<null, UpdateAddressInput>(
+		const fn = useCommerceUpdateAddress<null, UpdateAddressInput>(
 			defaultOpts,
 			customFetcher
 		)
@@ -48,9 +48,9 @@ export function extendHook(customFetcher: typeof fetcher) {
 		)
 	}
 
-	useUpdateAddressHook.extend = extendHook
+	useUpdateAddress.extend = extendHook
 
-	return useUpdateAddressHook
+	return useUpdateAddress
 }
 
 export default extendHook(fetcher)
