@@ -10,9 +10,9 @@ const defaultOpts = {
 	method: "POST",
 }
 
-export type AddAddressInput = AddAddressBody
+export type AddAddressInput = Omit<AddAddressBody, "customer_id">
 
-export const fetcher: HookFetcher<null, AddAddressBody> = (
+export const fetcher: HookFetcher<null, AddAddressInput> = (
 	options,
 	input,
 	fetch

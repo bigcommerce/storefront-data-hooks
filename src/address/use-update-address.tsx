@@ -10,9 +10,9 @@ const defaultOpts = {
 	method: "PUT",
 }
 
-export type UpdateAddressInput = UpdateAddressBody
+export type UpdateAddressInput = Omit<UpdateAddressBody, "customer_id">
 
-export const fetcher: HookFetcher<null, UpdateAddressBody> = (
+export const fetcher: HookFetcher<null, UpdateAddressInput> = (
 	options,
 	input,
 	fetch
