@@ -5,7 +5,7 @@ import getCustomerId from "../../operations/get-customer-id"
 
 const getAddresses: AddressHandlers["getAddresses"] = async ({
 	res,
-	body: { customerToken },
+	body: { customerToken, page = "1" },
 	config,
 }) => {
 	let response: BigCommerceAddressesResponse = {}
@@ -22,7 +22,7 @@ const getAddresses: AddressHandlers["getAddresses"] = async ({
 		}
 
 		response = await config.storeApiFetch(
-			`/v3/customers/addresses?customer_id%3Ain=${customerId}`,
+			`/v3/customers/addresses?customer_id:in=${customerId}&page=${parseInt(page, 10)}`,
 			{
 				headers: {
 					Accept: "application/json",

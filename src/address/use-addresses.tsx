@@ -12,33 +12,42 @@ const defaultOpts = {
 
 export type { AddressesResponse }
 
-export interface UseAddressesInput {
+export type UseAddressesInput  = {
+	page?: number
+}
+export type UseAddressesPayload = UseAddressesInput & {
 	customerId?: number
 }
-// TODO: Add pagination support
 
-export const fetcher: HookFetcher<AddressesResponse | null, UseAddressesInput> = async (
+export const fetcher: HookFetcher<AddressesResponse | null, UseAddressesPayload> = async (
 	options,
-	{ customerId },
+	{ customerId, page },
 	fetch
 ) => {
 	if (!customerId) return null
+	  // Use a dummy base as we only care about the relative path
+	const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
+	if (page) url.searchParams.set('page', String(page))
 
 	return fetch<AddressesResponse | null>({
 		...defaultOpts,
 		...options,
+		url: url.pathname + url.search,
 	})
 }
 
 export function extendHook(
 	customFetcher: typeof fetcher,
-	swrOptions?: SwrOptions<AddressesResponse | null, UseAddressesInput>
+	swrOptions?: SwrOptions<AddressesResponse | null, UseAddressesPayload>
 ) {
-	const useAddresses = () => {
+	const useAddresses = (input?: UseAddressesInput) => {
 		const { data: customer } = useCustomer()
 		return useData(
 			defaultOpts,
-			[["customerId", customer?.entityId]],
+			[
+				["customerId", customer?.entityId],
+				['page', input?.page],
+			],
 			customFetcher,
 			{
 				revalidateOnFocus: false,

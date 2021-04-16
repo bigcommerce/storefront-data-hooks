@@ -207,6 +207,7 @@ type AddressBody = {
 
 export type GetAddressesBody = {
 	customerToken?: string
+	page?: string
 }
 
 export type AddAddressBody = AddressBody

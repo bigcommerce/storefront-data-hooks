@@ -28,6 +28,7 @@ const addressesApi: BigcommerceApiHandler<AddressesResponse | null, AddressHandl
 		if (req.method === "GET") {
 			const body = {
 				customerToken,
+				...req.query,
 			}
 			return await handlers.getAddresses({ req, res, config, body })
 		}
