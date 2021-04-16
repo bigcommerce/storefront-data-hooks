@@ -21,7 +21,7 @@ Table of Contents
          * [useSearch](#usesearch)
          * [getAllProducts](#getallproducts)
          * [getProduct](#getproduct)
-      * [Address book hooks](#address-book-hooks)
+      * [Customer Addresses Hooks](#customer-addresses-hooks)
          * [useAddresses](#useaddresses)
          * [useAddAddress](#useaddaddress)
          * [useUpdateAddress](#useupdateaddress)
@@ -403,21 +403,20 @@ const { product } = await getProduct({
 })
 ```
 
-## Address book hooks
-
+## Customer Addresses Hooks
 ### useAddresses
 
 Hook for returning the current users addresses
 
 ```javascript
-import useAddresses from '@bigcommerce/storefront-data-hooks/use-addresses'
+import useAddresses from '@bigcommerce/storefront-data-hooks/address/use-addresses'
 
-const AddressBook = () => {
+const AddressPage = () => {
   const { data } = useAddresses()
 
   return (
     <div>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <pre>{JSON.stringify(data?.addresses, null, 2)}</pre>
     </div>
   )
 }
@@ -429,13 +428,13 @@ const AddressBook = () => {
 Hook for adding customer address
 
 ```javascript
-import useAddAddress from '@bigcommerce/storefront-data-hooks/use-add-address'
+import useAddAddress from '@bigcommerce/storefront-data-hooks/address/use-add-address'
 
-const AddressBook = () => {
-  const addAdress = useAddAddress()
-  
+const AddressPage = () => {
+  const addAddress = useAddAddress()
+
   const handleAddAddress = async () => {
-    await addAdress({
+    await addAddress({
       first_name: "Rod",
       last_name: "Hull",
       address1: "Waffle Road",
@@ -459,14 +458,14 @@ const AddressBook = () => {
 
 ### useUpdateAddress
 
-Hook for updating a customers address
+Hook for updating a customer address
 
 ```javascript
-import useUpdateAddress from '@bigcommerce/storefront-data-hooks/use-update-address'
+import useUpdateAddress from '@bigcommerce/storefront-data-hooks/address/use-update-address'
 
-const AddressBook = () => {
+const AddressPage = () => {
   const updateAddress = useUpdateAddress()
-  
+
   const handleUpdateAddress = async () => {
     await updateAddress({
       id: 4,
@@ -479,6 +478,7 @@ const AddressBook = () => {
       country_code: "GB",
       phone: "01234567890",
       address_type: "residential",
+      id: 12
     })
   }
 
@@ -496,11 +496,11 @@ const AddressBook = () => {
 Hook for removing a customers address
 
 ```javascript
-import useRemoveAddress from '@bigcommerce/storefront-data-hooks/use-remove-address'
+import useRemoveAddress from '@bigcommerce/storefront-data-hooks/address/use-remove-address'
 
-const AddressBook = () => {
+const AddressPage = () => {
   const removeAddress = useRemoveAddress()
-  
+
   const handleUpdateAddress = async () => {
     await removeAddress({
       id: 4,
