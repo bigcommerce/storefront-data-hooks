@@ -5,7 +5,7 @@ import useData from "./commerce/utils/use-data"
 import type { Products } from "./api/orders/products"
 
 const defaultOpts = {
-	url: "/api/bigcommerce/order-products",
+	url: "/api/bigcommerce/orders/products",
 	method: "GET",
 }
 
@@ -20,10 +20,14 @@ export const fetcher: HookFetcher<
 	UseOrderProductsInput
 > = async (options, { orderId }, fetch) => {
 	if (!orderId) return null
+	// Use a dummy base as we only care about the relative path
+  const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
+	url.searchParams.set('order_id', String(orderId))
 
 	return fetch<Products | null>({
 		...defaultOpts,
 		...options,
+		url: url.pathname + url.search,
 	})
 }
 
