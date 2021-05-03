@@ -52,28 +52,28 @@ async function login({
     query,
     { variables }
   )
-  // Bigcommerce returns a Set-Cookie header with the auth cookie
-  let cookie = res.headers.get('Set-Cookie')
+  function getCookie(header: string | null, cookieKey: string) {
+  if (!header) return null
+    const cookies : string[] = header.split(/, (?=[^;]+=[^;]+;)/)
+  return cookies.find(cookie => cookie.startsWith(`${cookieKey}=`))
+}
+  // Set-Cookie returns several cookies, we only want SHOP_TOKEN
+    let shopToken = getCookie(res.headers.get('Set-Cookie'), 'SHOP_TOKEN')
 
-  if (cookie && typeof cookie === 'string') {
-    const { host } = request.headers
-    // Set the cookie at TLD to make it accessible on subdomains
-    cookie = cookie + `; Domain=${host?.includes(':') ? host?.slice(0, host.indexOf(':')) : host}`
+    if (shopToken && typeof shopToken === 'string') {
+      const { host } = res.headers
+      // OPTIONAL: Set the cookie at TLD to make it accessible on subdomains (embedded checkout)
+      shopToken = shopToken + `; Domain=${host?.includes(':') ? host?.slice(0, host.indexOf(':')) : host}`
 
-    // In development, don't set a secure cookie or the browser will ignore it
-    if (process.env.NODE_ENV !== 'production') {
-      cookie = cookie.replace('; Secure', '')
-      // SameSite=none can't be set unless the cookie is Secure
-      // bc seems to sometimes send back SameSite=None rather than none so make
-      // this case insensitive
-      cookie = cookie.replace(/; SameSite=none/gi, '; SameSite=lax')
+      if (process.env.NODE_ENV !== 'production') {
+        shopToken = shopToken.replace(/; Secure/gi, '')
+        shopToken = shopToken.replace(/; SameSite=none/gi, '; SameSite=lax')
+      }
+      response.setHeader(
+        'Set-Cookie',
+        concatHeader(response.getHeader('Set-Cookie'), shopToken)!
+      )
     }
-
-    response.setHeader(
-      'Set-Cookie',
-      concatHeader(response.getHeader('Set-Cookie'), cookie)!
-    )
-  }
 
   return {
     result: data.login?.result,
