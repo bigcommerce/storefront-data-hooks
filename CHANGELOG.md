@@ -1,7 +1,7 @@
 # 1.4.0
 ## Get `locale`  with `useCommerce` instead of `useRouter`
 
-Right now, in the `useAddItem`, we use `useRouter` to get locale require `next` as peer dependency which isn't optimal. This was introduced in version [v1.2.0](https://github.com/bigcommerce/storefront-data-hooks/releases/tag/v1.2.0)  when adding locale support to the cart https://github.com/bigcommerce/storefront-data-hooks/pull/41.
+Right now, in the `useAddItem`, we use `useRouter` to get locale. This requires `next` as peer dependency, which isn't optimal, and was introduced in version [v1.2.0](https://github.com/bigcommerce/storefront-data-hooks/releases/tag/v1.2.0)  when adding locale support to the cart https://github.com/bigcommerce/storefront-data-hooks/pull/41.
 
 Now the `locale` will be obtained from the `useCommerce` as is done in other hooks such as `usePrice`.
 https://github.com/bigcommerce/storefront-data-hooks/blob/e6196b04ca86239987148878e305f61c05f58902/src/commerce/use-price.tsx#L54
@@ -38,7 +38,7 @@ Programmatically set the prototype to be able to check if a thrown Error is a Bi
 
 Resolves a bug where the user couldn't add new products to the cart because the current cart was invalid but never deleted.
 
-Resolves [#49](#49)
+Resolves [49](#49)
 # 1.3.0
 ## Login SSO Documentation
 
