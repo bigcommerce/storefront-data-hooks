@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
-import { useRouter } from 'next/router'
 import type { HookFetcher } from '.././commerce/utils/types'
 import { CommerceError } from '.././commerce/utils/errors'
 import useCartAddItem from '.././commerce/cart/use-add-item'
 import type { ItemBody, AddItemBody } from '../api/cart'
+import { useCommerce } from '..'
 import useCart, { Cart } from './use-cart'
 
 const defaultOpts = {
@@ -37,7 +37,7 @@ export const fetcher: HookFetcher<Cart, AddItemBody> = (
 export function extendHook(customFetcher: typeof fetcher) {
   const useAddItem = () => {
     const { mutate } = useCart()
-    const { locale } = useRouter()
+    const { locale } = useCommerce()
     const fn = useCartAddItem(defaultOpts, customFetcher)
 
     return useCallback(
