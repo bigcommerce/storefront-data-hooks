@@ -61,7 +61,7 @@ async function login({
     let shopToken = getCookie(res.headers.get('Set-Cookie'), 'SHOP_TOKEN')
 
     if (shopToken && typeof shopToken === 'string') {
-      const { host } = res.headers
+      const { host } = request.headers
       // OPTIONAL: Set the cookie at TLD to make it accessible on subdomains (embedded checkout)
       shopToken = shopToken + `; Domain=${host?.includes(':') ? host?.slice(0, host.indexOf(':')) : host}`
 
