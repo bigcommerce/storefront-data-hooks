@@ -1,3 +1,8 @@
+# 1.3.1
+### Fix problem with Login Cookie
+
+-  The Bigcommerce API has changed the cookies it returns after login, now we specifically select the cookie we are interested in returning to the customer: `SHOP_TOKEN`
+
 # 1.3.0
 ### Login SSO Documentation
 
