@@ -3,7 +3,7 @@ import type { NextApiRequest } from 'next'
 
 import type { LoginMutation, LoginMutationVariables } from '../../schema'
 import type { RecursivePartial } from '../utils/types'
-import concatHeader from '../utils/concat-cookie'
+import getLoginCookie from '../utils/get-login-cookie'
 import { BigcommerceConfig, getConfig } from '..'
 
 export const loginMutation = /* GraphQL */ `
@@ -52,28 +52,13 @@ async function login({
     query,
     { variables }
   )
-  function getCookie(header: string | null, cookieKey: string) {
-  if (!header) return null
-    const cookies : string[] = header.split(/, (?=[^;]+=[^;]+;)/)
-  return cookies.find(cookie => cookie.startsWith(`${cookieKey}=`))
-}
-  // Set-Cookie returns several cookies, we only want SHOP_TOKEN
-    let shopToken = getCookie(res.headers.get('Set-Cookie'), 'SHOP_TOKEN')
 
-    if (shopToken && typeof shopToken === 'string') {
-      const { host } = request.headers
-      // OPTIONAL: Set the cookie at TLD to make it accessible on subdomains (embedded checkout)
-      shopToken = shopToken + `; Domain=${host?.includes(':') ? host?.slice(0, host.indexOf(':')) : host}`
+  console.log('ggg', getLoginCookie(res.headers.get('Set-Cookie'), request.headers.host))
 
-      if (process.env.NODE_ENV !== 'production') {
-        shopToken = shopToken.replace(/; Secure/gi, '')
-        shopToken = shopToken.replace(/; SameSite=none/gi, '; SameSite=lax')
-      }
-      response.setHeader(
-        'Set-Cookie',
-        concatHeader(response.getHeader('Set-Cookie'), shopToken)!
-      )
-    }
+  response.setHeader(
+    'Set-Cookie',
+    getLoginCookie(res.headers.get('Set-Cookie'), request.headers.host)!
+  )
 
   return {
     result: data.login?.result,
