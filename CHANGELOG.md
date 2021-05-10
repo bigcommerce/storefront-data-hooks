@@ -39,6 +39,11 @@ Programmatically set the prototype to be able to check if a thrown Error is a Bi
 Resolves a bug where the user couldn't add new products to the cart because the current cart was invalid but never deleted.
 
 Resolves [49](#49)
+# 1.3.1
+### Troubleshoot login cookie problem
+
+-  The Bigcommerce API has changed the cookies it returns after login, now we specifically select the cookie we are interested in returning to the customer: `SHOP_TOKEN`
+
 # 1.3.0
 ## Login SSO Documentation
 
