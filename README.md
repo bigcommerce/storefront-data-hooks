@@ -1,3 +1,5 @@
+![Last version](https://img.shields.io/github/tag/bigcommerce/storefront-data-hooks.svg?style=flat-square)
+[![NPM Status](https://img.shields.io/npm/dm/@bigcommerce/storefront-data-hooks.svg?style=flat-square)](https://www.npmjs.org/package/@bigcommerce/storefront-data-hooks)
 
 Table of Contents
 =================
