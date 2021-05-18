@@ -542,6 +542,10 @@ The recommended method is the [Embedded Checkout](https://developer.bigcommerce.
   Thanks @Strapazzon 🚀
 </details>
 
+## Contributing
+Pull requests, issues and comments are welcome! See [Contributing](CONTRIBUTING.md) for more details.
+
+Many thanks to all [contributors](https://github.com/bigcommerce/storefront-data-hooks/contributors)!
 ## More
 
 Feel free to read through the source for more usage, and check the commerce vercel demo and commerce repo for usage examples: ([demo.vercel.store](https://demo.vercel.store/)) ([repo](https://github.com/vercel/commerce))
