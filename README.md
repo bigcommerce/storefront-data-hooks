@@ -1,3 +1,5 @@
+![Last version](https://img.shields.io/github/tag/bigcommerce/storefront-data-hooks.svg?style=flat-square)
+[![NPM Status](https://img.shields.io/npm/dm/@bigcommerce/storefront-data-hooks.svg?style=flat-square)](https://www.npmjs.org/package/@bigcommerce/storefront-data-hooks)
 
 Table of Contents
 =================
@@ -21,6 +23,11 @@ Table of Contents
          * [useSearch](#usesearch)
          * [getAllProducts](#getallproducts)
          * [getProduct](#getproduct)
+      * [Customer Addresses Hooks](#customer-addresses-hooks)
+         * [useAddresses](#useaddresses)
+         * [useAddAddress](#useaddaddress)
+         * [useUpdateAddress](#useupdateaddress)
+         * [useRemoveAddress](#useremoveaddress)
       * [Checkout](#checkout)
       * [Troubleshooting](#troubleshooting)
       * [More](#more)
@@ -398,6 +405,120 @@ const { product } = await getProduct({
 })
 ```
 
+## Customer Addresses Hooks
+### useAddresses
+
+Hook for returning the current users addresses
+
+```javascript
+import useAddresses from '@bigcommerce/storefront-data-hooks/address/use-addresses'
+
+const AddressPage = () => {
+  const { data } = useAddresses()
+
+  return (
+    <div>
+      <pre>{JSON.stringify(data?.addresses, null, 2)}</pre>
+    </div>
+  )
+}
+
+```
+
+### useAddAddress
+
+Hook for adding customer address
+
+```javascript
+import useAddAddress from '@bigcommerce/storefront-data-hooks/address/use-add-address'
+
+const AddressPage = () => {
+  const addAddress = useAddAddress()
+
+  const handleAddAddress = async () => {
+    await addAddress({
+      first_name: "Rod",
+      last_name: "Hull",
+      address1: "Waffle Road",
+      city: "Bristol",
+      state_or_province: "Bristol",
+      postal_code: "WAF FLE",
+      country_code: "GB",
+      phone: "01234567890",
+      address_type: "residential",
+    })
+  }
+
+  return (
+    <form onSubmit={handleAddAddress}>
+      {children}
+    </form>
+  )
+}
+
+```
+
+### useUpdateAddress
+
+Hook for updating a customer address
+
+```javascript
+import useUpdateAddress from '@bigcommerce/storefront-data-hooks/address/use-update-address'
+
+const AddressPage = () => {
+  const updateAddress = useUpdateAddress()
+
+  const handleUpdateAddress = async () => {
+    await updateAddress({
+      id: 4,
+      first_name: "Rod",
+      last_name: "Hull",
+      address1: "Waffle Road",
+      city: "Bristol",
+      state_or_province: "Bristol",
+      postal_code: "WAF FLE",
+      country_code: "GB",
+      phone: "01234567890",
+      address_type: "residential",
+      id: 12
+    })
+  }
+
+  return (
+    <form onSubmit={handleUpdateAddress}>
+      {children}
+    </form>
+  )
+}
+
+```
+
+### useRemoveAddress
+
+Hook for removing a customers address
+
+```javascript
+import useRemoveAddress from '@bigcommerce/storefront-data-hooks/address/use-remove-address'
+
+const AddressPage = () => {
+  const removeAddress = useRemoveAddress()
+
+  const handleUpdateAddress = async () => {
+    await removeAddress({
+      id: 4,
+    })
+  }
+
+  return (
+    <form onSubmit={handleUpdateAddress}>
+      {children}
+    </form>
+  )
+}
+
+```
+
+
 ## Checkout
 
 > The checkout only works on **production** and with a custom domain
@@ -421,6 +542,10 @@ The recommended method is the [Embedded Checkout](https://developer.bigcommerce.
   Thanks @Strapazzon 🚀
 </details>
 
+## Contributing
+Pull requests, issues and comments are welcome! See [Contributing](CONTRIBUTING.md) for more details.
+
+Many thanks to all [contributors](https://github.com/bigcommerce/storefront-data-hooks/contributors)!
 ## More
 
 Feel free to read through the source for more usage, and check the commerce vercel demo and commerce repo for usage examples: ([demo.vercel.store](https://demo.vercel.store/)) ([repo](https://github.com/vercel/commerce))
