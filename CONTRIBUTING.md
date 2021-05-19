@@ -32,7 +32,7 @@ Steps to get started:
 
 Maintainers merge pull requests by squashing all commits and editing the commit message if necessary using the GitHub user interface.
 
-Use an appropriate commit type. Be especially careful with breaking changes.
+Use an appropriate commit type. Be especially careful with breaking changes. We recommend following [Angular Commit Message Conventions](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines)
 
 ## Releases
 
