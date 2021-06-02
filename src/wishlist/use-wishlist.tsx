@@ -7,6 +7,7 @@ import useCustomer from '../use-customer'
 const defaultOpts = {
   url: '/api/bigcommerce/wishlist',
   method: 'GET',
+  base: window.location.host,
 }
 
 export type { Wishlist }
@@ -26,14 +27,14 @@ export const fetcher: HookFetcher<Wishlist | null, UseWishlistInput> = (
 ) => {
   if (!customerId) return null
 
-  // Use a dummy base as we only care about the relative path
-  const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
+	const url = new URL(options?.url ?? defaultOpts.url, options?.base ?? defaultOpts.base)
 
   if (includeProducts) url.searchParams.set('products', '1')
 
   return fetch({
-    url: url.pathname + url.search,
-    method: options?.method ?? defaultOpts.method,
+		...defaultOpts,
+		...options,
+    url: url.href,
   })
 }
 

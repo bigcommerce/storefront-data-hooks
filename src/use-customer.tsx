@@ -6,6 +6,7 @@ import type { Customer, CustomerData } from './api/customers'
 const defaultOpts = {
   url: '/api/bigcommerce/customers',
   method: 'GET',
+  base: window.location.host,
 }
 
 export type { Customer }
@@ -15,7 +16,12 @@ export const fetcher: HookFetcher<Customer | null> = async (
   _,
   fetch
 ) => {
-  const data = await fetch<CustomerData | null>({ ...defaultOpts, ...options })
+  const url = new URL(options?.url ?? defaultOpts.url, options?.base ?? defaultOpts.base)
+  const data = await fetch<CustomerData | null>({
+    ...defaultOpts,
+    ...options,
+    url: url.href,
+  })
   return data?.customer ?? null
 }
 

@@ -8,6 +8,7 @@ import useCustomer from './use-customer'
 const defaultOpts = {
   url: '/api/bigcommerce/customers/login',
   method: 'POST',
+  base: window.location.host,
 }
 
 export type LoginInput = LoginBody
@@ -24,9 +25,12 @@ export const fetcher: HookFetcher<null, LoginBody> = (
     })
   }
 
+	const url = new URL(options?.url ?? defaultOpts.url, options?.base ?? defaultOpts.base)
+
   return fetch({
     ...defaultOpts,
     ...options,
+    url: url.href,
     body: { email, password },
   })
 }

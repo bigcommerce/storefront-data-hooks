@@ -9,6 +9,7 @@ import useWishlist, { UseWishlistOptions, Wishlist } from './use-wishlist'
 const defaultOpts = {
   url: '/api/bigcommerce/wishlist',
   method: 'DELETE',
+  base: window.location.host,
 }
 
 export type RemoveItemInput = {
@@ -20,9 +21,11 @@ export const fetcher: HookFetcher<Wishlist | null, RemoveItemBody> = (
   { itemId },
   fetch
 ) => {
+	const url = new URL(options?.url ?? defaultOpts.url, options?.base ?? defaultOpts.base)
   return fetch({
     ...defaultOpts,
     ...options,
+    url: url.href,
     body: { itemId },
   })
 }

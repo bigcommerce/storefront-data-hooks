@@ -9,6 +9,7 @@ import useWishlist, { UseWishlistOptions, Wishlist } from './use-wishlist'
 const defaultOpts = {
   url: '/api/bigcommerce/wishlist',
   method: 'POST',
+  base: window.location.host,
 }
 
 export type AddItemInput = ItemBody
@@ -19,9 +20,11 @@ export const fetcher: HookFetcher<Wishlist, AddItemBody> = (
   fetch
 ) => {
   // TODO: add validations before doing the fetch
+	const url = new URL(options?.url ?? defaultOpts.url, options?.base ?? defaultOpts.base)
   return fetch({
     ...defaultOpts,
     ...options,
+    url: url.href,
     body: { item },
   })
 }

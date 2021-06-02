@@ -9,6 +9,7 @@ import useCart, { Cart } from './use-cart'
 const defaultOpts = {
   url: '/api/bigcommerce/cart',
   method: 'POST',
+  base: window.location.host,
 }
 
 export type AddItemInput = ItemBody
@@ -27,9 +28,12 @@ export const fetcher: HookFetcher<Cart, AddItemBody> = (
     })
   }
 
+  const url = new URL(options?.url ?? defaultOpts.url, options?.base ?? defaultOpts.base)
+
   return fetch({
     ...defaultOpts,
     ...options,
+    url: url.href,
     body: { item, locale },
   })
 }

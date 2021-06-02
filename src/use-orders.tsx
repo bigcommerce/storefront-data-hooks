@@ -8,6 +8,7 @@ import useCustomer from './use-customer'
 const defaultOpts = {
   url: '/api/bigcommerce/orders',
   method: 'GET',
+  base: window.location.host,
 }
 
 export type { Orders }
@@ -23,9 +24,12 @@ export const fetcher: HookFetcher<Orders | null, UseOrdersInput> = async (
 ) => {
   if (!customerId) return null
 
+  const url = new URL(options?.url ?? defaultOpts.url, options?.base ?? defaultOpts.base)
+
   return fetch<Orders | null>({
     ...defaultOpts,
     ...options,
+    url: url.href,
   })
 }
 
