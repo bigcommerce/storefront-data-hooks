@@ -32,8 +32,8 @@ export const fetcher: HookFetcher<Wishlist | null, UseWishlistInput> = (
   if (includeProducts) url.searchParams.set('products', '1')
 
   return fetch({
-		...defaultOpts,
-		...options,
+    ...defaultOpts,
+    ...options,
     url: (options?.base || '') + url.pathname + url.search,
   })
 }

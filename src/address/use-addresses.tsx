@@ -26,7 +26,7 @@ export const fetcher: HookFetcher<AddressesResponse | null, UseAddressesPayload>
 ) => {
 	if (!customerId) return null
 	// Use a dummy base as we only care about the relative path
-		const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
+	const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
 	if (page) url.searchParams.set('page', String(page))
 
 	return fetch<AddressesResponse | null>({

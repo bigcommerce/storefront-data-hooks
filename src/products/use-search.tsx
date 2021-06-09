@@ -44,7 +44,7 @@ export const fetcher: HookFetcher<SearchProductsData, SearchProductsPayload> = (
 
   return fetch({
     ...defaultOpts,
-		...options,
+    ...options,
     url: (options?.base || '') + url.pathname + url.search
   })
 }

@@ -21,14 +21,14 @@ export const fetcher: HookFetcher<
 > = async (options, { orderId }, fetch) => {
 	if (!orderId) return null
 
-  // Use a dummy base as we only care about the relative path
-  const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
+	// Use a dummy base as we only care about the relative path
+	const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
 	url.searchParams.set('order_id', String(orderId))
 
 	return fetch<Products | null>({
 		...defaultOpts,
 		...options,
-    url: (options?.base || '') + url.pathname + url.search,
+		url: (options?.base || '') + url.pathname + url.search,
 	})
 }
 
