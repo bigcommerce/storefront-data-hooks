@@ -15,7 +15,13 @@ export const fetcher: HookFetcher<Customer | null> = async (
   _,
   fetch
 ) => {
-  const data = await fetch<CustomerData | null>({ ...defaultOpts, ...options })
+  // Use a dummy base as we only care about the relative path
+  const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
+  const data = await fetch<CustomerData | null>({
+    ...defaultOpts,
+    ...options,
+    url: (options?.base || '') + url.pathname,
+  })
   return data?.customer ?? null
 }
 

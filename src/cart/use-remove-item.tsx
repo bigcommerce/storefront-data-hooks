@@ -18,9 +18,13 @@ export const fetcher: HookFetcher<Cart | null, RemoveItemBody> = (
   { itemId },
   fetch
 ) => {
+
+  // Use a dummy base as we only care about the relative path
+  const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
   return fetch({
     ...defaultOpts,
     ...options,
+    url: (options?.base || '') + url.pathname,
     body: { itemId },
   })
 }

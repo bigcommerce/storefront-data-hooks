@@ -15,7 +15,15 @@ export const fetcher: HookFetcher<Cart | null, CartInput> = (
   { cartId },
   fetch
 ) => {
-  return cartId ? fetch({ ...defaultOpts, ...options }) : null
+  if (!cartId) return null
+  // Use a dummy base as we only care about the relative path
+  const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
+
+  return fetch({
+    ...defaultOpts,
+    ...options,
+    url: (options?.base || '') + url.pathname
+  })
 }
 
 export function extendHook(
