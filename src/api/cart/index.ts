@@ -128,6 +128,11 @@ export type Cart = {
   created_time: string
   updated_time: string
   channel_id: number
+  redirect_urls?: {
+    cart_url: string
+    checkout_url: string
+    embedded_checkout_url?: string
+  }
 }
 
 export type CartHandlers = {
