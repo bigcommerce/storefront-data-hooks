@@ -8,7 +8,6 @@ import useCustomer from './use-customer'
 const defaultOpts = {
   url: '/api/bigcommerce/customers/signup',
   method: 'POST',
-  base: window.location.host,
 }
 
 export type SignupInput = SignupBody
@@ -25,12 +24,13 @@ export const fetcher: HookFetcher<null, SignupBody> = (
     })
   }
 
-  const url = new URL(options?.url ?? defaultOpts.url, options?.base ?? defaultOpts.base)
+  // Use a dummy base as we only care about the relative path
+  const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
 
   return fetch({
     ...defaultOpts,
     ...options,
-    url: url.href,
+    url: (options?.base || '') + url.pathname,
     body: { firstName, lastName, email, password },
   })
 }

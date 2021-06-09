@@ -8,7 +8,6 @@ import useAddresses from "./use-addresses"
 const defaultOpts = {
 	url: "/api/bigcommerce/address",
 	method: "PUT",
-	base: window.location.host,
 }
 
 export type UpdateAddressInput = Omit<UpdateAddressBody, "customer_id">
@@ -24,12 +23,13 @@ export const fetcher: HookFetcher<null, UpdateAddressInput> = (
 		})
 	}
 
-	const url = new URL(options?.url ?? defaultOpts.url, options?.base ?? defaultOpts.base)
+	// Use a dummy base as we only care about the relative path
+	const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
 
 	return fetch({
 		...defaultOpts,
 		...options,
-		url: url.href,
+		url: (options?.base || '') + url.pathname,
 		body: input,
 	})
 }

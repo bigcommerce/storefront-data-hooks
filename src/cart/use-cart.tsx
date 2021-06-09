@@ -6,7 +6,6 @@ import type { Cart } from '../api/cart'
 const defaultOpts = {
   url: '/api/bigcommerce/cart',
   method: 'GET',
-  base: window.location.host,
 }
 
 export type { Cart }
@@ -17,12 +16,13 @@ export const fetcher: HookFetcher<Cart | null, CartInput> = (
   fetch
 ) => {
   if (!cartId) return null
-  const url = new URL(options?.url ?? defaultOpts.url, options?.base ?? defaultOpts.base)
+  // Use a dummy base as we only care about the relative path
+  const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
 
   return fetch({
     ...defaultOpts,
     ...options,
-    url: url.href
+    url: (options?.base || '') + url.pathname
   })
 }
 

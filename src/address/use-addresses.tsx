@@ -8,7 +8,6 @@ import useCustomer from "../use-customer"
 const defaultOpts = {
 	url: "/api/bigcommerce/address",
 	method: "GET",
-	base: window.location.host,
 }
 
 export type { AddressesResponse }
@@ -26,13 +25,14 @@ export const fetcher: HookFetcher<AddressesResponse | null, UseAddressesPayload>
 	fetch
 ) => {
 	if (!customerId) return null
-	const url = new URL(options?.url ?? defaultOpts.url, options?.base ?? defaultOpts.base)
+	// Use a dummy base as we only care about the relative path
+		const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
 	if (page) url.searchParams.set('page', String(page))
 
 	return fetch<AddressesResponse | null>({
 		...defaultOpts,
 		...options,
-		url: url.href,
+		url: (options?.base || '') + url.pathname + url.search
 	})
 }
 

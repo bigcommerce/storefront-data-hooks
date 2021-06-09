@@ -8,7 +8,6 @@ import useAddresses from "./use-addresses"
 const defaultOpts = {
 	url: "/api/bigcommerce/address",
 	method: "DELETE",
-	base: window.location.host,
 }
 
 export type RemoveAddressInput = RemoveAddressBody
@@ -19,13 +18,13 @@ export const fetcher: HookFetcher<null, RemoveAddressBody> = (options, { id }, f
 			message: "An id is required to remove an address",
 		})
 	}
-
-	const url = new URL(options?.url ?? defaultOpts.url, options?.base ?? defaultOpts.base)
+	// Use a dummy base as we only care about the relative path
+	const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
 
 	return fetch({
 		...defaultOpts,
 		...options,
-		url: url.href,
+		url: (options?.base || '') + url.pathname,
 		body: { id },
 	})
 }

@@ -6,7 +6,6 @@ import type { Customer, CustomerData } from './api/customers'
 const defaultOpts = {
   url: '/api/bigcommerce/customers',
   method: 'GET',
-  base: window.location.host,
 }
 
 export type { Customer }
@@ -16,11 +15,12 @@ export const fetcher: HookFetcher<Customer | null> = async (
   _,
   fetch
 ) => {
-  const url = new URL(options?.url ?? defaultOpts.url, options?.base ?? defaultOpts.base)
+  // Use a dummy base as we only care about the relative path
+  const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
   const data = await fetch<CustomerData | null>({
     ...defaultOpts,
     ...options,
-    url: url.href,
+    url: (options?.base || '') + url.pathname,
   })
   return data?.customer ?? null
 }

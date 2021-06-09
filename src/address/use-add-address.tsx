@@ -8,7 +8,6 @@ import useAddresses from "./use-addresses"
 const defaultOpts = {
 	url: "/api/bigcommerce/address",
 	method: "POST",
-  base: window.location.host,
 }
 
 export type AddAddressInput = Omit<AddAddressBody, "customer_id">
@@ -32,13 +31,13 @@ export const fetcher: HookFetcher<null, AddAddressInput> = (
 				"A first name, last name, address1, city, state_or_province, postal_code and country_code are required",
 		})
 	}
-
-	const url = new URL(options?.url ?? defaultOpts.url, options?.base ?? defaultOpts.base)
+	// Use a dummy base as we only care about the relative path
+	const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
 
 	return fetch({
 		...defaultOpts,
 		...options,
-    url: url.href,
+		url: (options?.base || '') + url.pathname,
 		body: input,
 	})
 }

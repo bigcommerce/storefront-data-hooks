@@ -7,7 +7,6 @@ import useCart, { Cart } from './use-cart'
 const defaultOpts = {
   url: '/api/bigcommerce/cart',
   method: 'DELETE',
-  base: window.location.host,
 }
 
 export type RemoveItemInput = {
@@ -20,11 +19,12 @@ export const fetcher: HookFetcher<Cart | null, RemoveItemBody> = (
   fetch
 ) => {
 
-	const url = new URL(options?.url ?? defaultOpts.url, options?.base ?? defaultOpts.base)
+  // Use a dummy base as we only care about the relative path
+  const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
   return fetch({
     ...defaultOpts,
     ...options,
-    url: url.href,
+    url: (options?.base || '') + url.pathname,
     body: { itemId },
   })
 }

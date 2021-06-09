@@ -6,7 +6,6 @@ import type { SearchProductsData } from '../api/catalog/products'
 const defaultOpts = {
   url: '/api/bigcommerce/catalog/products',
   method: 'GET',
-  base: window.location.host
 }
 
 export type SearchProductsInput = {
@@ -26,7 +25,8 @@ export const fetcher: HookFetcher<SearchProductsData, SearchProductsPayload> = (
   { search, categoryId, stringifiedCategoryIds, brandId, sort, page },
   fetch
 ) => {
-  const url = new URL(options?.url ?? defaultOpts.url, options?.base ?? defaultOpts.base)
+  // Use a dummy base as we only care about the relative path
+  const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
 
   if (search) url.searchParams.set('search', search)
   if (page) url.searchParams.set('page', String(page))
@@ -45,7 +45,7 @@ export const fetcher: HookFetcher<SearchProductsData, SearchProductsPayload> = (
   return fetch({
     ...defaultOpts,
 		...options,
-    url: url.href,
+    url: (options?.base || '') + url.pathname + url.search
   })
 }
 
