@@ -4,7 +4,7 @@ import { CommerceError } from '.././commerce/utils/errors'
 import useCartAddItem from '.././commerce/cart/use-add-item'
 import type { ItemBody, AddItemBody } from '../api/cart'
 import { useCommerce } from '..'
-import useCart, { Cart } from './use-cart'
+import useCart, { Cart, UseCartInput } from './use-cart'
 
 const defaultOpts = {
   url: '/api/bigcommerce/cart',
@@ -15,7 +15,7 @@ export type AddItemInput = ItemBody
 
 export const fetcher: HookFetcher<Cart, AddItemBody> = (
   options,
-  { item, locale },
+  { item, locale, include },
   fetch
 ) => {
   if (
@@ -29,24 +29,25 @@ export const fetcher: HookFetcher<Cart, AddItemBody> = (
 
   // Use a dummy base as we only care about the relative path
   const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
+  if (include) url.searchParams.set('include', include)
 
   return fetch({
     ...defaultOpts,
     ...options,
-    url: (options?.base || '') + url.pathname,
+    url: (options?.base || '') + url.pathname + url.search,
     body: { item, locale },
   })
 }
 
 export function extendHook(customFetcher: typeof fetcher) {
-  const useAddItem = () => {
+  const useAddItem = (input?: UseCartInput) => {
     const { mutate } = useCart()
     const { locale } = useCommerce()
     const fn = useCartAddItem(defaultOpts, customFetcher)
 
     return useCallback(
-      async function addItem(input: AddItemInput) {
-        const data = await fn({ item: input, locale })
+      async function addItem(item: AddItemInput) {
+        const data = await fn({ item, locale, include: input?.include?.join(',') })
         await mutate(data, false)
         return data
       },

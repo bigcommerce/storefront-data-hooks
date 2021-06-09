@@ -5,7 +5,7 @@ import { CommerceError } from '.././commerce/utils/errors'
 import useCartUpdateItem from '.././commerce/cart/use-update-item'
 import type { ItemBody, PhysicalItem, UpdateItemBody } from '../api/cart'
 import { fetcher as removeFetcher } from './use-remove-item'
-import useCart, { Cart } from './use-cart'
+import useCart, { Cart, UseCartInput } from './use-cart'
 
 const defaultOpts = {
   url: '/api/bigcommerce/cart',
@@ -16,7 +16,7 @@ export type UpdateItemInput = Partial<{ id: string } & ItemBody>
 
 export const fetcher: HookFetcher<Cart | null, UpdateItemBody> = (
   options,
-  { itemId, item },
+  { itemId, item, include },
   fetch
 ) => {
   if (Number.isInteger(item.quantity)) {
@@ -32,17 +32,18 @@ export const fetcher: HookFetcher<Cart | null, UpdateItemBody> = (
 
   // Use a dummy base as we only care about the relative path
   const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
+  if (include) url.searchParams.set('include', include)
 
   return fetch({
     ...defaultOpts,
     ...options,
-    url: (options?.base || '') + url.pathname,
+    url: (options?.base || '') + url.pathname + url.search,
     body: { itemId, item },
   })
 }
 
 function extendHook(customFetcher: typeof fetcher, cfg?: { wait?: number }) {
-  const useUpdateItem = (item: PhysicalItem) => {
+  const useUpdateItem = (item: PhysicalItem, input?: UseCartInput) => {
     const { mutate } = useCart()
     const fn = useCartUpdateItem<Cart | null, UpdateItemBody>(
       defaultOpts,
@@ -50,15 +51,17 @@ function extendHook(customFetcher: typeof fetcher, cfg?: { wait?: number }) {
     )
 
     return useCallback(
-      debounce(async (input: UpdateItemInput) => {
+      debounce(async (newItem: UpdateItemInput) => {
         const data = await fn({
-          itemId: input.id ?? item?.id,
+          itemId: newItem.id ?? item?.id,
           item: {
-            productId: input.productId ?? item?.product_id,
-            variantId: input.variantId ?? item?.variant_id,
-            quantity: input.quantity,
+            productId: newItem.productId ?? item?.product_id,
+            variantId: newItem.variantId ?? item?.variant_id,
+            quantity: newItem.quantity,
           },
+          include: input?.include?.join(',')
         })
+        console.log({ data })
         await mutate(data, false)
         return data
       }, cfg?.wait ?? 500),

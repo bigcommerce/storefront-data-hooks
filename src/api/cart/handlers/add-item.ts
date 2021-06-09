@@ -5,7 +5,7 @@ import type { CartHandlers } from '..'
 // Return current cart info
 const addItem: CartHandlers['addItem'] = async ({
   res,
-  body: { cartId, locale, item },
+  body: { cartId, locale, item, include },
   config,
 }) => {
   if (!item) {
@@ -15,6 +15,10 @@ const addItem: CartHandlers['addItem'] = async ({
     })
   }
   if (!item.quantity) item.quantity = 1
+
+  // Use a dummy base as we only care about the relative path
+  const url = new URL(cartId ? `/v3/carts/${cartId}/items` : '/v3/carts', 'http://a')
+  if (include) url.searchParams.set('include', include)
 
   const options = {
     method: 'POST',
@@ -28,9 +32,7 @@ const addItem: CartHandlers['addItem'] = async ({
         : {}),
     }),
   }
-  const { data } = cartId
-    ? await config.storeApiFetch(`/v3/carts/${cartId}/items`, options)
-    : await config.storeApiFetch('/v3/carts', options)
+  const { data } = await config.storeApiFetch(url.pathname + url.search, options)
 
   // Create or update the cart cookie
   res.setHeader(
