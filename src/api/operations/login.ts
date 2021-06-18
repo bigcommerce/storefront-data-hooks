@@ -53,8 +53,6 @@ async function login({
     { variables }
   )
 
-  console.log('ggg', getLoginCookie(res.headers.get('Set-Cookie'), request.headers.host))
-
   response.setHeader(
     'Set-Cookie',
     getLoginCookie(res.headers.get('Set-Cookie'), request.headers.host)!

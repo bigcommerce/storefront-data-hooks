@@ -11,13 +11,15 @@ export type LoginBody = {
   password: string
 }
 
+export type LoginResponse = { result?: string | undefined }
+
 export type LoginHandlers = {
-  login: BigcommerceHandler<null, Partial<LoginBody>>
+  login: BigcommerceHandler<LoginResponse, Partial<LoginBody>>
 }
 
 const METHODS = ['POST']
 
-const loginApi: BigcommerceApiHandler<null, LoginHandlers> = async (
+const loginApi: BigcommerceApiHandler<LoginResponse, LoginHandlers> = async (
   req,
   res,
   config,
