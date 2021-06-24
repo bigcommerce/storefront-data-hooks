@@ -1,4 +1,3 @@
-import { BigcommerceApiResponse } from 'src/api/utils/create-api-handler'
 import { FetcherError } from '../../.././commerce/utils/errors'
 import login from '../../operations/login'
 import type { LoginHandlers } from '../login'
