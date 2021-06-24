@@ -17,6 +17,7 @@ export type HookFetcherOptions = {
   url?: string
   method?: string
   base?: string
+  credentials?: RequestInit["credentials"]
 }
 
 export type HookInput = [string, string | number | boolean | undefined][]

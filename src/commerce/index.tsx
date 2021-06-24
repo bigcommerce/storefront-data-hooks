@@ -25,6 +25,8 @@ export type CommerceContextValue = {
   fetcherRef: MutableRefObject<Fetcher<any>>
   locale: string
   cartCookie: string
+  base?: string
+  credentials?: RequestInit["credentials"]
 }
 
 export function CommerceProvider({ children, config }: CommerceProps) {
@@ -40,8 +42,10 @@ export function CommerceProvider({ children, config }: CommerceProps) {
       fetcherRef,
       locale: config.locale,
       cartCookie: config.cartCookie,
+      base: config.base,
+      credentials: config.credentials,
     }),
-    [config.locale, config.cartCookie]
+    [config.locale, config.cartCookie, config.base, config.credentials]
   )
 
   return <Commerce.Provider value={cfg}>{children}</Commerce.Provider>
