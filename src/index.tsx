@@ -35,6 +35,7 @@ export const bigcommerceConfig: CommerceConfig = {
     const res = await fetch(url!, { method, body, headers })
 
     if (res.ok) {
+      if (res.status === 204) return null
       const { data } = await res.json()
       return data
     }
