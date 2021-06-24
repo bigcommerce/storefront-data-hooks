@@ -48,6 +48,7 @@ export const productInfoFragment = /* GraphQL */ `
     path
     brand {
       entityId
+      name
     }
     description
     prices {
