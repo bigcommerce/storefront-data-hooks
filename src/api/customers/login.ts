@@ -42,6 +42,6 @@ const loginApi: BigcommerceApiHandler<LoginResponse, LoginHandlers> = async (
   }
 }
 
-const handlers = { login }
+export const handlers = { login }
 
 export default createApiHandler(loginApi, handlers, {})

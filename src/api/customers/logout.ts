@@ -40,6 +40,6 @@ const logoutApi: BigcommerceApiHandler<null, LogoutHandlers> = async (
   }
 }
 
-const handlers = { logout }
+export const handlers = { logout }
 
 export default createApiHandler(logoutApi, handlers, {})
