@@ -17,7 +17,7 @@ export type UseData = <Result = any, Input = null>(
 ) => responseInterface<Result, CommerceError>
 
 const useData: UseData = (options, input, fetcherFn, swrOptions) => {
-  const { fetcherRef } = useCommerce()
+  const { fetcherRef, credentials, base } = useCommerce()
   const fetcher = async (
     url?: string,
     query?: string,
@@ -26,7 +26,7 @@ const useData: UseData = (options, input, fetcherFn, swrOptions) => {
   ) => {
     try {
       return await fetcherFn(
-        { url, query, method },
+        { url, query, method, base, credentials },
         // Transform the input array into an object
         args.reduce((obj, val, i) => {
           obj[input[i][0]!] = val
