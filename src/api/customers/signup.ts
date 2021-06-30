@@ -45,6 +45,6 @@ const signupApi: BigcommerceApiHandler<null, SignupHandlers> = async (
   }
 }
 
-const handlers = { signup }
+export const handlers = { signup }
 
 export default createApiHandler(signupApi, handlers, {})

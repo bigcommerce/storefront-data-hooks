@@ -53,11 +53,13 @@ async function login({
     { variables }
   )
 
-  console.log('ggg', getLoginCookie(res.headers.get('Set-Cookie'), request.headers.host))
-
   response.setHeader(
     'Set-Cookie',
-    getLoginCookie(res.headers.get('Set-Cookie'), request.headers.host)!
+    [
+      getLoginCookie(res.headers.get('Set-Cookie'), request.headers.host)!,
+      getLoginCookie(res.headers.get('Set-Cookie'), request.headers.host, 'SHOP_SESSION_TOKEN')!,
+      getLoginCookie(res.headers.get('Set-Cookie'), request.headers.host, 'Shopper-perf')!,
+    ].filter(cookie => cookie)
   )
 
   return {
