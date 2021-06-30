@@ -5,7 +5,12 @@ type LoginResult {
   """
   The result of a login
   """
-  result: String!
+  result: String! @deprecated(reason: "Use customer node instead.")
+
+  """
+  The currently logged in customer.
+  """
+  customer: Customer
 }
 
 """
@@ -90,17 +95,22 @@ type Brand implements Node {
   """
   Page title for the brand.
   """
-  pageTitle: String!
+  pageTitle: String! @deprecated(reason: "Use SEO details instead.")
 
   """
   Meta description for the brand.
   """
-  metaDesc: String!
+  metaDesc: String! @deprecated(reason: "Use SEO details instead.")
 
   """
   Meta keywords for the brand.
   """
-  metaKeywords: [String!]!
+  metaKeywords: [String!]! @deprecated(reason: "Use SEO details instead.")
+
+  """
+  Brand SEO details.
+  """
+  seo: SeoDetails!
 
   """
   Search keywords for the brand.
@@ -372,6 +382,7 @@ type Category implements Node {
     first: Int
     last: Int
     hideOutOfStock: Boolean
+    sortBy: CategoryProductSort
   ): ProductConnection!
 
   """
@@ -385,6 +396,11 @@ type Category implements Node {
     first: Int
     last: Int
   ): MetafieldConnection!
+
+  """
+  Category SEO details.
+  """
+  seo: SeoDetails!
 }
 
 """
@@ -415,6 +431,21 @@ type CategoryEdge {
   A cursor for use in pagination.
   """
   cursor: String!
+}
+
+"""
+Product sorting by categories.
+"""
+enum CategoryProductSort {
+  DEFAULT
+  FEATURED
+  NEWEST
+  BEST_SELLING
+  A_TO_Z
+  Z_TO_A
+  BEST_REVIEWED
+  LOWEST_PRICE
+  HIGHEST_PRICE
 }
 
 """
@@ -505,6 +536,17 @@ type ContactField {
   Store phone number.
   """
   phone: String!
+}
+
+"""
+The page content.
+"""
+type Content {
+  renderedRegionsByPageType(pageType: PageType!): RenderedRegionsByPageType!
+  renderedRegionsByPageTypeAndEntityId(
+    entityId: Long!
+    entityPageType: EntityPageType!
+  ): RenderedRegionsByPageType!
 }
 
 """
@@ -743,6 +785,18 @@ input DistanceFilter {
 }
 
 """
+Entity page type
+"""
+enum EntityPageType {
+  BLOG_POST
+  BRAND
+  CATEGORY
+  CONTACT_US
+  PAGE
+  PRODUCT
+}
+
+"""
 A form allowing selection and uploading of a file from the user's local computer.
 """
 type FileUploadFieldOption implements CatalogProductOption {
@@ -828,8 +882,11 @@ type Inventory {
     entityIds: [Int!] = []
     codes: [String!] = []
     typeIds: [String!] = []
-    serviceTypeCodes: [String!] = []
+    serviceTypeIds: [String!] = []
     distanceFilter: DistanceFilter
+    countryCodes: [countryCode!] = []
+    states: [String!] = []
+    cities: [String!] = []
     before: String
     after: String
     first: Int
@@ -872,9 +929,10 @@ type InventoryByLocations {
   locationEntityTypeId: String
 
   """
-  Location service type codes.
+  Location service type ids.
   """
-  locationEntityServiceTypeCodes: [String!]!
+  locationEntityServiceTypeIds: [String!]!
+    @deprecated(reason: "Deprecated. Will be substituted with pickup methods.")
 
   """
   Location code.
@@ -1231,6 +1289,46 @@ type PageInfo {
 }
 
 """
+Page type
+"""
+enum PageType {
+  ACCOUNT_ADDRESS
+  ACCOUNT_ADD_ADDRESS
+  ACCOUNT_ADD_RETURN
+  ACCOUNT_ADD_WISHLIST
+  ACCOUNT_DOWNLOAD_ITEM
+  ACCOUNT_EDIT
+  ACCOUNT_INBOX
+  ACCOUNT_ORDERS_ALL
+  ACCOUNT_ORDERS_COMPLETED
+  ACCOUNT_ORDERS_DETAILS
+  ACCOUNT_ORDERS_INVOICE
+  ACCOUNT_RECENT_ITEMS
+  ACCOUNT_RETURNS
+  ACCOUNT_RETURN_SAVED
+  ACCOUNT_WISHLISTS
+  ACCOUNT_WISHLIST_DETAILS
+  AUTH_ACCOUNT_CREATED
+  AUTH_CREATE_ACC
+  AUTH_FORGOT_PASS
+  AUTH_LOGIN
+  AUTH_NEW_PASS
+  BLOG
+  BRANDS
+  CART
+  COMPARE
+  GIFT_CERT_BALANCE
+  GIFT_CERT_PURCHASE
+  GIFT_CERT_REDEEM
+  HOME
+  ORDER_INFO
+  SEARCH
+  SITEMAP
+  SUBSCRIBED
+  UNSUBSCRIBE
+}
+
+"""
 The min and max range of prices that apply to this product.
 """
 type PriceRanges {
@@ -1549,6 +1647,11 @@ type Product implements Node {
     first: Int
     last: Int
   ): ReviewConnection!
+
+  """
+  Product SEO details.
+  """
+  seo: SeoDetails!
 }
 
 """
@@ -1836,6 +1939,18 @@ type Query {
     @deprecated(reason: "Alpha version. Do not use in production.")
 }
 
+type Region {
+  """
+  The name of a region.
+  """
+  name: String!
+
+  """
+  The rendered HTML content targeted at the region.
+  """
+  html: String!
+}
+
 """
 A connection to a list of items.
 """
@@ -1864,6 +1979,13 @@ type RelatedProductsEdge {
   A cursor for use in pagination.
   """
   cursor: String!
+}
+
+"""
+The rendered regions by specific page.
+"""
+type RenderedRegionsByPageType {
+  regions: [Region!]!
 }
 
 """
@@ -1963,6 +2085,36 @@ type Route {
 }
 
 """
+Store search settings.
+"""
+type Search {
+  """
+  Product filtering enabled.
+  """
+  productFilteringEnabled: Boolean!
+}
+
+"""
+Seo Details
+"""
+type SeoDetails {
+  """
+  Page title.
+  """
+  pageTitle: String!
+
+  """
+  Meta description.
+  """
+  metaDescription: String!
+
+  """
+  Meta keywords.
+  """
+  metaKeywords: String!
+}
+
+"""
 Store settings information from the control panel.
 """
 type Settings {
@@ -2006,6 +2158,11 @@ type Settings {
   """
   channelId: Long!
   tax: TaxDisplaySettings
+
+  """
+  Store search settings.
+  """
+  search: Search!
 }
 
 """
@@ -2091,6 +2248,7 @@ type Site {
   Store settings.
   """
   settings: Settings
+  content: Content!
 }
 
 """
@@ -2352,13 +2510,268 @@ type VariantInventory {
     locationEntityIds: [Int!] = []
     locationEntityCodes: [String!] = []
     locationEntityTypeIds: [String!] = []
-    locationEntityServiceTypeCodes: [String!] = []
+    locationEntityServiceTypeIds: [String!] = []
     distanceFilter: DistanceFilter
     before: String
     after: String
     first: Int
     last: Int
   ): LocationConnection
+}
+
+"""
+Country Code
+"""
+enum countryCode {
+  AW
+  AF
+  AO
+  AI
+  AX
+  AL
+  AD
+  AE
+  AR
+  AM
+  AS
+  AQ
+  TF
+  AG
+  AU
+  AT
+  AZ
+  BI
+  BE
+  BJ
+  BQ
+  BF
+  BD
+  BG
+  BH
+  BS
+  BA
+  BL
+  BY
+  BZ
+  BM
+  BO
+  BR
+  BB
+  BN
+  BT
+  BV
+  BW
+  CF
+  CA
+  CC
+  CH
+  CL
+  CN
+  CI
+  CM
+  CD
+  CG
+  CK
+  CO
+  KM
+  CV
+  CR
+  CU
+  CW
+  CX
+  KY
+  CY
+  CZ
+  DE
+  DJ
+  DM
+  DK
+  DO
+  DZ
+  EC
+  EG
+  ER
+  EH
+  ES
+  EE
+  ET
+  FI
+  FJ
+  FK
+  FR
+  FO
+  FM
+  GA
+  GB
+  GE
+  GG
+  GH
+  GI
+  GN
+  GP
+  GM
+  GW
+  GQ
+  GR
+  GD
+  GL
+  GT
+  GF
+  GU
+  GY
+  HK
+  HM
+  HN
+  HR
+  HT
+  HU
+  ID
+  IM
+  IN
+  IO
+  IE
+  IR
+  IQ
+  IS
+  IL
+  IT
+  JM
+  JE
+  JO
+  JP
+  KZ
+  KE
+  KG
+  KH
+  KI
+  KN
+  KR
+  KW
+  LA
+  LB
+  LR
+  LY
+  LC
+  LI
+  LK
+  LS
+  LT
+  LU
+  LV
+  MO
+  MF
+  MA
+  MC
+  MD
+  MG
+  MV
+  MX
+  MH
+  MK
+  ML
+  MT
+  MM
+  ME
+  MN
+  MP
+  MZ
+  MR
+  MS
+  MQ
+  MU
+  MW
+  MY
+  YT
+  NA
+  NC
+  NE
+  NF
+  NG
+  NI
+  NU
+  NL
+  NO
+  NP
+  NR
+  NZ
+  OM
+  PK
+  PA
+  PN
+  PE
+  PH
+  PW
+  PG
+  PL
+  PR
+  KP
+  PT
+  PY
+  PS
+  PF
+  QA
+  RE
+  RO
+  RU
+  RW
+  SA
+  SD
+  SN
+  SG
+  GS
+  SH
+  SJ
+  SB
+  SL
+  SV
+  SM
+  SO
+  PM
+  RS
+  SS
+  ST
+  SR
+  SK
+  SI
+  SE
+  SZ
+  SX
+  SC
+  SY
+  TC
+  TD
+  TG
+  TH
+  TJ
+  TK
+  TM
+  TL
+  TO
+  TT
+  TN
+  TR
+  TV
+  TW
+  TZ
+  UG
+  UA
+  UM
+  UY
+  US
+  UZ
+  VA
+  VC
+  VE
+  VG
+  VI
+  VN
+  VU
+  WF
+  WS
+  YE
+  ZA
+  ZM
+  ZW
 }
 
 """

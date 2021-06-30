@@ -19,8 +19,13 @@ export type Scalars = {
 /** Login result */
 export type LoginResult = {
   __typename?: 'LoginResult'
-  /** The result of a login */
+  /**
+   * The result of a login
+   * @deprecated Use customer node instead.
+   */
   result: Scalars['String']
+  /** The currently logged in customer. */
+  customer?: Maybe<Customer>
 }
 
 /** Logout result */
@@ -77,12 +82,23 @@ export type Brand = Node & {
   name: Scalars['String']
   /** Default image for brand. */
   defaultImage?: Maybe<Image>
-  /** Page title for the brand. */
+  /**
+   * Page title for the brand.
+   * @deprecated Use SEO details instead.
+   */
   pageTitle: Scalars['String']
-  /** Meta description for the brand. */
+  /**
+   * Meta description for the brand.
+   * @deprecated Use SEO details instead.
+   */
   metaDesc: Scalars['String']
-  /** Meta keywords for the brand. */
+  /**
+   * Meta keywords for the brand.
+   * @deprecated Use SEO details instead.
+   */
   metaKeywords: Array<Scalars['String']>
+  /** Brand SEO details. */
+  seo: SeoDetails
   /** Search keywords for the brand. */
   searchKeywords: Array<Scalars['String']>
   /** Path for the brand page. */
@@ -237,6 +253,8 @@ export type Category = Node & {
   products: ProductConnection
   /** Metafield data related to a category. */
   metafields: MetafieldConnection
+  /** Category SEO details. */
+  seo: SeoDetails
 }
 
 /** Category */
@@ -255,6 +273,7 @@ export type CategoryProductsArgs = {
   first?: Maybe<Scalars['Int']>
   last?: Maybe<Scalars['Int']>
   hideOutOfStock?: Maybe<Scalars['Boolean']>
+  sortBy?: Maybe<CategoryProductSort>
 }
 
 /** Category */
@@ -283,6 +302,19 @@ export type CategoryEdge = {
   node: Category
   /** A cursor for use in pagination. */
   cursor: Scalars['String']
+}
+
+/** Product sorting by categories. */
+export enum CategoryProductSort {
+  Default = 'DEFAULT',
+  Featured = 'FEATURED',
+  Newest = 'NEWEST',
+  BestSelling = 'BEST_SELLING',
+  AToZ = 'A_TO_Z',
+  ZToA = 'Z_TO_A',
+  BestReviewed = 'BEST_REVIEWED',
+  LowestPrice = 'LOWEST_PRICE',
+  HighestPrice = 'HIGHEST_PRICE',
 }
 
 /** An item in a tree of categories. */
@@ -328,6 +360,24 @@ export type ContactField = {
   email: Scalars['String']
   /** Store phone number. */
   phone: Scalars['String']
+}
+
+/** The page content. */
+export type Content = {
+  __typename?: 'Content'
+  renderedRegionsByPageType: RenderedRegionsByPageType
+  renderedRegionsByPageTypeAndEntityId: RenderedRegionsByPageType
+}
+
+/** The page content. */
+export type ContentRenderedRegionsByPageTypeArgs = {
+  pageType: PageType
+}
+
+/** The page content. */
+export type ContentRenderedRegionsByPageTypeAndEntityIdArgs = {
+  entityId: Scalars['Long']
+  entityPageType: EntityPageType
 }
 
 /** Custom field */
@@ -459,6 +509,16 @@ export type DistanceFilter = {
   lengthUnit: LengthUnit
 }
 
+/** Entity page type */
+export enum EntityPageType {
+  BlogPost = 'BLOG_POST',
+  Brand = 'BRAND',
+  Category = 'CATEGORY',
+  ContactUs = 'CONTACT_US',
+  Page = 'PAGE',
+  Product = 'PRODUCT',
+}
+
 /** A form allowing selection and uploading of a file from the user's local computer. */
 export type FileUploadFieldOption = CatalogProductOption & {
   __typename?: 'FileUploadFieldOption'
@@ -519,8 +579,11 @@ export type InventoryLocationsArgs = {
   entityIds?: Maybe<Array<Scalars['Int']>>
   codes?: Maybe<Array<Scalars['String']>>
   typeIds?: Maybe<Array<Scalars['String']>>
-  serviceTypeCodes?: Maybe<Array<Scalars['String']>>
+  serviceTypeIds?: Maybe<Array<Scalars['String']>>
   distanceFilter?: Maybe<DistanceFilter>
+  countryCodes?: Maybe<Array<CountryCode>>
+  states?: Maybe<Array<Scalars['String']>>
+  cities?: Maybe<Array<Scalars['String']>>
   before?: Maybe<Scalars['String']>
   after?: Maybe<Scalars['String']>
   first?: Maybe<Scalars['Int']>
@@ -542,8 +605,11 @@ export type InventoryByLocations = {
   locationDistance?: Maybe<Distance>
   /** Location type id. */
   locationEntityTypeId?: Maybe<Scalars['String']>
-  /** Location service type codes. */
-  locationEntityServiceTypeCodes: Array<Scalars['String']>
+  /**
+   * Location service type ids.
+   * @deprecated Deprecated. Will be substituted with pickup methods.
+   */
+  locationEntityServiceTypeIds: Array<Scalars['String']>
   /** Location code. */
   locationEntityCode: Scalars['String']
 }
@@ -755,6 +821,44 @@ export type PageInfo = {
   endCursor?: Maybe<Scalars['String']>
 }
 
+/** Page type */
+export enum PageType {
+  AccountAddress = 'ACCOUNT_ADDRESS',
+  AccountAddAddress = 'ACCOUNT_ADD_ADDRESS',
+  AccountAddReturn = 'ACCOUNT_ADD_RETURN',
+  AccountAddWishlist = 'ACCOUNT_ADD_WISHLIST',
+  AccountDownloadItem = 'ACCOUNT_DOWNLOAD_ITEM',
+  AccountEdit = 'ACCOUNT_EDIT',
+  AccountInbox = 'ACCOUNT_INBOX',
+  AccountOrdersAll = 'ACCOUNT_ORDERS_ALL',
+  AccountOrdersCompleted = 'ACCOUNT_ORDERS_COMPLETED',
+  AccountOrdersDetails = 'ACCOUNT_ORDERS_DETAILS',
+  AccountOrdersInvoice = 'ACCOUNT_ORDERS_INVOICE',
+  AccountRecentItems = 'ACCOUNT_RECENT_ITEMS',
+  AccountReturns = 'ACCOUNT_RETURNS',
+  AccountReturnSaved = 'ACCOUNT_RETURN_SAVED',
+  AccountWishlists = 'ACCOUNT_WISHLISTS',
+  AccountWishlistDetails = 'ACCOUNT_WISHLIST_DETAILS',
+  AuthAccountCreated = 'AUTH_ACCOUNT_CREATED',
+  AuthCreateAcc = 'AUTH_CREATE_ACC',
+  AuthForgotPass = 'AUTH_FORGOT_PASS',
+  AuthLogin = 'AUTH_LOGIN',
+  AuthNewPass = 'AUTH_NEW_PASS',
+  Blog = 'BLOG',
+  Brands = 'BRANDS',
+  Cart = 'CART',
+  Compare = 'COMPARE',
+  GiftCertBalance = 'GIFT_CERT_BALANCE',
+  GiftCertPurchase = 'GIFT_CERT_PURCHASE',
+  GiftCertRedeem = 'GIFT_CERT_REDEEM',
+  Home = 'HOME',
+  OrderInfo = 'ORDER_INFO',
+  Search = 'SEARCH',
+  Sitemap = 'SITEMAP',
+  Subscribed = 'SUBSCRIBED',
+  Unsubscribe = 'UNSUBSCRIBE',
+}
+
 /** The min and max range of prices that apply to this product. */
 export type PriceRanges = {
   __typename?: 'PriceRanges'
@@ -883,6 +987,8 @@ export type Product = Node & {
   createdAt: DateTimeExtended
   /** Reviews associated with the product. */
   reviews: ReviewConnection
+  /** Product SEO details. */
+  seo: SeoDetails
 }
 
 /** Product */
@@ -1149,6 +1255,14 @@ export type QueryNodeArgs = {
   id: Scalars['ID']
 }
 
+export type Region = {
+  __typename?: 'Region'
+  /** The name of a region. */
+  name: Scalars['String']
+  /** The rendered HTML content targeted at the region. */
+  html: Scalars['String']
+}
+
 /** A connection to a list of items. */
 export type RelatedProductsConnection = {
   __typename?: 'RelatedProductsConnection'
@@ -1165,6 +1279,12 @@ export type RelatedProductsEdge = {
   node: Product
   /** A cursor for use in pagination. */
   cursor: Scalars['String']
+}
+
+/** The rendered regions by specific page. */
+export type RenderedRegionsByPageType = {
+  __typename?: 'RenderedRegionsByPageType'
+  regions: Array<Region>
 }
 
 /** Review */
@@ -1223,6 +1343,24 @@ export type Route = {
   node?: Maybe<Node>
 }
 
+/** Store search settings. */
+export type Search = {
+  __typename?: 'Search'
+  /** Product filtering enabled. */
+  productFilteringEnabled: Scalars['Boolean']
+}
+
+/** Seo Details */
+export type SeoDetails = {
+  __typename?: 'SeoDetails'
+  /** Page title. */
+  pageTitle: Scalars['String']
+  /** Meta description. */
+  metaDescription: Scalars['String']
+  /** Meta keywords. */
+  metaKeywords: Scalars['String']
+}
+
 /** Store settings information from the control panel. */
 export type Settings = {
   __typename?: 'Settings'
@@ -1243,6 +1381,8 @@ export type Settings = {
   /** Channel ID. */
   channelId: Scalars['Long']
   tax?: Maybe<TaxDisplaySettings>
+  /** Store search settings. */
+  search: Search
 }
 
 /** A site */
@@ -1265,6 +1405,7 @@ export type Site = {
   route: Route
   /** Store settings. */
   settings?: Maybe<Settings>
+  content: Content
 }
 
 /** A site */
@@ -1495,12 +1636,265 @@ export type VariantInventoryByLocationArgs = {
   locationEntityIds?: Maybe<Array<Scalars['Int']>>
   locationEntityCodes?: Maybe<Array<Scalars['String']>>
   locationEntityTypeIds?: Maybe<Array<Scalars['String']>>
-  locationEntityServiceTypeCodes?: Maybe<Array<Scalars['String']>>
+  locationEntityServiceTypeIds?: Maybe<Array<Scalars['String']>>
   distanceFilter?: Maybe<DistanceFilter>
   before?: Maybe<Scalars['String']>
   after?: Maybe<Scalars['String']>
   first?: Maybe<Scalars['Int']>
   last?: Maybe<Scalars['Int']>
+}
+
+/** Country Code */
+export enum CountryCode {
+  Aw = 'AW',
+  Af = 'AF',
+  Ao = 'AO',
+  Ai = 'AI',
+  Ax = 'AX',
+  Al = 'AL',
+  Ad = 'AD',
+  Ae = 'AE',
+  Ar = 'AR',
+  Am = 'AM',
+  As = 'AS',
+  Aq = 'AQ',
+  Tf = 'TF',
+  Ag = 'AG',
+  Au = 'AU',
+  At = 'AT',
+  Az = 'AZ',
+  Bi = 'BI',
+  Be = 'BE',
+  Bj = 'BJ',
+  Bq = 'BQ',
+  Bf = 'BF',
+  Bd = 'BD',
+  Bg = 'BG',
+  Bh = 'BH',
+  Bs = 'BS',
+  Ba = 'BA',
+  Bl = 'BL',
+  By = 'BY',
+  Bz = 'BZ',
+  Bm = 'BM',
+  Bo = 'BO',
+  Br = 'BR',
+  Bb = 'BB',
+  Bn = 'BN',
+  Bt = 'BT',
+  Bv = 'BV',
+  Bw = 'BW',
+  Cf = 'CF',
+  Ca = 'CA',
+  Cc = 'CC',
+  Ch = 'CH',
+  Cl = 'CL',
+  Cn = 'CN',
+  Ci = 'CI',
+  Cm = 'CM',
+  Cd = 'CD',
+  Cg = 'CG',
+  Ck = 'CK',
+  Co = 'CO',
+  Km = 'KM',
+  Cv = 'CV',
+  Cr = 'CR',
+  Cu = 'CU',
+  Cw = 'CW',
+  Cx = 'CX',
+  Ky = 'KY',
+  Cy = 'CY',
+  Cz = 'CZ',
+  De = 'DE',
+  Dj = 'DJ',
+  Dm = 'DM',
+  Dk = 'DK',
+  Do = 'DO',
+  Dz = 'DZ',
+  Ec = 'EC',
+  Eg = 'EG',
+  Er = 'ER',
+  Eh = 'EH',
+  Es = 'ES',
+  Ee = 'EE',
+  Et = 'ET',
+  Fi = 'FI',
+  Fj = 'FJ',
+  Fk = 'FK',
+  Fr = 'FR',
+  Fo = 'FO',
+  Fm = 'FM',
+  Ga = 'GA',
+  Gb = 'GB',
+  Ge = 'GE',
+  Gg = 'GG',
+  Gh = 'GH',
+  Gi = 'GI',
+  Gn = 'GN',
+  Gp = 'GP',
+  Gm = 'GM',
+  Gw = 'GW',
+  Gq = 'GQ',
+  Gr = 'GR',
+  Gd = 'GD',
+  Gl = 'GL',
+  Gt = 'GT',
+  Gf = 'GF',
+  Gu = 'GU',
+  Gy = 'GY',
+  Hk = 'HK',
+  Hm = 'HM',
+  Hn = 'HN',
+  Hr = 'HR',
+  Ht = 'HT',
+  Hu = 'HU',
+  Id = 'ID',
+  Im = 'IM',
+  In = 'IN',
+  Io = 'IO',
+  Ie = 'IE',
+  Ir = 'IR',
+  Iq = 'IQ',
+  Is = 'IS',
+  Il = 'IL',
+  It = 'IT',
+  Jm = 'JM',
+  Je = 'JE',
+  Jo = 'JO',
+  Jp = 'JP',
+  Kz = 'KZ',
+  Ke = 'KE',
+  Kg = 'KG',
+  Kh = 'KH',
+  Ki = 'KI',
+  Kn = 'KN',
+  Kr = 'KR',
+  Kw = 'KW',
+  La = 'LA',
+  Lb = 'LB',
+  Lr = 'LR',
+  Ly = 'LY',
+  Lc = 'LC',
+  Li = 'LI',
+  Lk = 'LK',
+  Ls = 'LS',
+  Lt = 'LT',
+  Lu = 'LU',
+  Lv = 'LV',
+  Mo = 'MO',
+  Mf = 'MF',
+  Ma = 'MA',
+  Mc = 'MC',
+  Md = 'MD',
+  Mg = 'MG',
+  Mv = 'MV',
+  Mx = 'MX',
+  Mh = 'MH',
+  Mk = 'MK',
+  Ml = 'ML',
+  Mt = 'MT',
+  Mm = 'MM',
+  Me = 'ME',
+  Mn = 'MN',
+  Mp = 'MP',
+  Mz = 'MZ',
+  Mr = 'MR',
+  Ms = 'MS',
+  Mq = 'MQ',
+  Mu = 'MU',
+  Mw = 'MW',
+  My = 'MY',
+  Yt = 'YT',
+  Na = 'NA',
+  Nc = 'NC',
+  Ne = 'NE',
+  Nf = 'NF',
+  Ng = 'NG',
+  Ni = 'NI',
+  Nu = 'NU',
+  Nl = 'NL',
+  No = 'NO',
+  Np = 'NP',
+  Nr = 'NR',
+  Nz = 'NZ',
+  Om = 'OM',
+  Pk = 'PK',
+  Pa = 'PA',
+  Pn = 'PN',
+  Pe = 'PE',
+  Ph = 'PH',
+  Pw = 'PW',
+  Pg = 'PG',
+  Pl = 'PL',
+  Pr = 'PR',
+  Kp = 'KP',
+  Pt = 'PT',
+  Py = 'PY',
+  Ps = 'PS',
+  Pf = 'PF',
+  Qa = 'QA',
+  Re = 'RE',
+  Ro = 'RO',
+  Ru = 'RU',
+  Rw = 'RW',
+  Sa = 'SA',
+  Sd = 'SD',
+  Sn = 'SN',
+  Sg = 'SG',
+  Gs = 'GS',
+  Sh = 'SH',
+  Sj = 'SJ',
+  Sb = 'SB',
+  Sl = 'SL',
+  Sv = 'SV',
+  Sm = 'SM',
+  So = 'SO',
+  Pm = 'PM',
+  Rs = 'RS',
+  Ss = 'SS',
+  St = 'ST',
+  Sr = 'SR',
+  Sk = 'SK',
+  Si = 'SI',
+  Se = 'SE',
+  Sz = 'SZ',
+  Sx = 'SX',
+  Sc = 'SC',
+  Sy = 'SY',
+  Tc = 'TC',
+  Td = 'TD',
+  Tg = 'TG',
+  Th = 'TH',
+  Tj = 'TJ',
+  Tk = 'TK',
+  Tm = 'TM',
+  Tl = 'TL',
+  To = 'TO',
+  Tt = 'TT',
+  Tn = 'TN',
+  Tr = 'TR',
+  Tv = 'TV',
+  Tw = 'TW',
+  Tz = 'TZ',
+  Ug = 'UG',
+  Ua = 'UA',
+  Um = 'UM',
+  Uy = 'UY',
+  Us = 'US',
+  Uz = 'UZ',
+  Va = 'VA',
+  Vc = 'VC',
+  Ve = 'VE',
+  Vg = 'VG',
+  Vi = 'VI',
+  Vn = 'VN',
+  Vu = 'VU',
+  Wf = 'WF',
+  Ws = 'WS',
+  Ye = 'YE',
+  Za = 'ZA',
+  Zm = 'ZM',
+  Zw = 'ZW',
 }
 
 /** Currency Code */
@@ -1874,7 +2268,7 @@ export type ProductInfoFragment = { __typename?: 'Product' } & Pick<
   Product,
   'entityId' | 'name' | 'path' | 'description'
 > & {
-    brand?: Maybe<{ __typename?: 'Brand' } & Pick<Brand, 'entityId'>>
+    brand?: Maybe<{ __typename?: 'Brand' } & Pick<Brand, 'entityId' | 'name'>>
     prices?: Maybe<{ __typename?: 'Prices' } & ProductPricesFragment>
     images: { __typename?: 'ImageConnection' } & {
       edges?: Maybe<
