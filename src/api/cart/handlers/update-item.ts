@@ -5,7 +5,7 @@ import type { CartHandlers } from '..'
 // Return current cart info
 const updateItem: CartHandlers['updateItem'] = async ({
   res,
-  body: { cartId, itemId, item },
+  body: { cartId, itemId, item, include },
   config,
 }) => {
   if (!cartId || !itemId || !item) {
@@ -15,8 +15,12 @@ const updateItem: CartHandlers['updateItem'] = async ({
     })
   }
 
+  // Use a dummy base as we only care about the relative path
+  const url = new URL(`/v3/carts/${cartId}/items/${itemId}`, 'http://a')
+  if (include) url.searchParams.set('include', include)
+
   const { data } = await config.storeApiFetch(
-    `/v3/carts/${cartId}/items/${itemId}`,
+    url.pathname + url.search,
     {
       method: 'PUT',
       body: JSON.stringify({

@@ -21,11 +21,11 @@ export type ItemBody = {
 	optionSelections?: OptionSelections
 }
 
-export type AddItemBody = { item: ItemBody, locale?: string }
+export type AddItemBody = { item: ItemBody, locale?: string, include?: string }
 
-export type UpdateItemBody = { itemId: string; item: ItemBody }
+export type UpdateItemBody = { itemId: string; item: ItemBody, include?: string  }
 
-export type RemoveItemBody = { itemId: string }
+export type RemoveItemBody = { itemId: string, include?: string  }
 
 export type Coupon = {
   code: string
@@ -128,10 +128,15 @@ export type Cart = {
   created_time: string
   updated_time: string
   channel_id: number
+  redirect_urls?: {
+    cart_url: string
+    checkout_url: string
+    embedded_checkout_url?: string
+  }
 }
 
 export type CartHandlers = {
-  getCart: BigcommerceHandler<Cart, { cartId?: string }>
+  getCart: BigcommerceHandler<Cart, { cartId?: string, include?: string }>
   addItem: BigcommerceHandler<Cart, { cartId?: string } & Partial<AddItemBody>>
   updateItem: BigcommerceHandler<
     Cart,
@@ -156,29 +161,30 @@ const cartApi: BigcommerceApiHandler<Cart, CartHandlers> = async (
 
   const { cookies } = req
   const cartId = cookies[config.cartCookie]
+  const include = typeof req.query.include === 'string' ? req.query.include : undefined
 
   try {
     // Return current cart info
     if (req.method === 'GET') {
-      const body = { cartId }
+      const body = { cartId, include }
       return await handlers['getCart']({ req, res, config, body })
     }
 
     // Create or add an item to the cart
     if (req.method === 'POST') {
-      const body = { ...req.body, cartId }
+      const body = { ...req.body, cartId, include }
       return await handlers['addItem']({ req, res, config, body })
     }
 
     // Update item in cart
     if (req.method === 'PUT') {
-      const body = { ...req.body, cartId }
+      const body = { ...req.body, cartId, include }
       return await handlers['updateItem']({ req, res, config, body })
     }
 
     // Remove an item from the cart
     if (req.method === 'DELETE') {
-      const body = { ...req.body, cartId }
+      const body = { ...req.body, cartId, include }
       return await handlers['removeItem']({ req, res, config, body })
     }
   } catch (error) {
