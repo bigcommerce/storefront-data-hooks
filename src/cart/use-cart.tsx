@@ -10,20 +10,35 @@ const defaultOpts = {
 
 export type { Cart }
 
+export type UseCartInput = {
+  include?:  ("redirect_urls" |"line_items.physical_items.options" |"line_items.digital_items.options")[]
+}
+
 export const fetcher: HookFetcher<Cart | null, CartInput> = (
   options,
-  { cartId },
+  { cartId, include },
   fetch
 ) => {
-  return cartId ? fetch({ ...defaultOpts, ...options }) : null
+  if (!cartId) return null
+  // Use a dummy base as we only care about the relative path
+  const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
+  if (include) url.searchParams.set('include', include)
+
+  return fetch({
+    ...defaultOpts,
+    ...options,
+    url: (options?.base || '') + url.pathname + url.search,
+  })
 }
 
 export function extendHook(
   customFetcher: typeof fetcher,
   swrOptions?: SwrOptions<Cart | null, CartInput>
 ) {
-  const useCart = () => {
-    const response = useCommerceCart(defaultOpts, [], customFetcher, {
+  const useCart = (input?: UseCartInput) => {
+    const response = useCommerceCart(defaultOpts, [
+      ['include', input?.include?.join(',')]
+    ], customFetcher, {
       revalidateOnFocus: false,
       ...swrOptions,
     })

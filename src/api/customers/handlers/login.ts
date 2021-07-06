@@ -22,7 +22,13 @@ const loginHandler: LoginHandlers['login'] = async ({
   // and numeric characters.
 
   try {
-    await login({ variables: { email, password }, config, req, res })
+    const data = await login({
+      variables: { email, password },
+      config,
+      req,
+      res,
+    })
+    res.status(200).json({ data })
   } catch (error) {
     // Check if the email and password didn't match an existing account
     if (
@@ -43,8 +49,6 @@ const loginHandler: LoginHandlers['login'] = async ({
 
     throw error
   }
-
-  res.status(200).json({ data: null })
 }
 
 export default loginHandler

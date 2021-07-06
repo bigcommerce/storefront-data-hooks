@@ -26,15 +26,16 @@ async function getError(res: Response) {
 export const bigcommerceConfig: CommerceConfig = {
   locale: 'en-us',
   cartCookie: 'bc_cartId',
-  async fetcher({ url, method = 'GET', variables, body: bodyObj }) {
+  async fetcher({ url, method = 'GET', variables, body: bodyObj, credentials }) {
     const hasBody = Boolean(variables || bodyObj)
     const body = hasBody
       ? JSON.stringify(variables ? { variables } : bodyObj)
       : undefined
     const headers = hasBody ? { 'Content-Type': 'application/json' } : undefined
-    const res = await fetch(url!, { method, body, headers })
+    const res = await fetch(url!, { method, body, headers, credentials })
 
     if (res.ok) {
+      if (res.status === 204) return null
       const { data } = await res.json()
       return data
     }
@@ -47,7 +48,6 @@ export type BigcommerceConfig = Partial<CommerceConfig>
 
 export type BigcommerceProps = {
   children?: ReactNode
-  locale: string
 } & BigcommerceConfig
 
 export function CommerceProvider({ children, ...config }: BigcommerceProps) {

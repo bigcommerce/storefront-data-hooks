@@ -31,10 +31,13 @@ export const fetcher: HookFetcher<null, AddAddressInput> = (
 				"A first name, last name, address1, city, state_or_province, postal_code and country_code are required",
 		})
 	}
+	// Use a dummy base as we only care about the relative path
+	const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
 
 	return fetch({
 		...defaultOpts,
 		...options,
+		url: (options?.base || '') + url.pathname,
 		body: input,
 	})
 }

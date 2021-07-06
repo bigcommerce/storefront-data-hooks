@@ -43,8 +43,9 @@ export const fetcher: HookFetcher<SearchProductsData, SearchProductsPayload> = (
   if (sort) url.searchParams.set('sort', sort)
 
   return fetch({
-    url: url.pathname + url.search,
-    method: options?.method ?? defaultOpts.method,
+    ...defaultOpts,
+    ...options,
+    url: (options?.base || '') + url.pathname + url.search
   })
 }
 

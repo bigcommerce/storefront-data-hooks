@@ -41,6 +41,6 @@ const customersApi: BigcommerceApiHandler<
   }
 }
 
-const handlers = { getLoggedInCustomer }
+export const handlers = { getLoggedInCustomer }
 
 export default createApiHandler(customersApi, handlers, {})
