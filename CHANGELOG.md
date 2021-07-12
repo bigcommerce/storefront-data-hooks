@@ -1,3 +1,38 @@
+# 1.5.0
+## Improve extensibility
+- Allow to override the base URL of every hook
+- Allow to override the API handlers
+- Allow to set the `base` at Provider level. Thus, if it is set, all requests will be made with that base URL.
+- Allow to define the credentials that will be used in the network requests
+
+## Support query params in cart hooks
+
+Allow to define at hook level the parameter `include`, to be able to include more elements in the cart response. This allows, for example, to receive the different options of the products added to the cart.
+
+```js
+const { data } = useCart({ include: ['line_items.physical_items.options']})
+```
+
+Based on: https://developer.bigcommerce.com/api-reference/store-management/carts/cart/getacart
+
+## Login updates
+
+- Send customer on login response
+- Set session and shopper cookies on login
+- Export the customer handlers as we do in for the other resources
+
+## Allow 204
+
+- Allow responses with http status code 204
+
+With the current configuration, when receiving a 204 (no content) it tries to execute the `.json()` method and fails. With this change we prevent the call to that method if the status is 204.
+
+## Brand name
+
+- Return the brand name when requesting the products. Receiving only the id was of little use
+- Update the schema including the brand name field
+- Update the schema including latest changes in the [Storefront GraphQL API](https://developer.bigcommerce.com/changelog#labels/storefront-api)
+
 # 1.4.0
 ## Get `locale`  with `useCommerce` instead of `useRouter`
 
