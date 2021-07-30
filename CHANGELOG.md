@@ -1,3 +1,11 @@
+# 1.5.2
+## Fix Address API imports
+Export edit and delete handlers correctly. They were swapped.
+
+# 1.5.1
+## Add address folder to npm
+Include the address folder to the package that will be uploaded to npm
+
 # 1.5.0
 ## Improve extensibility
 - Allow to override the base URL of every hook
