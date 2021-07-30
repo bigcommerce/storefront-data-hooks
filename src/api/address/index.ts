@@ -5,8 +5,8 @@ import createApiHandler, {
 import { BigcommerceApiError } from "../utils/errors"
 import getAddresses from "./handlers/get-addresses"
 import addAddress from "./handlers/add-address"
-import updateAddress from "./handlers/remove-address"
-import removeAddress from "./handlers/update-address"
+import updateAddress from "./handlers/update-address"
+import removeAddress from "./handlers/remove-address"
 
 import { AddressesResponse, AddressHandlers } from './types';
 
