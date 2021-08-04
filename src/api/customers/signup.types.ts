@@ -83,7 +83,7 @@ export type SignupBody = {
   /**
    * Array of customer addresses. Limited to 10
    */
-  addresses:
+  addresses?:
     | []
     | [CustomerAddress]
     | [CustomerAddress, CustomerAddress]
