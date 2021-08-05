@@ -14,7 +14,7 @@ export type SignupInput = SignupBody
 
 export const fetcher: HookFetcher<null, SignupBody> = (
   options,
-  { firstName, lastName, email, password },
+  { firstName, lastName, email, password, ...rest },
   fetch
 ) => {
   if (!(firstName && lastName && email && password)) {
@@ -31,7 +31,7 @@ export const fetcher: HookFetcher<null, SignupBody> = (
     ...defaultOpts,
     ...options,
     url: (options?.base || '') + url.pathname,
-    body: { firstName, lastName, email, password },
+    body: { firstName, lastName, email, password, ...rest },
   })
 }
 

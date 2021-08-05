@@ -5,7 +5,17 @@ import { SignupHandlers } from '../signup'
 const signup: SignupHandlers['signup'] = async ({
   req,
   res,
-  body: { firstName, lastName, email, password },
+  body: {
+    firstName,
+    lastName,
+    email,
+    password,
+    phone,
+    company,
+    acceptsEmails,
+    notes,
+    addresses,
+  },
   config,
 }) => {
   // TODO: Add proper validations with something like Ajv
@@ -27,6 +37,11 @@ const signup: SignupHandlers['signup'] = async ({
           first_name: firstName,
           last_name: lastName,
           email,
+          phone,
+          company,
+          notes,
+          addresses,
+          accepts_product_review_abandoned_cart_emails: acceptsEmails,
           authentication: {
             new_password: password,
           },
