@@ -1,3 +1,10 @@
+### 1.5.5-beta.2 (2021-08-12)
+
+
+### Bug Fixes
+
+* update schema ([61f571f](https://github.com/bigcommerce/storefront-data-hooks/commit/61f571f54c57880cfa2085c8623f0dda4adfd232))
+
 ### 1.5.5-beta.1 (2021-08-11)
 
 ### 1.5.5-beta.0 (2021-08-05)
