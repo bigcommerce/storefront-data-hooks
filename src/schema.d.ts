@@ -330,6 +330,8 @@ export type CategoryTreeItem = {
   description: Scalars['String']
   /** The number of products in this category. */
   productCount: Scalars['Int']
+  /** The category image. */
+  image?: Maybe<Image>
   /** Subcategories of this category */
   children: Array<CategoryTreeItem>
 }
@@ -378,6 +380,64 @@ export type ContentRenderedRegionsByPageTypeArgs = {
 export type ContentRenderedRegionsByPageTypeAndEntityIdArgs = {
   entityId: Scalars['Long']
   entityPageType: EntityPageType
+}
+
+export type Currency = {
+  __typename?: 'Currency'
+  /** Currency ID. */
+  entityId: Scalars['Int']
+  /** Currency code. */
+  code: CurrencyCode
+  /** Currency name. */
+  name: Scalars['String']
+  /** Flag image URL. */
+  flagImage?: Maybe<Scalars['String']>
+  /** Indicates whether this currency is active. */
+  isActive: Scalars['Boolean']
+  /** Exchange rate relative to default currency. */
+  exchangeRate: Scalars['Float']
+  /** Indicates whether this currency is transactional. */
+  isTransactional: Scalars['Boolean']
+  /** Currency display settings. */
+  display: CurrencyDisplay
+}
+
+/** A connection to a list of items. */
+export type CurrencyConnection = {
+  __typename?: 'CurrencyConnection'
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<CurrencyEdge>>>
+}
+
+export type CurrencyDisplay = {
+  __typename?: 'CurrencyDisplay'
+  /** Currency symbol. */
+  symbol: Scalars['String']
+  /** Currency symbol. */
+  symbolPlacement: CurrencySymbolPosition
+  /** Currency decimal token. */
+  decimalToken: Scalars['String']
+  /** Currency thousands token. */
+  thousandsToken: Scalars['String']
+  /** Currency decimal places. */
+  decimalPlaces: Scalars['Int']
+}
+
+/** An edge in a connection. */
+export type CurrencyEdge = {
+  __typename?: 'CurrencyEdge'
+  /** The item at the end of the edge. */
+  node: Currency
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']
+}
+
+/** Currency symbol position */
+export enum CurrencySymbolPosition {
+  Left = 'LEFT',
+  Right = 'RIGHT',
 }
 
 /** Custom field */
@@ -868,6 +928,11 @@ export type PriceRanges = {
   retailPriceRange?: Maybe<MoneyRange>
 }
 
+export type PriceSearchFilterInput = {
+  minPrice?: Maybe<Scalars['Float']>
+  maxPrice?: Maybe<Scalars['Float']>
+}
+
 /** The various prices that can be set on a product. */
 export type Prices = {
   __typename?: 'Prices'
@@ -1078,10 +1143,16 @@ export type ProductMetafieldsArgs = {
 
 /** Product */
 export type ProductReviewsArgs = {
+  sort?: Maybe<ProductReviewsSortInput>
   before?: Maybe<Scalars['String']>
   after?: Maybe<Scalars['String']>
   first?: Maybe<Scalars['Int']>
   last?: Maybe<Scalars['Int']>
+}
+
+export type ProductAttributeSearchFilterInput = {
+  attribute: Scalars['String']
+  values: Array<Scalars['String']>
 }
 
 /** Product availability */
@@ -1229,6 +1300,10 @@ export type ProductPreOrder = ProductAvailability & {
   description: Scalars['String']
 }
 
+export enum ProductReviewsSortInput {
+  Newest = 'NEWEST',
+}
+
 /** Unavailable Product */
 export type ProductUnavailable = ProductAvailability & {
   __typename?: 'ProductUnavailable'
@@ -1253,6 +1328,11 @@ export type Query = {
 
 export type QueryNodeArgs = {
   id: Scalars['ID']
+}
+
+export type RatingSearchFilterInput = {
+  minRating?: Maybe<Scalars['Float']>
+  maxRating?: Maybe<Scalars['Float']>
 }
 
 export type Region = {
@@ -1350,6 +1430,52 @@ export type Search = {
   productFilteringEnabled: Scalars['Boolean']
 }
 
+export type SearchProducts = {
+  __typename?: 'SearchProducts'
+  /** Details of the products. */
+  products: ProductConnection
+}
+
+export type SearchProductsProductsArgs = {
+  after?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+}
+
+export type SearchProductsFiltersInput = {
+  searchTerm?: Maybe<Scalars['String']>
+  price?: Maybe<PriceSearchFilterInput>
+  rating?: Maybe<RatingSearchFilterInput>
+  categoryEntityId?: Maybe<Scalars['Int']>
+  categoryEntityIds?: Maybe<Array<Scalars['Int']>>
+  brandEntityIds?: Maybe<Array<Scalars['Int']>>
+  productAttributes?: Maybe<Array<ProductAttributeSearchFilterInput>>
+  isFreeShipping?: Maybe<Scalars['Boolean']>
+  isFeatured?: Maybe<Scalars['Boolean']>
+  isInStock?: Maybe<Scalars['Boolean']>
+}
+
+export enum SearchProductsSortInput {
+  Featured = 'FEATURED',
+  Newest = 'NEWEST',
+  BestSelling = 'BEST_SELLING',
+  BestReviewed = 'BEST_REVIEWED',
+  AToZ = 'A_TO_Z',
+  ZToA = 'Z_TO_A',
+  LowestPrice = 'LOWEST_PRICE',
+  HighestPrice = 'HIGHEST_PRICE',
+}
+
+export type SearchQueries = {
+  __typename?: 'SearchQueries'
+  /** Details of the products and facets matching given search criteria. */
+  searchProducts: SearchProducts
+}
+
+export type SearchQueriesSearchProductsArgs = {
+  filters: SearchProductsFiltersInput
+  sort?: Maybe<SearchProductsSortInput>
+}
+
 /** Seo Details */
 export type SeoDetails = {
   __typename?: 'SeoDetails'
@@ -1388,6 +1514,11 @@ export type Settings = {
 /** A site */
 export type Site = {
   __typename?: 'Site'
+  /**
+   * The Search queries.
+   * @deprecated Alpha version. Do not use in production.
+   */
+  search: SearchQueries
   categoryTree: Array<CategoryTreeItem>
   /** Details of the brand. */
   brands: BrandConnection
@@ -1406,6 +1537,15 @@ export type Site = {
   /** Store settings. */
   settings?: Maybe<Settings>
   content: Content
+  /** Currency details. */
+  currency?: Maybe<Currency>
+  /** Store Currencies. */
+  currencies: CurrencyConnection
+}
+
+/** A site */
+export type SiteCategoryTreeArgs = {
+  rootEntityId?: Maybe<Scalars['Int']>
 }
 
 /** A site */
@@ -1467,6 +1607,19 @@ export type SiteProductArgs = {
 /** A site */
 export type SiteRouteArgs = {
   path: Scalars['String']
+}
+
+/** A site */
+export type SiteCurrencyArgs = {
+  currencyCode: CurrencyCode
+}
+
+/** A site */
+export type SiteCurrenciesArgs = {
+  before?: Maybe<Scalars['String']>
+  after?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
 }
 
 /** Storefront Mode */
@@ -2215,7 +2368,14 @@ export type CategoryTreeItemFragment = {
 } & Pick<
   CategoryTreeItem,
   'entityId' | 'name' | 'path' | 'description' | 'productCount'
->
+> & {
+    image?: Maybe<
+      { __typename?: 'Image' } & Pick<
+        Image,
+        'urlOriginal' | 'altText' | 'isDefault'
+      >
+    >
+  }
 
 export type ProductPricesFragment = { __typename?: 'Prices' } & {
   price: { __typename?: 'Money' } & Pick<Money, 'value' | 'currencyCode'>
