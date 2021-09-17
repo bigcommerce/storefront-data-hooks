@@ -25,20 +25,35 @@ export const swatchOptionFragment = /* GraphQL */ `
     hexColors
   }
 `
+export const productPickListOptionFragment = /* GraphQL */ `
+  fragment productPickListOption on ProductPickListOptionValue {
+    productId
+  }
+`
 
 export const multipleChoiceOptionFragment = /* GraphQL */ `
   fragment multipleChoiceOption on MultipleChoiceOption {
     values {
       edges {
         node {
+          entityId
           label
+          isDefault
           ...swatchOption
+          ...productPickListOption
         }
       }
     }
   }
 
   ${swatchOptionFragment}
+  ${productPickListOptionFragment}
+`
+
+export const checkboxOptionFragment = /* GraphQL */ `
+  fragment checkboxOption on CheckboxOption {
+    checkedByDefault
+  }
 `
 
 export const productInfoFragment = /* GraphQL */ `
@@ -82,7 +97,35 @@ export const productInfoFragment = /* GraphQL */ `
           entityId
           displayName
           ...multipleChoiceOption
+          ...checkboxOption
         }
+      }
+    }
+    reviewSummary {
+      summationOfRatings
+      numberOfReviews
+    }
+    reviews {
+      edges {
+        node {
+          author {
+            name
+          }
+          title
+          text
+          rating
+          createdAt {
+            utc
+          }
+          entityId
+        }
+        cursor
+      }
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
       }
     }
     localeMeta: metafields(namespace: $locale, keys: ["name", "description"])
@@ -98,6 +141,7 @@ export const productInfoFragment = /* GraphQL */ `
 
   ${productPrices}
   ${multipleChoiceOptionFragment}
+  ${checkboxOptionFragment}
 `
 
 export const productConnectionFragment = /* GraphQL */ `
