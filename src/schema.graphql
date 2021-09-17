@@ -310,6 +310,11 @@ interface CatalogProductOption {
   One of the option values is required to be selected for the checkout.
   """
   isRequired: Boolean!
+
+  """
+  Indicates whether it is a variant option or modifier.
+  """
+  isVariantOption: Boolean!
 }
 
 """
@@ -511,6 +516,11 @@ type CheckboxOption implements CatalogProductOption {
   One of the option values is required to be selected for the checkout.
   """
   isRequired: Boolean!
+
+  """
+  Indicates whether it is a variant option or modifier.
+  """
+  isVariantOption: Boolean!
 }
 
 """
@@ -831,6 +841,11 @@ type DateFieldOption implements CatalogProductOption {
   One of the option values is required to be selected for the checkout.
   """
   isRequired: Boolean!
+
+  """
+  Indicates whether it is a variant option or modifier.
+  """
+  isVariantOption: Boolean!
 }
 
 scalar DateTime
@@ -926,6 +941,11 @@ type FileUploadFieldOption implements CatalogProductOption {
   One of the option values is required to be selected for the checkout.
   """
   isRequired: Boolean!
+
+  """
+  Indicates whether it is a variant option or modifier.
+  """
+  isVariantOption: Boolean!
 }
 
 """
@@ -1223,6 +1243,11 @@ type MultiLineTextFieldOption implements CatalogProductOption {
   One of the option values is required to be selected for the checkout.
   """
   isRequired: Boolean!
+
+  """
+  Indicates whether it is a variant option or modifier.
+  """
+  isVariantOption: Boolean!
 }
 
 """
@@ -1258,6 +1283,11 @@ type MultipleChoiceOption implements CatalogProductOption {
   One of the option values is required to be selected for the checkout.
   """
   isRequired: Boolean!
+
+  """
+  Indicates whether it is a variant option or modifier.
+  """
+  isVariantOption: Boolean!
 }
 
 """
@@ -1308,6 +1338,11 @@ type NumberFieldOption implements CatalogProductOption {
   One of the option values is required to be selected for the checkout.
   """
   isRequired: Boolean!
+
+  """
+  Indicates whether it is a variant option or modifier.
+  """
+  isVariantOption: Boolean!
 }
 
 """
@@ -1620,7 +1655,7 @@ type Product implements Node {
     after: String
     first: Int
     last: Int
-  ): OptionConnection!
+  ): OptionConnection! @deprecated(reason: "Use productOptions instead.")
 
   """
   Product options.
@@ -1760,6 +1795,7 @@ type Product implements Node {
   """
   reviews(
     sort: ProductReviewsSortInput
+    filters: ProductReviewsFiltersInput
     before: String
     after: String
     first: Int
@@ -2021,8 +2057,20 @@ type ProductPreOrder implements ProductAvailability {
   description: String!
 }
 
+input ProductReviewsFiltersInput {
+  rating: ProductReviewsRatingFilterInput
+}
+
+input ProductReviewsRatingFilterInput {
+  minRating: Int
+  maxRating: Int
+}
+
 enum ProductReviewsSortInput {
   NEWEST
+  OLDEST
+  HIGHEST_RATING
+  LOWEST_RATING
 }
 
 """
@@ -2531,6 +2579,11 @@ type TextFieldOption implements CatalogProductOption {
   One of the option values is required to be selected for the checkout.
   """
   isRequired: Boolean!
+
+  """
+  Indicates whether it is a variant option or modifier.
+  """
+  isVariantOption: Boolean!
 }
 
 """

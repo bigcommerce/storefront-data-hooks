@@ -221,6 +221,8 @@ export type CatalogProductOption = {
   displayName: Scalars['String']
   /** One of the option values is required to be selected for the checkout. */
   isRequired: Scalars['Boolean']
+  /** Indicates whether it is a variant option or modifier. */
+  isVariantOption: Scalars['Boolean']
 }
 
 /** Product Option Value */
@@ -347,6 +349,8 @@ export type CheckboxOption = CatalogProductOption & {
   displayName: Scalars['String']
   /** One of the option values is required to be selected for the checkout. */
   isRequired: Scalars['Boolean']
+  /** Indicates whether it is a variant option or modifier. */
+  isVariantOption: Scalars['Boolean']
 }
 
 /** Contact field */
@@ -531,6 +535,8 @@ export type DateFieldOption = CatalogProductOption & {
   displayName: Scalars['String']
   /** One of the option values is required to be selected for the checkout. */
   isRequired: Scalars['Boolean']
+  /** Indicates whether it is a variant option or modifier. */
+  isVariantOption: Scalars['Boolean']
 }
 
 /** Date Time Extended */
@@ -588,6 +594,8 @@ export type FileUploadFieldOption = CatalogProductOption & {
   displayName: Scalars['String']
   /** One of the option values is required to be selected for the checkout. */
   isRequired: Scalars['Boolean']
+  /** Indicates whether it is a variant option or modifier. */
+  isVariantOption: Scalars['Boolean']
 }
 
 /** Image */
@@ -774,6 +782,8 @@ export type MultiLineTextFieldOption = CatalogProductOption & {
   displayName: Scalars['String']
   /** One of the option values is required to be selected for the checkout. */
   isRequired: Scalars['Boolean']
+  /** Indicates whether it is a variant option or modifier. */
+  isVariantOption: Scalars['Boolean']
 }
 
 /** An option type that has a fixed list of values. */
@@ -789,6 +799,8 @@ export type MultipleChoiceOption = CatalogProductOption & {
   displayName: Scalars['String']
   /** One of the option values is required to be selected for the checkout. */
   isRequired: Scalars['Boolean']
+  /** Indicates whether it is a variant option or modifier. */
+  isVariantOption: Scalars['Boolean']
 }
 
 /** An option type that has a fixed list of values. */
@@ -825,6 +837,8 @@ export type NumberFieldOption = CatalogProductOption & {
   displayName: Scalars['String']
   /** One of the option values is required to be selected for the checkout. */
   isRequired: Scalars['Boolean']
+  /** Indicates whether it is a variant option or modifier. */
+  isVariantOption: Scalars['Boolean']
 }
 
 /** A connection to a list of items. */
@@ -1001,7 +1015,10 @@ export type Product = Node & {
   width?: Maybe<Measurement>
   /** Depth of the product. */
   depth?: Maybe<Measurement>
-  /** Product options. */
+  /**
+   * Product options.
+   * @deprecated Use productOptions instead.
+   */
   options: OptionConnection
   /** Product options. */
   productOptions: ProductOptionConnection
@@ -1144,6 +1161,7 @@ export type ProductMetafieldsArgs = {
 /** Product */
 export type ProductReviewsArgs = {
   sort?: Maybe<ProductReviewsSortInput>
+  filters?: Maybe<ProductReviewsFiltersInput>
   before?: Maybe<Scalars['String']>
   after?: Maybe<Scalars['String']>
   first?: Maybe<Scalars['Int']>
@@ -1300,8 +1318,20 @@ export type ProductPreOrder = ProductAvailability & {
   description: Scalars['String']
 }
 
+export type ProductReviewsFiltersInput = {
+  rating?: Maybe<ProductReviewsRatingFilterInput>
+}
+
+export type ProductReviewsRatingFilterInput = {
+  minRating?: Maybe<Scalars['Int']>
+  maxRating?: Maybe<Scalars['Int']>
+}
+
 export enum ProductReviewsSortInput {
   Newest = 'NEWEST',
+  Oldest = 'OLDEST',
+  HighestRating = 'HIGHEST_RATING',
+  LowestRating = 'LOWEST_RATING',
 }
 
 /** Unavailable Product */
@@ -1675,6 +1705,8 @@ export type TextFieldOption = CatalogProductOption & {
   displayName: Scalars['String']
   /** One of the option values is required to be selected for the checkout. */
   isRequired: Scalars['Boolean']
+  /** Indicates whether it is a variant option or modifier. */
+  isVariantOption: Scalars['Boolean']
 }
 
 /** Url field */
@@ -2395,6 +2427,10 @@ export type SwatchOptionFragment = { __typename?: 'SwatchOptionValue' } & Pick<
   'isDefault' | 'hexColors'
 >
 
+export type ProductPickListOptionFragment = {
+  __typename?: 'ProductPickListOptionValue'
+} & Pick<ProductPickListOptionValue, 'productId'>
+
 export type MultipleChoiceOptionFragment = {
   __typename?: 'MultipleChoiceOption'
 } & {
@@ -2406,15 +2442,16 @@ export type MultipleChoiceOptionFragment = {
             node:
               | ({ __typename?: 'MultipleChoiceOptionValue' } & Pick<
                   MultipleChoiceOptionValue,
-                  'label'
+                  'entityId' | 'label' | 'isDefault'
                 >)
               | ({ __typename?: 'ProductPickListOptionValue' } & Pick<
                   ProductPickListOptionValue,
-                  'label'
-                >)
+                  'entityId' | 'label' | 'isDefault'
+                > &
+                  ProductPickListOptionFragment)
               | ({ __typename?: 'SwatchOptionValue' } & Pick<
                   SwatchOptionValue,
-                  'label'
+                  'entityId' | 'label' | 'isDefault'
                 > &
                   SwatchOptionFragment)
           }
@@ -2423,6 +2460,11 @@ export type MultipleChoiceOptionFragment = {
     >
   }
 }
+
+export type CheckboxOptionFragment = { __typename?: 'CheckboxOption' } & Pick<
+  CheckboxOption,
+  'checkedByDefault'
+>
 
 export type ProductInfoFragment = { __typename?: 'Product' } & Pick<
   Product,
@@ -2471,7 +2513,8 @@ export type ProductInfoFragment = { __typename?: 'Product' } & Pick<
                 | ({ __typename: 'CheckboxOption' } & Pick<
                     CheckboxOption,
                     'entityId' | 'displayName'
-                  >)
+                  > &
+                    CheckboxOptionFragment)
                 | ({ __typename: 'DateFieldOption' } & Pick<
                     DateFieldOption,
                     'entityId' | 'displayName'
@@ -2500,6 +2543,34 @@ export type ProductInfoFragment = { __typename?: 'Product' } & Pick<
             }
           >
         >
+      >
+    }
+    reviewSummary: { __typename?: 'Reviews' } & Pick<
+      Reviews,
+      'summationOfRatings' | 'numberOfReviews'
+    >
+    reviews: { __typename?: 'ReviewConnection' } & {
+      edges?: Maybe<
+        Array<
+          Maybe<
+            { __typename?: 'ReviewEdge' } & Pick<ReviewEdge, 'cursor'> & {
+                node: { __typename?: 'Review' } & Pick<
+                  Review,
+                  'title' | 'text' | 'rating' | 'entityId'
+                > & {
+                    author: { __typename?: 'Author' } & Pick<Author, 'name'>
+                    createdAt: { __typename?: 'DateTimeExtended' } & Pick<
+                      DateTimeExtended,
+                      'utc'
+                    >
+                  }
+              }
+          >
+        >
+      >
+      pageInfo: { __typename?: 'PageInfo' } & Pick<
+        PageInfo,
+        'startCursor' | 'endCursor' | 'hasNextPage' | 'hasPreviousPage'
       >
     }
     localeMeta: { __typename?: 'MetafieldConnection' } & {
