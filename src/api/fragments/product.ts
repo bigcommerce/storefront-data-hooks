@@ -101,33 +101,6 @@ export const productInfoFragment = /* GraphQL */ `
         }
       }
     }
-    reviewSummary {
-      summationOfRatings
-      numberOfReviews
-    }
-    reviews {
-      edges {
-        node {
-          author {
-            name
-          }
-          title
-          text
-          rating
-          createdAt {
-            utc
-          }
-          entityId
-        }
-        cursor
-      }
-      pageInfo {
-        startCursor
-        endCursor
-        hasNextPage
-        hasPreviousPage
-      }
-    }
     localeMeta: metafields(namespace: $locale, keys: ["name", "description"])
       @include(if: $hasLocale) {
       edges {

@@ -2545,34 +2545,6 @@ export type ProductInfoFragment = { __typename?: 'Product' } & Pick<
         >
       >
     }
-    reviewSummary: { __typename?: 'Reviews' } & Pick<
-      Reviews,
-      'summationOfRatings' | 'numberOfReviews'
-    >
-    reviews: { __typename?: 'ReviewConnection' } & {
-      edges?: Maybe<
-        Array<
-          Maybe<
-            { __typename?: 'ReviewEdge' } & Pick<ReviewEdge, 'cursor'> & {
-                node: { __typename?: 'Review' } & Pick<
-                  Review,
-                  'title' | 'text' | 'rating' | 'entityId'
-                > & {
-                    author: { __typename?: 'Author' } & Pick<Author, 'name'>
-                    createdAt: { __typename?: 'DateTimeExtended' } & Pick<
-                      DateTimeExtended,
-                      'utc'
-                    >
-                  }
-              }
-          >
-        >
-      >
-      pageInfo: { __typename?: 'PageInfo' } & Pick<
-        PageInfo,
-        'startCursor' | 'endCursor' | 'hasNextPage' | 'hasPreviousPage'
-      >
-    }
     localeMeta: { __typename?: 'MetafieldConnection' } & {
       edges?: Maybe<
         Array<
