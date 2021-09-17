@@ -1,8 +1,8 @@
 {
   "schema": {
-    "https://buybutton.store/graphql": {
+    "${BIGCOMMERCE_STOREFRONT_API_URL}": {
       "headers": {
-        "Authorization": "Bearer xzy"
+        "Authorization": "Bearer ${BIGCOMMERCE_STOREFRONT_API_TOKEN}"
       }
     }
   },
