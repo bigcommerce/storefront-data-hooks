@@ -5,6 +5,7 @@ import type { CartHandlers } from '..'
 // Return current cart info
 const addItem: CartHandlers['addItem'] = async ({
   res,
+  req,
   body: { cartId, locale, item, include },
   config,
 }) => {
@@ -17,7 +18,10 @@ const addItem: CartHandlers['addItem'] = async ({
   if (!item.quantity) item.quantity = 1
 
   // Use a dummy base as we only care about the relative path
-  const url = new URL(cartId ? `/v3/carts/${cartId}/items` : '/v3/carts', 'http://a')
+  const url = new URL(
+    cartId ? `/v3/carts/${cartId}/items` : '/v3/carts',
+    'http://a'
+  )
   if (include) url.searchParams.set('include', include)
 
   const options = {
@@ -27,12 +31,13 @@ const addItem: CartHandlers['addItem'] = async ({
       ...(!cartId && config.storeChannelId
         ? { channel_id: config.storeChannelId }
         : {}),
-      ...(!cartId
-        ? { locale }
-        : {}),
+      ...(!cartId ? { locale } : {}),
     }),
   }
-  const { data } = await config.storeApiFetch(url.pathname + url.search, options)
+  const { data } = await config.storeApiFetch(
+    url.pathname + url.search,
+    options
+  )
 
   // Create or update the cart cookie
   res.setHeader(
