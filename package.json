@@ -19,7 +19,7 @@
     "build": "npm run clean && tsc && cp src/schema.d.ts schema.d.ts",
     "start": "npm run clean && tsc -w",
     "prepublish": "npm run build",
-    "generate": "graphql-codegen",
+    "generate": "graphql-codegen -r dotenv/config",
     "generate:definitions": "node src/scripts/generate-definitions.js",
     "release": "release-it"
   },
