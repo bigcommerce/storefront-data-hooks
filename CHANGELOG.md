@@ -1,3 +1,5 @@
+### 1.5.5-beta.4 (2021-09-24)
+
 # 1.5.2
 ## Fix Address API imports
 Export edit and delete handlers correctly. They were swapped.
