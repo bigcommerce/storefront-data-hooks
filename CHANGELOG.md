@@ -1,3 +1,32 @@
+# 1.6.0
+
+## Add extra values to `useSignup` hook
+
+Add support to more values that are supported in the Customer V3 API:
+
+```
+- phone
+- company
+- notes
+- addresses
+- accepts_product_review_abandoned_cart_emails
+```
+
+In addition, **`eslint/prettier`** has been configured.
+
+## Category images
+
+- Return (if exists) category images
+
+## Add product options to product query
+
+- Return specific product options for checkbox option
+- Return specific product options for product pick list option
+- Return `isDefault` for multiple choice option
+
+## Add customer id to cart
+
+Add the customer id (if the customer is logged) to the cart when creating it using the addItem hook
 # 1.5.2
 ## Fix Address API imports
 Export edit and delete handlers correctly. They were swapped.
