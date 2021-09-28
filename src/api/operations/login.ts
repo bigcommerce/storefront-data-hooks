@@ -57,9 +57,17 @@ async function login({
     'Set-Cookie',
     [
       getLoginCookie(res.headers.get('Set-Cookie'), request.headers.host)!,
-      getLoginCookie(res.headers.get('Set-Cookie'), request.headers.host, 'SHOP_SESSION_TOKEN')!,
-      getLoginCookie(res.headers.get('Set-Cookie'), request.headers.host, 'Shopper-perf')!,
-    ].filter(cookie => cookie)
+      getLoginCookie(
+        res.headers.get('Set-Cookie'),
+        request.headers.host,
+        'SHOP_SESSION_TOKEN'
+      )!,
+      getLoginCookie(
+        res.headers.get('Set-Cookie'),
+        request.headers.host,
+        'Shopper-perf'
+      )!,
+    ].filter((cookie) => cookie)
   )
 
   return {
