@@ -10,22 +10,26 @@ import updateItem from './handlers/update-item'
 import removeItem from './handlers/remove-item'
 
 type OptionSelections = {
-	option_id: Number
-	option_value: Number|String
+  option_id: number
+  option_value: number | string
 }
 
 export type ItemBody = {
   productId: number
   variantId?: number
-	quantity?: number
-	optionSelections?: OptionSelections
+  quantity?: number
+  optionSelections?: OptionSelections
 }
 
-export type AddItemBody = { item: ItemBody, locale?: string, include?: string }
+export type AddItemBody = { item: ItemBody; locale?: string; include?: string }
 
-export type UpdateItemBody = { itemId: string; item: ItemBody, include?: string  }
+export type UpdateItemBody = {
+  itemId: string
+  item: ItemBody
+  include?: string
+}
 
-export type RemoveItemBody = { itemId: string, include?: string  }
+export type RemoveItemBody = { itemId: string; include?: string }
 
 export type Coupon = {
   code: string
@@ -136,7 +140,7 @@ export type Cart = {
 }
 
 export type CartHandlers = {
-  getCart: BigcommerceHandler<Cart, { cartId?: string, include?: string }>
+  getCart: BigcommerceHandler<Cart, { cartId?: string; include?: string }>
   addItem: BigcommerceHandler<Cart, { cartId?: string } & Partial<AddItemBody>>
   updateItem: BigcommerceHandler<
     Cart,
@@ -161,7 +165,8 @@ const cartApi: BigcommerceApiHandler<Cart, CartHandlers> = async (
 
   const { cookies } = req
   const cartId = cookies[config.cartCookie]
-  const include = typeof req.query.include === 'string' ? req.query.include : undefined
+  const include =
+    typeof req.query.include === 'string' ? req.query.include : undefined
 
   try {
     // Return current cart info
