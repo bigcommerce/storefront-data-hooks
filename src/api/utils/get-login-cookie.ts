@@ -8,6 +8,7 @@ export default function getLoginCookie(
   let cookie =
     cookies.find((cookie) => cookie.startsWith(`${cookieKey}=`)) || null
 
+  if (!cookie) return null
   // Set the cookie at TLD to make it accessible on subdomains (embedded checkout)
   cookie =
     cookie +
