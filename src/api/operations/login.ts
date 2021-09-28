@@ -67,8 +67,6 @@ async function login({
     ),
   ].filter((cookie): cookie is string => typeof cookie === 'string')
 
-  console.log('cc', cookies)
-
   response.setHeader('Set-Cookie', cookies)
 
   return {
