@@ -6,12 +6,7 @@ import isAllowedMethod from '../utils/is-allowed-method'
 import { BigcommerceApiError } from '../utils/errors'
 import signup from './handlers/signup'
 
-export type SignupBody = {
-  firstName: string
-  lastName: string
-  email: string
-  password: string
-}
+import { SignupBody } from './signup.types'
 
 export type SignupHandlers = {
   signup: BigcommerceHandler<null, { cartId?: string } & Partial<SignupBody>>
@@ -46,5 +41,5 @@ const signupApi: BigcommerceApiHandler<null, SignupHandlers> = async (
 }
 
 export const handlers = { signup }
-
+export * from './signup.types'
 export default createApiHandler(signupApi, handlers, {})

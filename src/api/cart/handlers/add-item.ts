@@ -1,3 +1,4 @@
+import getCustomerId from '../../operations/get-customer-id'
 import { parseCartItem } from '../../utils/parse-item'
 import getCartCookie from '../../utils/get-cart-cookie'
 import type { CartHandlers } from '..'
@@ -5,6 +6,7 @@ import type { CartHandlers } from '..'
 // Return current cart info
 const addItem: CartHandlers['addItem'] = async ({
   res,
+  req,
   body: { cartId, locale, item, include },
   config,
 }) => {
@@ -16,23 +18,33 @@ const addItem: CartHandlers['addItem'] = async ({
   }
   if (!item.quantity) item.quantity = 1
 
+  const { cookies } = req
+  const customerToken = cookies[config.customerCookie]
+  const customerId =
+    customerToken && (await getCustomerId({ customerToken, config }))
+
   // Use a dummy base as we only care about the relative path
-  const url = new URL(cartId ? `/v3/carts/${cartId}/items` : '/v3/carts', 'http://a')
+  const url = new URL(
+    cartId ? `/v3/carts/${cartId}/items` : '/v3/carts',
+    'http://a'
+  )
   if (include) url.searchParams.set('include', include)
 
   const options = {
     method: 'POST',
     body: JSON.stringify({
+      customer_id: customerId,
       line_items: [parseCartItem(item)],
       ...(!cartId && config.storeChannelId
         ? { channel_id: config.storeChannelId }
         : {}),
-      ...(!cartId
-        ? { locale }
-        : {}),
+      ...(!cartId ? { locale } : {}),
     }),
   }
-  const { data } = await config.storeApiFetch(url.pathname + url.search, options)
+  const { data } = await config.storeApiFetch(
+    url.pathname + url.search,
+    options
+  )
 
   // Create or update the cart cookie
   res.setHeader(

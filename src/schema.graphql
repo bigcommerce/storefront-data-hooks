@@ -310,6 +310,11 @@ interface CatalogProductOption {
   One of the option values is required to be selected for the checkout.
   """
   isRequired: Boolean!
+
+  """
+  Indicates whether it is a variant option or modifier.
+  """
+  isVariantOption: Boolean!
 }
 
 """
@@ -478,6 +483,11 @@ type CategoryTreeItem {
   productCount: Int!
 
   """
+  The category image.
+  """
+  image: Image
+
+  """
   Subcategories of this category
   """
   children: [CategoryTreeItem!]!
@@ -506,6 +516,11 @@ type CheckboxOption implements CatalogProductOption {
   One of the option values is required to be selected for the checkout.
   """
   isRequired: Boolean!
+
+  """
+  Indicates whether it is a variant option or modifier.
+  """
+  isVariantOption: Boolean!
 }
 
 """
@@ -547,6 +562,113 @@ type Content {
     entityId: Long!
     entityPageType: EntityPageType!
   ): RenderedRegionsByPageType!
+}
+
+type Currency {
+  """
+  Currency ID.
+  """
+  entityId: Int!
+
+  """
+  Currency code.
+  """
+  code: currencyCode!
+
+  """
+  Currency name.
+  """
+  name: String!
+
+  """
+  Flag image URL.
+  """
+  flagImage: String
+
+  """
+  Indicates whether this currency is active.
+  """
+  isActive: Boolean!
+
+  """
+  Exchange rate relative to default currency.
+  """
+  exchangeRate: Float!
+
+  """
+  Indicates whether this currency is transactional.
+  """
+  isTransactional: Boolean!
+
+  """
+  Currency display settings.
+  """
+  display: CurrencyDisplay!
+}
+
+"""
+A connection to a list of items.
+"""
+type CurrencyConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  A list of edges.
+  """
+  edges: [CurrencyEdge]
+}
+
+type CurrencyDisplay {
+  """
+  Currency symbol.
+  """
+  symbol: String!
+
+  """
+  Currency symbol.
+  """
+  symbolPlacement: CurrencySymbolPosition!
+
+  """
+  Currency decimal token.
+  """
+  decimalToken: String!
+
+  """
+  Currency thousands token.
+  """
+  thousandsToken: String!
+
+  """
+  Currency decimal places.
+  """
+  decimalPlaces: Int!
+}
+
+"""
+An edge in a connection.
+"""
+type CurrencyEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Currency!
+
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+}
+
+"""
+Currency symbol position
+"""
+enum CurrencySymbolPosition {
+  LEFT
+  RIGHT
 }
 
 """
@@ -719,6 +841,11 @@ type DateFieldOption implements CatalogProductOption {
   One of the option values is required to be selected for the checkout.
   """
   isRequired: Boolean!
+
+  """
+  Indicates whether it is a variant option or modifier.
+  """
+  isVariantOption: Boolean!
 }
 
 scalar DateTime
@@ -814,6 +941,11 @@ type FileUploadFieldOption implements CatalogProductOption {
   One of the option values is required to be selected for the checkout.
   """
   isRequired: Boolean!
+
+  """
+  Indicates whether it is a variant option or modifier.
+  """
+  isVariantOption: Boolean!
 }
 
 """
@@ -1111,6 +1243,11 @@ type MultiLineTextFieldOption implements CatalogProductOption {
   One of the option values is required to be selected for the checkout.
   """
   isRequired: Boolean!
+
+  """
+  Indicates whether it is a variant option or modifier.
+  """
+  isVariantOption: Boolean!
 }
 
 """
@@ -1146,6 +1283,11 @@ type MultipleChoiceOption implements CatalogProductOption {
   One of the option values is required to be selected for the checkout.
   """
   isRequired: Boolean!
+
+  """
+  Indicates whether it is a variant option or modifier.
+  """
+  isVariantOption: Boolean!
 }
 
 """
@@ -1196,6 +1338,11 @@ type NumberFieldOption implements CatalogProductOption {
   One of the option values is required to be selected for the checkout.
   """
   isRequired: Boolean!
+
+  """
+  Indicates whether it is a variant option or modifier.
+  """
+  isVariantOption: Boolean!
 }
 
 """
@@ -1341,6 +1488,11 @@ type PriceRanges {
   Product retail price min/max range.
   """
   retailPriceRange: MoneyRange
+}
+
+input PriceSearchFilterInput {
+  minPrice: Float
+  maxPrice: Float
 }
 
 """
@@ -1503,7 +1655,7 @@ type Product implements Node {
     after: String
     first: Int
     last: Int
-  ): OptionConnection!
+  ): OptionConnection! @deprecated(reason: "Use productOptions instead.")
 
   """
   Product options.
@@ -1642,6 +1794,8 @@ type Product implements Node {
   Reviews associated with the product.
   """
   reviews(
+    sort: ProductReviewsSortInput
+    filters: ProductReviewsFiltersInput
     before: String
     after: String
     first: Int
@@ -1652,6 +1806,11 @@ type Product implements Node {
   Product SEO details.
   """
   seo: SeoDetails!
+}
+
+input ProductAttributeSearchFilterInput {
+  attribute: String!
+  values: [String!]!
 }
 
 """
@@ -1898,6 +2057,22 @@ type ProductPreOrder implements ProductAvailability {
   description: String!
 }
 
+input ProductReviewsFiltersInput {
+  rating: ProductReviewsRatingFilterInput
+}
+
+input ProductReviewsRatingFilterInput {
+  minRating: Int
+  maxRating: Int
+}
+
+enum ProductReviewsSortInput {
+  NEWEST
+  OLDEST
+  HIGHEST_RATING
+  LOWEST_RATING
+}
+
 """
 Unavailable Product
 """
@@ -1937,6 +2112,11 @@ type Query {
   ): Node
   inventory: Inventory!
     @deprecated(reason: "Alpha version. Do not use in production.")
+}
+
+input RatingSearchFilterInput {
+  minRating: Float
+  maxRating: Float
 }
 
 type Region {
@@ -2094,6 +2274,47 @@ type Search {
   productFilteringEnabled: Boolean!
 }
 
+type SearchProducts {
+  """
+  Details of the products.
+  """
+  products(after: String, first: Int): ProductConnection!
+}
+
+input SearchProductsFiltersInput {
+  searchTerm: String
+  price: PriceSearchFilterInput
+  rating: RatingSearchFilterInput
+  categoryEntityId: Int
+  categoryEntityIds: [Int!]
+  brandEntityIds: [Int!]
+  productAttributes: [ProductAttributeSearchFilterInput!]
+  isFreeShipping: Boolean
+  isFeatured: Boolean
+  isInStock: Boolean
+}
+
+enum SearchProductsSortInput {
+  FEATURED
+  NEWEST
+  BEST_SELLING
+  BEST_REVIEWED
+  A_TO_Z
+  Z_TO_A
+  LOWEST_PRICE
+  HIGHEST_PRICE
+}
+
+type SearchQueries {
+  """
+  Details of the products and facets matching given search criteria.
+  """
+  searchProducts(
+    filters: SearchProductsFiltersInput!
+    sort: SearchProductsSortInput
+  ): SearchProducts!
+}
+
 """
 Seo Details
 """
@@ -2169,7 +2390,12 @@ type Settings {
 A site
 """
 type Site {
-  categoryTree: [CategoryTreeItem!]!
+  """
+  The Search queries.
+  """
+  search: SearchQueries!
+    @deprecated(reason: "Alpha version. Do not use in production.")
+  categoryTree(rootEntityId: Int): [CategoryTreeItem!]!
 
   """
   Details of the brand.
@@ -2249,6 +2475,26 @@ type Site {
   """
   settings: Settings
   content: Content!
+
+  """
+  Currency details.
+  """
+  currency(
+    """
+    Currency Code
+    """
+    currencyCode: currencyCode!
+  ): Currency
+
+  """
+  Store Currencies.
+  """
+  currencies(
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): CurrencyConnection!
 }
 
 """
@@ -2333,6 +2579,11 @@ type TextFieldOption implements CatalogProductOption {
   One of the option values is required to be selected for the checkout.
   """
   isRequired: Boolean!
+
+  """
+  Indicates whether it is a variant option or modifier.
+  """
+  isVariantOption: Boolean!
 }
 
 """
