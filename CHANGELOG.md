@@ -1,3 +1,5 @@
+### 1.7.1-beta.0 (2021-10-01)
+
 # 1.6.0
 
 ## Add extra values to `useSignup` hook
