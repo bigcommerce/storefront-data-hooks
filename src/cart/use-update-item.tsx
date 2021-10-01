@@ -59,7 +59,7 @@ function extendHook(customFetcher: typeof fetcher, cfg?: { wait?: number }) {
             variantId: newItem.variantId ?? item?.variant_id,
             quantity: newItem.quantity,
           },
-          include: input?.include?.join(',')
+          include: input?.include?.join(','),
         })
         await mutate(data, false)
         return data
