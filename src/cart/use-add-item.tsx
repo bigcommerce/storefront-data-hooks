@@ -41,7 +41,7 @@ export const fetcher: HookFetcher<Cart, AddItemBody> = (
 
 export function extendHook(customFetcher: typeof fetcher) {
   const useAddItem = (input?: UseCartInput) => {
-    const { mutate } = useCart()
+    const { mutate } = useCart(input)
     const { locale } = useCommerce()
     const fn = useCartAddItem(defaultOpts, customFetcher)
 

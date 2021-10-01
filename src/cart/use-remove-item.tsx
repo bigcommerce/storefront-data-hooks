@@ -33,7 +33,7 @@ export const fetcher: HookFetcher<Cart | null, RemoveItemBody> = (
 
 export function extendHook(customFetcher: typeof fetcher) {
   const useRemoveItem = (item?: any, input?: UseCartInput) => { // TODO; Item should be mandatory and types
-    const { mutate } = useCart()
+    const { mutate } = useCart(input)
     const fn = useCartRemoveItem<Cart | null, RemoveItemBody>(
       defaultOpts,
       customFetcher
