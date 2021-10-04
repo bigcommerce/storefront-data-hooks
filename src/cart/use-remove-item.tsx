@@ -18,7 +18,6 @@ export const fetcher: HookFetcher<Cart | null, RemoveItemBody> = (
   { itemId, include },
   fetch
 ) => {
-
   // Use a dummy base as we only care about the relative path
   const url = new URL(options?.url ?? defaultOpts.url, 'http://a')
   if (include) url.searchParams.set('include', include)
@@ -32,8 +31,9 @@ export const fetcher: HookFetcher<Cart | null, RemoveItemBody> = (
 }
 
 export function extendHook(customFetcher: typeof fetcher) {
-  const useRemoveItem = (item?: any, input?: UseCartInput) => { // TODO; Item should be mandatory and types
-    const { mutate } = useCart()
+  const useRemoveItem = (item?: any, input?: UseCartInput) => {
+    // TODO; Item should be mandatory and types
+    const { mutate } = useCart(input)
     const fn = useCartRemoveItem<Cart | null, RemoveItemBody>(
       defaultOpts,
       customFetcher
@@ -43,7 +43,7 @@ export function extendHook(customFetcher: typeof fetcher) {
       async function removeItem({ id: itemId }: RemoveItemInput) {
         const data = await fn({
           itemId: itemId ?? item?.id,
-          include: input?.include?.join(',')
+          include: input?.include?.join(','),
         })
         await mutate(data, false)
         return data

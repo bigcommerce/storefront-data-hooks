@@ -44,7 +44,7 @@ export const fetcher: HookFetcher<Cart | null, UpdateItemBody> = (
 
 function extendHook(customFetcher: typeof fetcher, cfg?: { wait?: number }) {
   const useUpdateItem = (item: PhysicalItem, input?: UseCartInput) => {
-    const { mutate } = useCart()
+    const { mutate } = useCart(input)
     const fn = useCartUpdateItem<Cart | null, UpdateItemBody>(
       defaultOpts,
       customFetcher
@@ -59,9 +59,8 @@ function extendHook(customFetcher: typeof fetcher, cfg?: { wait?: number }) {
             variantId: newItem.variantId ?? item?.variant_id,
             quantity: newItem.quantity,
           },
-          include: input?.include?.join(',')
+          include: input?.include?.join(','),
         })
-        console.log({ data })
         await mutate(data, false)
         return data
       }, cfg?.wait ?? 500),
