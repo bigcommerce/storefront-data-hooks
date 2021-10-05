@@ -78,7 +78,7 @@ export const productInfoFragment = /* GraphQL */ `
         }
       }
     }
-    variants {
+    variants(first: 250) {
       edges {
         node {
           entityId
