@@ -44,10 +44,6 @@ export const getProductQuery = /* GraphQL */ `
                       }
                     }
                   }
-                  reviewSummary {
-                    numberOfReviews
-                    summationOfRatings
-                  }
                 }
               }
             }
