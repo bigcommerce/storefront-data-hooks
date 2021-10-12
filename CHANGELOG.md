@@ -1,3 +1,12 @@
+### 1.7.1-beta.4 (2021-10-12)
+
+### 1.7.1-beta.3 (2021-10-12)
+
+
+### Bug Fixes
+
+* add review summary to product fragment ([2ddf749](https://github.com/bigcommerce/storefront-data-hooks/commit/2ddf749577bb1ccb9d499bebf5b203c90ba56b55))
+
 ### 1.7.1-beta.2 (2021-10-12)
 
 ### 1.7.1-beta.1 (2021-10-04)
