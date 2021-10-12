@@ -2486,6 +2486,10 @@ export type ProductInfoFragment = { __typename?: 'Product' } & Pick<
         >
       >
     }
+    reviewSummary: { __typename?: 'Reviews' } & Pick<
+      Reviews,
+      'numberOfReviews' | 'summationOfRatings'
+    >
     variants: { __typename?: 'VariantConnection' } & {
       edges?: Maybe<
         Array<
