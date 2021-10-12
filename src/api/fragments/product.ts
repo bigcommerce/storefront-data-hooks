@@ -82,7 +82,7 @@ export const productInfoFragment = /* GraphQL */ `
       numberOfReviews
       summationOfRatings
     }
-    variants {
+    variants(first: 250) {
       edges {
         node {
           entityId
