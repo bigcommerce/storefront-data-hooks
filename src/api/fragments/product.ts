@@ -78,6 +78,10 @@ export const productInfoFragment = /* GraphQL */ `
         }
       }
     }
+    reviewSummary {
+      numberOfReviews
+      summationOfRatings
+    }
     variants(first: 250) {
       edges {
         node {
