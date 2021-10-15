@@ -1,19 +1,23 @@
-### 1.7.1-beta.5 (2021-10-12)
+# 1.7.0
 
-### 1.7.1-beta.4 (2021-10-12)
+## Set `OptionSelection` as an array
+Following the BigCommerce API, `OptionSelection` have to be an array.
 
-### 1.7.1-beta.3 (2021-10-12)
+## Login cookies
+Return only non-null cookies.
 
+## Update cart after add, update or remove cart items
+Allow to pass array of options to `useAddItem`, `useUpdateItem ` and `useRemoveItem ` as it's allowed in `useCart`.
 
-### Bug Fixes
+This way, when using the hook of `useCart` with options, we can update its value through the rest of hooks if the same options are used. This is because behind the scenes we use **`swr`** in which the hook update depends on its input arguments. And the cart options are input arguments.
 
-* add review summary to product fragment ([2ddf749](https://github.com/bigcommerce/storefront-data-hooks/commit/2ddf749577bb1ccb9d499bebf5b203c90ba56b55))
+## Add review summary
 
-### 1.7.1-beta.2 (2021-10-12)
+Add review summary to get product operation.
 
-### 1.7.1-beta.1 (2021-10-04)
+## Increase product variants
 
-### 1.7.1-beta.0 (2021-10-01)
+By default, the number of variants returned by the API is 10. This has been changed to the maximum (250) to cover cases where a product has many possible variants.
 
 # 1.6.0
 
