@@ -1,4 +1,64 @@
 """
+Add wishlist items input object
+"""
+input AddWishlistItemsInput {
+  entityId: Int!
+  items: [WishlistItemInput!]!
+}
+
+"""
+Add wishlist items
+"""
+type AddWishlistItemsResult {
+  result: Wishlist!
+}
+
+"""
+Create wishlist input object
+"""
+input CreateWishlistInput {
+  name: String!
+  isPublic: Boolean!
+  items: [WishlistItemInput!]
+}
+
+"""
+Create wishlist
+"""
+type CreateWishlistResult {
+  result: Wishlist!
+}
+
+"""
+Delete wishlist items input object
+"""
+input DeleteWishlistItemsInput {
+  entityId: Int!
+  itemEntityIds: [Int!]!
+}
+
+"""
+Delete wishlist items
+"""
+type DeleteWishlistItemsResult {
+  result: Wishlist!
+}
+
+"""
+Delete wishlist
+"""
+type DeleteWishlistResult {
+  result: String!
+}
+
+"""
+Delete wishlists input object
+"""
+input DeleteWishlistsInput {
+  entityIds: [Int!]!
+}
+
+"""
 Login result
 """
 type LoginResult {
@@ -26,6 +86,52 @@ type LogoutResult {
 type Mutation {
   login(email: String!, password: String!): LoginResult!
   logout: LogoutResult!
+
+  """
+  The wishlist mutations.
+  """
+  wishlist: WishlistMutations!
+}
+
+"""
+Update wishlist input object
+"""
+input UpdateWishlistInput {
+  entityId: Int!
+  data: WishlistUpdateDataInput!
+}
+
+"""
+Update wishlist
+"""
+type UpdateWishlistResult {
+  result: Wishlist!
+}
+
+"""
+Wishlist item input object
+"""
+input WishlistItemInput {
+  productEntityId: Int!
+  variantEntityId: Int
+}
+
+type WishlistMutations {
+  createWishlist(input: CreateWishlistInput!): CreateWishlistResult
+  addWishlistItems(input: AddWishlistItemsInput!): AddWishlistItemsResult
+  deleteWishlistItems(
+    input: DeleteWishlistItemsInput!
+  ): DeleteWishlistItemsResult
+  updateWishlist(input: UpdateWishlistInput!): UpdateWishlistResult
+  deleteWishlists(input: DeleteWishlistsInput!): DeleteWishlistResult
+}
+
+"""
+Wishlist data to update
+"""
+input WishlistUpdateDataInput {
+  name: String
+  isPublic: Boolean
 }
 
 """
@@ -503,6 +609,11 @@ type CheckboxOption implements CatalogProductOption {
   checkedByDefault: Boolean!
 
   """
+  Label of the checkbox option.
+  """
+  label: String!
+
+  """
   Unique ID for the option.
   """
   entityId: Int!
@@ -789,6 +900,13 @@ type Customer {
   Customer attributes.
   """
   attributes: CustomerAttributes!
+  wishlists(
+    filters: WishlistFiltersInput
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): WishlistConnection!
 }
 
 """
@@ -827,6 +945,26 @@ type CustomerAttributes {
 A calendar for allowing selection of a date.
 """
 type DateFieldOption implements CatalogProductOption {
+  """
+  The default timestamp of date option.
+  """
+  defaultValue: DateTime
+
+  """
+  The earliest timestamp of date option.
+  """
+  earliest: DateTime
+
+  """
+  The latest timestamp of date option.
+  """
+  latest: DateTime
+
+  """
+  Limit date by
+  """
+  limitDateBy: LimitDateOption!
+
   """
   Unique ID for the option.
   """
@@ -927,6 +1065,16 @@ enum EntityPageType {
 A form allowing selection and uploading of a file from the user's local computer.
 """
 type FileUploadFieldOption implements CatalogProductOption {
+  """
+  The maximum size of the file in kilobytes
+  """
+  maxFileSize: Int!
+
+  """
+  All possible file extensions. Empty means that all files allowed.
+  """
+  fileTypes: [String!]!
+
   """
   Unique ID for the option.
   """
@@ -1080,6 +1228,20 @@ enum LengthUnit {
   Kilometres
 }
 
+enum LimitDateOption {
+  NO_LIMIT
+  EARLIEST_DATE
+  LATEST_DATE
+  RANGE
+}
+
+enum LimitInputBy {
+  NO_LIMIT
+  LOWEST_VALUE
+  HIGHEST_VALUE
+  RANGE
+}
+
 """
 A connection to a list of items.
 """
@@ -1230,6 +1392,26 @@ A multi-line text input field, aka a text box.
 """
 type MultiLineTextFieldOption implements CatalogProductOption {
   """
+  Default value of the multiline text field option.
+  """
+  defaultValue: String
+
+  """
+  The minimum number of characters.
+  """
+  minLength: Int
+
+  """
+  The maximum number of characters.
+  """
+  maxLength: Int
+
+  """
+  The maximum number of lines.
+  """
+  maxLines: Int
+
+  """
   Unique ID for the option.
   """
   entityId: Int!
@@ -1324,6 +1506,31 @@ interface Node {
 A single line text input field that only accepts numbers.
 """
 type NumberFieldOption implements CatalogProductOption {
+  """
+  Default value of the text field option.
+  """
+  defaultValue: Float
+
+  """
+  The bottom limit of possible numbers.
+  """
+  lowest: Float
+
+  """
+  The top limit of possible numbers.
+  """
+  highest: Float
+
+  """
+  Allow whole numbers only.
+  """
+  isIntegerOnly: Float
+
+  """
+  Limit numbers by several options.
+  """
+  limitNumberBy: LimitInputBy!
+
   """
   Unique ID for the option.
   """
@@ -2093,6 +2300,27 @@ type ProductUnavailable implements ProductAvailability {
   description: String!
 }
 
+"""
+Public Wishlist
+"""
+type PublicWishlist {
+  """
+  The wishlist id.
+  """
+  entityId: Int!
+
+  """
+  The wishlist name.
+  """
+  name: String!
+
+  """
+  The wishlist token.
+  """
+  token: String!
+  items(hideOutOfStock: Boolean, first: Int): WishlistItemConnection!
+}
+
 type Query {
   site: Site!
 
@@ -2398,6 +2626,11 @@ type Site {
   categoryTree(rootEntityId: Int): [CategoryTreeItem!]!
 
   """
+  Retrieve a category object by the id.
+  """
+  category(entityId: Int!): Category
+
+  """
   Details of the brand.
   """
   brands(
@@ -2495,6 +2728,7 @@ type Site {
     first: Int
     last: Int
   ): CurrencyConnection!
+  publicWishlist(token: String!): PublicWishlist
 }
 
 """
@@ -2565,6 +2799,21 @@ enum TaxPriceDisplay {
 A single line text input field.
 """
 type TextFieldOption implements CatalogProductOption {
+  """
+  Default value of the text field option.
+  """
+  defaultValue: String
+
+  """
+  The minimum number of characters.
+  """
+  minLength: Int
+
+  """
+  The maximum number of characters.
+  """
+  maxLength: Int
+
   """
   Unique ID for the option.
   """
@@ -2768,6 +3017,109 @@ type VariantInventory {
     first: Int
     last: Int
   ): LocationConnection
+}
+
+type Wishlist {
+  """
+  The wishlist id.
+  """
+  entityId: Int!
+
+  """
+  The wishlist name.
+  """
+  name: String!
+
+  """
+  Is the wishlist public?
+  """
+  isPublic: Boolean!
+
+  """
+  The wishlist token.
+  """
+  token: String!
+  items(hideOutOfStock: Boolean, first: Int): WishlistItemConnection!
+}
+
+"""
+A connection to a list of items.
+"""
+type WishlistConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  A list of edges.
+  """
+  edges: [WishlistEdge]
+}
+
+"""
+An edge in a connection.
+"""
+type WishlistEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Wishlist!
+
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+}
+
+"""
+Wishlist filters input object
+"""
+input WishlistFiltersInput {
+  entityIds: [Int!]
+}
+
+"""
+WishlistItem
+"""
+type WishlistItem {
+  """
+  Wishlist item id.
+  """
+  entityId: Int!
+  product: Product!
+  productEntityId: Int!
+  variantEntityId: Int
+}
+
+"""
+A connection to a list of items.
+"""
+type WishlistItemConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  A list of edges.
+  """
+  edges: [WishlistItemEdge]
+}
+
+"""
+An edge in a connection.
+"""
+type WishlistItemEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: WishlistItem!
+
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
 }
 
 """
