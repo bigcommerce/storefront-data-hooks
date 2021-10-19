@@ -19,6 +19,10 @@ Add review summary to get product operation.
 
 By default, the number of variants returned by the API is 10. This has been changed to the maximum (250) to cover cases where a product has many possible variants.
 
+## Reduce wishlist products to new maximum
+
+The new maximum number of products returned by the API is 50.
+
 # 1.6.0
 
 ## Add extra values to `useSignup` hook
