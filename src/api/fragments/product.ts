@@ -78,7 +78,11 @@ export const productInfoFragment = /* GraphQL */ `
         }
       }
     }
-    variants {
+    reviewSummary {
+      numberOfReviews
+      summationOfRatings
+    }
+    variants(first: 250) {
       edges {
         node {
           entityId

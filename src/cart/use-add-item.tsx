@@ -41,13 +41,17 @@ export const fetcher: HookFetcher<Cart, AddItemBody> = (
 
 export function extendHook(customFetcher: typeof fetcher) {
   const useAddItem = (input?: UseCartInput) => {
-    const { mutate } = useCart()
+    const { mutate } = useCart(input)
     const { locale } = useCommerce()
     const fn = useCartAddItem(defaultOpts, customFetcher)
 
     return useCallback(
       async function addItem(item: AddItemInput) {
-        const data = await fn({ item, locale, include: input?.include?.join(',') })
+        const data = await fn({
+          item,
+          locale,
+          include: input?.include?.join(','),
+        })
         await mutate(data, false)
         return data
       },

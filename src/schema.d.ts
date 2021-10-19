@@ -16,6 +16,54 @@ export type Scalars = {
   Long: any
 }
 
+/** Add wishlist items input object */
+export type AddWishlistItemsInput = {
+  entityId: Scalars['Int']
+  items: Array<WishlistItemInput>
+}
+
+/** Add wishlist items */
+export type AddWishlistItemsResult = {
+  __typename?: 'AddWishlistItemsResult'
+  result: Wishlist
+}
+
+/** Create wishlist input object */
+export type CreateWishlistInput = {
+  name: Scalars['String']
+  isPublic: Scalars['Boolean']
+  items?: Maybe<Array<WishlistItemInput>>
+}
+
+/** Create wishlist */
+export type CreateWishlistResult = {
+  __typename?: 'CreateWishlistResult'
+  result: Wishlist
+}
+
+/** Delete wishlist items input object */
+export type DeleteWishlistItemsInput = {
+  entityId: Scalars['Int']
+  itemEntityIds: Array<Scalars['Int']>
+}
+
+/** Delete wishlist items */
+export type DeleteWishlistItemsResult = {
+  __typename?: 'DeleteWishlistItemsResult'
+  result: Wishlist
+}
+
+/** Delete wishlist */
+export type DeleteWishlistResult = {
+  __typename?: 'DeleteWishlistResult'
+  result: Scalars['String']
+}
+
+/** Delete wishlists input object */
+export type DeleteWishlistsInput = {
+  entityIds: Array<Scalars['Int']>
+}
+
 /** Login result */
 export type LoginResult = {
   __typename?: 'LoginResult'
@@ -39,11 +87,66 @@ export type Mutation = {
   __typename?: 'Mutation'
   login: LoginResult
   logout: LogoutResult
+  /** The wishlist mutations. */
+  wishlist: WishlistMutations
 }
 
 export type MutationLoginArgs = {
   email: Scalars['String']
   password: Scalars['String']
+}
+
+/** Update wishlist input object */
+export type UpdateWishlistInput = {
+  entityId: Scalars['Int']
+  data: WishlistUpdateDataInput
+}
+
+/** Update wishlist */
+export type UpdateWishlistResult = {
+  __typename?: 'UpdateWishlistResult'
+  result: Wishlist
+}
+
+/** Wishlist item input object */
+export type WishlistItemInput = {
+  productEntityId: Scalars['Int']
+  variantEntityId?: Maybe<Scalars['Int']>
+}
+
+export type WishlistMutations = {
+  __typename?: 'WishlistMutations'
+  createWishlist?: Maybe<CreateWishlistResult>
+  addWishlistItems?: Maybe<AddWishlistItemsResult>
+  deleteWishlistItems?: Maybe<DeleteWishlistItemsResult>
+  updateWishlist?: Maybe<UpdateWishlistResult>
+  deleteWishlists?: Maybe<DeleteWishlistResult>
+}
+
+export type WishlistMutationsCreateWishlistArgs = {
+  input: CreateWishlistInput
+}
+
+export type WishlistMutationsAddWishlistItemsArgs = {
+  input: AddWishlistItemsInput
+}
+
+export type WishlistMutationsDeleteWishlistItemsArgs = {
+  input: DeleteWishlistItemsInput
+}
+
+export type WishlistMutationsUpdateWishlistArgs = {
+  input: UpdateWishlistInput
+}
+
+export type WishlistMutationsDeleteWishlistsArgs = {
+  input: DeleteWishlistsInput
+}
+
+/** Wishlist data to update */
+export type WishlistUpdateDataInput = {
+  name?: Maybe<Scalars['String']>
+  isPublic?: Maybe<Scalars['Boolean']>
 }
 
 /** Aggregated */
@@ -343,6 +446,8 @@ export type CheckboxOption = CatalogProductOption & {
   __typename?: 'CheckboxOption'
   /** Indicates the default checked status. */
   checkedByDefault: Scalars['Boolean']
+  /** Label of the checkbox option. */
+  label: Scalars['String']
   /** Unique ID for the option. */
   entityId: Scalars['Int']
   /** Display name for the option. */
@@ -502,6 +607,16 @@ export type Customer = {
   storeCredit: Array<Money>
   /** Customer attributes. */
   attributes: CustomerAttributes
+  wishlists: WishlistConnection
+}
+
+/** A customer that shops on a store */
+export type CustomerWishlistsArgs = {
+  filters?: Maybe<WishlistFiltersInput>
+  before?: Maybe<Scalars['String']>
+  after?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
 }
 
 /** A custom, store-specific attribute for a customer */
@@ -529,6 +644,14 @@ export type CustomerAttributesAttributeArgs = {
 /** A calendar for allowing selection of a date. */
 export type DateFieldOption = CatalogProductOption & {
   __typename?: 'DateFieldOption'
+  /** The default timestamp of date option. */
+  defaultValue?: Maybe<Scalars['DateTime']>
+  /** The earliest timestamp of date option. */
+  earliest?: Maybe<Scalars['DateTime']>
+  /** The latest timestamp of date option. */
+  latest?: Maybe<Scalars['DateTime']>
+  /** Limit date by */
+  limitDateBy: LimitDateOption
   /** Unique ID for the option. */
   entityId: Scalars['Int']
   /** Display name for the option. */
@@ -588,6 +711,10 @@ export enum EntityPageType {
 /** A form allowing selection and uploading of a file from the user's local computer. */
 export type FileUploadFieldOption = CatalogProductOption & {
   __typename?: 'FileUploadFieldOption'
+  /** The maximum size of the file in kilobytes */
+  maxFileSize: Scalars['Int']
+  /** All possible file extensions. Empty means that all files allowed. */
+  fileTypes: Array<Scalars['String']>
   /** Unique ID for the option. */
   entityId: Scalars['Int']
   /** Display name for the option. */
@@ -688,6 +815,20 @@ export enum LengthUnit {
   Kilometres = 'Kilometres',
 }
 
+export enum LimitDateOption {
+  NoLimit = 'NO_LIMIT',
+  EarliestDate = 'EARLIEST_DATE',
+  LatestDate = 'LATEST_DATE',
+  Range = 'RANGE',
+}
+
+export enum LimitInputBy {
+  NoLimit = 'NO_LIMIT',
+  LowestValue = 'LOWEST_VALUE',
+  HighestValue = 'HIGHEST_VALUE',
+  Range = 'RANGE',
+}
+
 /** A connection to a list of items. */
 export type LocationConnection = {
   __typename?: 'LocationConnection'
@@ -776,6 +917,14 @@ export type MoneyRange = {
 /** A multi-line text input field, aka a text box. */
 export type MultiLineTextFieldOption = CatalogProductOption & {
   __typename?: 'MultiLineTextFieldOption'
+  /** Default value of the multiline text field option. */
+  defaultValue?: Maybe<Scalars['String']>
+  /** The minimum number of characters. */
+  minLength?: Maybe<Scalars['Int']>
+  /** The maximum number of characters. */
+  maxLength?: Maybe<Scalars['Int']>
+  /** The maximum number of lines. */
+  maxLines?: Maybe<Scalars['Int']>
   /** Unique ID for the option. */
   entityId: Scalars['Int']
   /** Display name for the option. */
@@ -831,6 +980,16 @@ export type Node = {
 /** A single line text input field that only accepts numbers. */
 export type NumberFieldOption = CatalogProductOption & {
   __typename?: 'NumberFieldOption'
+  /** Default value of the text field option. */
+  defaultValue?: Maybe<Scalars['Float']>
+  /** The bottom limit of possible numbers. */
+  lowest?: Maybe<Scalars['Float']>
+  /** The top limit of possible numbers. */
+  highest?: Maybe<Scalars['Float']>
+  /** Allow whole numbers only. */
+  isIntegerOnly?: Maybe<Scalars['Float']>
+  /** Limit numbers by several options. */
+  limitNumberBy: LimitInputBy
   /** Unique ID for the option. */
   entityId: Scalars['Int']
   /** Display name for the option. */
@@ -1345,6 +1504,24 @@ export type ProductUnavailable = ProductAvailability & {
   description: Scalars['String']
 }
 
+/** Public Wishlist */
+export type PublicWishlist = {
+  __typename?: 'PublicWishlist'
+  /** The wishlist id. */
+  entityId: Scalars['Int']
+  /** The wishlist name. */
+  name: Scalars['String']
+  /** The wishlist token. */
+  token: Scalars['String']
+  items: WishlistItemConnection
+}
+
+/** Public Wishlist */
+export type PublicWishlistItemsArgs = {
+  hideOutOfStock?: Maybe<Scalars['Boolean']>
+  first?: Maybe<Scalars['Int']>
+}
+
 export type Query = {
   __typename?: 'Query'
   site: Site
@@ -1550,6 +1727,8 @@ export type Site = {
    */
   search: SearchQueries
   categoryTree: Array<CategoryTreeItem>
+  /** Retrieve a category object by the id. */
+  category?: Maybe<Category>
   /** Details of the brand. */
   brands: BrandConnection
   /** Details of the products. */
@@ -1571,11 +1750,17 @@ export type Site = {
   currency?: Maybe<Currency>
   /** Store Currencies. */
   currencies: CurrencyConnection
+  publicWishlist?: Maybe<PublicWishlist>
 }
 
 /** A site */
 export type SiteCategoryTreeArgs = {
   rootEntityId?: Maybe<Scalars['Int']>
+}
+
+/** A site */
+export type SiteCategoryArgs = {
+  entityId: Scalars['Int']
 }
 
 /** A site */
@@ -1652,6 +1837,11 @@ export type SiteCurrenciesArgs = {
   last?: Maybe<Scalars['Int']>
 }
 
+/** A site */
+export type SitePublicWishlistArgs = {
+  token: Scalars['String']
+}
+
 /** Storefront Mode */
 export enum StorefrontStatusType {
   Launched = 'LAUNCHED',
@@ -1699,6 +1889,12 @@ export enum TaxPriceDisplay {
 /** A single line text input field. */
 export type TextFieldOption = CatalogProductOption & {
   __typename?: 'TextFieldOption'
+  /** Default value of the text field option. */
+  defaultValue?: Maybe<Scalars['String']>
+  /** The minimum number of characters. */
+  minLength?: Maybe<Scalars['Int']>
+  /** The maximum number of characters. */
+  maxLength?: Maybe<Scalars['Int']>
   /** Unique ID for the option. */
   entityId: Scalars['Int']
   /** Display name for the option. */
@@ -1827,6 +2023,75 @@ export type VariantInventoryByLocationArgs = {
   after?: Maybe<Scalars['String']>
   first?: Maybe<Scalars['Int']>
   last?: Maybe<Scalars['Int']>
+}
+
+export type Wishlist = {
+  __typename?: 'Wishlist'
+  /** The wishlist id. */
+  entityId: Scalars['Int']
+  /** The wishlist name. */
+  name: Scalars['String']
+  /** Is the wishlist public? */
+  isPublic: Scalars['Boolean']
+  /** The wishlist token. */
+  token: Scalars['String']
+  items: WishlistItemConnection
+}
+
+export type WishlistItemsArgs = {
+  hideOutOfStock?: Maybe<Scalars['Boolean']>
+  first?: Maybe<Scalars['Int']>
+}
+
+/** A connection to a list of items. */
+export type WishlistConnection = {
+  __typename?: 'WishlistConnection'
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<WishlistEdge>>>
+}
+
+/** An edge in a connection. */
+export type WishlistEdge = {
+  __typename?: 'WishlistEdge'
+  /** The item at the end of the edge. */
+  node: Wishlist
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']
+}
+
+/** Wishlist filters input object */
+export type WishlistFiltersInput = {
+  entityIds?: Maybe<Array<Scalars['Int']>>
+}
+
+/** WishlistItem */
+export type WishlistItem = {
+  __typename?: 'WishlistItem'
+  /** Wishlist item id. */
+  entityId: Scalars['Int']
+  product: Product
+  productEntityId: Scalars['Int']
+  variantEntityId?: Maybe<Scalars['Int']>
+}
+
+/** A connection to a list of items. */
+export type WishlistItemConnection = {
+  __typename?: 'WishlistItemConnection'
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<WishlistItemEdge>>>
+}
+
+/** An edge in a connection. */
+export type WishlistItemEdge = {
+  __typename?: 'WishlistItemEdge'
+  /** The item at the end of the edge. */
+  node: WishlistItem
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']
 }
 
 /** Country Code */
@@ -2486,6 +2751,10 @@ export type ProductInfoFragment = { __typename?: 'Product' } & Pick<
         >
       >
     }
+    reviewSummary: { __typename?: 'Reviews' } & Pick<
+      Reviews,
+      'numberOfReviews' | 'summationOfRatings'
+    >
     variants: { __typename?: 'VariantConnection' } & {
       edges?: Maybe<
         Array<

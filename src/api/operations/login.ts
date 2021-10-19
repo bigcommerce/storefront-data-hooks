@@ -53,14 +53,21 @@ async function login({
     { variables }
   )
 
-  response.setHeader(
-    'Set-Cookie',
-    [
-      getLoginCookie(res.headers.get('Set-Cookie'), request.headers.host)!,
-      getLoginCookie(res.headers.get('Set-Cookie'), request.headers.host, 'SHOP_SESSION_TOKEN')!,
-      getLoginCookie(res.headers.get('Set-Cookie'), request.headers.host, 'Shopper-perf')!,
-    ].filter(cookie => cookie)
-  )
+  const cookies = [
+    getLoginCookie(res.headers.get('Set-Cookie'), request.headers.host),
+    getLoginCookie(
+      res.headers.get('Set-Cookie'),
+      request.headers.host,
+      'SHOP_SESSION_TOKEN'
+    ),
+    getLoginCookie(
+      res.headers.get('Set-Cookie'),
+      request.headers.host,
+      'Shopper-perf'
+    ),
+  ].filter((cookie): cookie is string => typeof cookie === 'string')
+
+  response.setHeader('Set-Cookie', cookies)
 
   return {
     result: data.login?.result,

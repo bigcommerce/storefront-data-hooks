@@ -1,3 +1,28 @@
+# 1.7.0
+
+## Set `OptionSelection` as an array
+Following the BigCommerce API, `OptionSelection` have to be an array.
+
+## Login cookies
+Return only non-null cookies.
+
+## Update cart after add, update or remove cart items
+Allow to pass array of options to `useAddItem`, `useUpdateItem ` and `useRemoveItem ` as it's allowed in `useCart`.
+
+This way, when using the hook of `useCart` with options, we can update its value through the rest of hooks if the same options are used. This is because behind the scenes we use **`swr`** in which the hook update depends on its input arguments. And the cart options are input arguments.
+
+## Add review summary
+
+Add review summary to get product operation.
+
+## Increase product variants
+
+By default, the number of variants returned by the API is 10. This has been changed to the maximum (250) to cover cases where a product has many possible variants.
+
+## Reduce wishlist products to new maximum
+
+The new maximum number of products returned by the API is 50.
+
 # 1.6.0
 
 ## Add extra values to `useSignup` hook
