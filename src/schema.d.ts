@@ -2748,6 +2748,13 @@ export type MultiLineTextFieldOptionFragment = {
   'defaultValue' | 'minLength' | 'maxLength' | 'maxLines'
 >
 
+export type NumberFieldOptionFragment = {
+  __typename?: 'NumberFieldOption'
+} & Pick<
+  NumberFieldOption,
+  'lowest' | 'highest' | 'isIntegerOnly' | 'limitNumberBy'
+> & { defaultNumber: NumberFieldOption['defaultValue'] }
+
 export type ProductInfoFragment = { __typename?: 'Product' } & Pick<
   Product,
   'entityId' | 'name' | 'path' | 'description'
@@ -2841,7 +2848,8 @@ export type ProductInfoFragment = { __typename?: 'Product' } & Pick<
                     | 'displayName'
                     | 'isVariantOption'
                     | 'isRequired'
-                  >)
+                  > &
+                    NumberFieldOptionFragment)
                 | ({ __typename: 'TextFieldOption' } & Pick<
                     TextFieldOption,
                     | 'entityId'

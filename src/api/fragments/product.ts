@@ -80,6 +80,16 @@ export const multiLineTextFieldOptionFragment = /* GraphQL */ `
   }
 `
 
+export const numberFieldOptionFragment = /* GraphQL */ `
+  fragment numberFieldOption on NumberFieldOption {
+    defaultNumber: defaultValue
+    lowest
+    highest
+    isIntegerOnly
+    limitNumberBy
+  }
+`
+
 export const productInfoFragment = /* GraphQL */ `
   fragment productInfo on Product {
     entityId
@@ -131,6 +141,7 @@ export const productInfoFragment = /* GraphQL */ `
           ...dateFieldOption
           ...textFieldOption
           ...multiLineTextFieldOption
+          ...numberFieldOption
         }
       }
     }
@@ -151,6 +162,7 @@ export const productInfoFragment = /* GraphQL */ `
   ${dateFieldOptionFragment}
   ${textFieldOptionFragment}
   ${multiLineTextFieldOptionFragment}
+  ${numberFieldOptionFragment}
 `
 
 export const productConnectionFragment = /* GraphQL */ `
