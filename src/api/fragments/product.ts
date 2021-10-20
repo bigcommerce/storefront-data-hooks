@@ -63,6 +63,22 @@ export const dateFieldOptionFragment = /* GraphQL */ `
     limitDateBy
   }
 `
+export const textFieldOptionFragment = /* GraphQL */ `
+  fragment textFieldOption on TextFieldOption {
+    defaultValue
+    minLength
+    maxLength
+  }
+`
+
+export const multiLineTextFieldOptionFragment = /* GraphQL */ `
+  fragment multiLineTextFieldOption on MultiLineTextFieldOption {
+    defaultValue
+    minLength
+    maxLength
+    maxLines
+  }
+`
 
 export const productInfoFragment = /* GraphQL */ `
   fragment productInfo on Product {
@@ -113,6 +129,8 @@ export const productInfoFragment = /* GraphQL */ `
           ...multipleChoiceOption
           ...checkboxOption
           ...dateFieldOption
+          ...textFieldOption
+          ...multiLineTextFieldOption
         }
       }
     }
@@ -131,6 +149,8 @@ export const productInfoFragment = /* GraphQL */ `
   ${multipleChoiceOptionFragment}
   ${checkboxOptionFragment}
   ${dateFieldOptionFragment}
+  ${textFieldOptionFragment}
+  ${multiLineTextFieldOptionFragment}
 `
 
 export const productConnectionFragment = /* GraphQL */ `

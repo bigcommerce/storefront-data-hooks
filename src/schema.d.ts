@@ -2736,6 +2736,18 @@ export type DateFieldOptionFragment = { __typename?: 'DateFieldOption' } & Pick<
   'earliest' | 'latest' | 'limitDateBy'
 > & { defaultDate: DateFieldOption['defaultValue'] }
 
+export type TextFieldOptionFragment = { __typename?: 'TextFieldOption' } & Pick<
+  TextFieldOption,
+  'defaultValue' | 'minLength' | 'maxLength'
+>
+
+export type MultiLineTextFieldOptionFragment = {
+  __typename?: 'MultiLineTextFieldOption'
+} & Pick<
+  MultiLineTextFieldOption,
+  'defaultValue' | 'minLength' | 'maxLength' | 'maxLines'
+>
+
 export type ProductInfoFragment = { __typename?: 'Product' } & Pick<
   Product,
   'entityId' | 'name' | 'path' | 'description'
@@ -2813,7 +2825,8 @@ export type ProductInfoFragment = { __typename?: 'Product' } & Pick<
                     | 'displayName'
                     | 'isVariantOption'
                     | 'isRequired'
-                  >)
+                  > &
+                    MultiLineTextFieldOptionFragment)
                 | ({ __typename: 'MultipleChoiceOption' } & Pick<
                     MultipleChoiceOption,
                     | 'entityId'
@@ -2835,7 +2848,8 @@ export type ProductInfoFragment = { __typename?: 'Product' } & Pick<
                     | 'displayName'
                     | 'isVariantOption'
                     | 'isRequired'
-                  >)
+                  > &
+                    TextFieldOptionFragment)
             }
           >
         >
