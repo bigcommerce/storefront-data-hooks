@@ -100,6 +100,8 @@ export const productInfoFragment = /* GraphQL */ `
           __typename
           entityId
           displayName
+          isVariantOption
+          isRequired
           ...multipleChoiceOption
           ...checkboxOption
         }

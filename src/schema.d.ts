@@ -2781,33 +2781,54 @@ export type ProductInfoFragment = { __typename?: 'Product' } & Pick<
               node:
                 | ({ __typename: 'CheckboxOption' } & Pick<
                     CheckboxOption,
-                    'entityId' | 'displayName'
+                    | 'entityId'
+                    | 'displayName'
+                    | 'isVariantOption'
+                    | 'isRequired'
                   > &
                     CheckboxOptionFragment)
                 | ({ __typename: 'DateFieldOption' } & Pick<
                     DateFieldOption,
-                    'entityId' | 'displayName'
+                    | 'entityId'
+                    | 'displayName'
+                    | 'isVariantOption'
+                    | 'isRequired'
                   >)
                 | ({ __typename: 'FileUploadFieldOption' } & Pick<
                     FileUploadFieldOption,
-                    'entityId' | 'displayName'
+                    | 'entityId'
+                    | 'displayName'
+                    | 'isVariantOption'
+                    | 'isRequired'
                   >)
                 | ({ __typename: 'MultiLineTextFieldOption' } & Pick<
                     MultiLineTextFieldOption,
-                    'entityId' | 'displayName'
+                    | 'entityId'
+                    | 'displayName'
+                    | 'isVariantOption'
+                    | 'isRequired'
                   >)
                 | ({ __typename: 'MultipleChoiceOption' } & Pick<
                     MultipleChoiceOption,
-                    'entityId' | 'displayName'
+                    | 'entityId'
+                    | 'displayName'
+                    | 'isVariantOption'
+                    | 'isRequired'
                   > &
                     MultipleChoiceOptionFragment)
                 | ({ __typename: 'NumberFieldOption' } & Pick<
                     NumberFieldOption,
-                    'entityId' | 'displayName'
+                    | 'entityId'
+                    | 'displayName'
+                    | 'isVariantOption'
+                    | 'isRequired'
                   >)
                 | ({ __typename: 'TextFieldOption' } & Pick<
                     TextFieldOption,
-                    'entityId' | 'displayName'
+                    | 'entityId'
+                    | 'displayName'
+                    | 'isVariantOption'
+                    | 'isRequired'
                   >)
             }
           >
