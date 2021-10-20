@@ -55,6 +55,14 @@ export const checkboxOptionFragment = /* GraphQL */ `
     checkedByDefault
   }
 `
+export const dateFieldOptionFragment = /* GraphQL */ `
+  fragment dateFieldOption on DateFieldOption {
+    defaultDate: defaultValue
+    earliest
+    latest
+    limitDateBy
+  }
+`
 
 export const productInfoFragment = /* GraphQL */ `
   fragment productInfo on Product {
@@ -104,6 +112,7 @@ export const productInfoFragment = /* GraphQL */ `
           isRequired
           ...multipleChoiceOption
           ...checkboxOption
+          ...dateFieldOption
         }
       }
     }
@@ -121,6 +130,7 @@ export const productInfoFragment = /* GraphQL */ `
   ${productPrices}
   ${multipleChoiceOptionFragment}
   ${checkboxOptionFragment}
+  ${dateFieldOptionFragment}
 `
 
 export const productConnectionFragment = /* GraphQL */ `

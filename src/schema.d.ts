@@ -2731,6 +2731,11 @@ export type CheckboxOptionFragment = { __typename?: 'CheckboxOption' } & Pick<
   'checkedByDefault'
 >
 
+export type DateFieldOptionFragment = { __typename?: 'DateFieldOption' } & Pick<
+  DateFieldOption,
+  'earliest' | 'latest' | 'limitDateBy'
+> & { defaultDate: DateFieldOption['defaultValue'] }
+
 export type ProductInfoFragment = { __typename?: 'Product' } & Pick<
   Product,
   'entityId' | 'name' | 'path' | 'description'
@@ -2793,7 +2798,8 @@ export type ProductInfoFragment = { __typename?: 'Product' } & Pick<
                     | 'displayName'
                     | 'isVariantOption'
                     | 'isRequired'
-                  >)
+                  > &
+                    DateFieldOptionFragment)
                 | ({ __typename: 'FileUploadFieldOption' } & Pick<
                     FileUploadFieldOption,
                     | 'entityId'
