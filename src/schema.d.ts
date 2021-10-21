@@ -2731,6 +2731,30 @@ export type CheckboxOptionFragment = { __typename?: 'CheckboxOption' } & Pick<
   'checkedByDefault'
 >
 
+export type DateFieldOptionFragment = { __typename?: 'DateFieldOption' } & Pick<
+  DateFieldOption,
+  'earliest' | 'latest' | 'limitDateBy'
+> & { defaultDate: DateFieldOption['defaultValue'] }
+
+export type TextFieldOptionFragment = { __typename?: 'TextFieldOption' } & Pick<
+  TextFieldOption,
+  'defaultValue' | 'minLength' | 'maxLength'
+>
+
+export type MultiLineTextFieldOptionFragment = {
+  __typename?: 'MultiLineTextFieldOption'
+} & Pick<
+  MultiLineTextFieldOption,
+  'defaultValue' | 'minLength' | 'maxLength' | 'maxLines'
+>
+
+export type NumberFieldOptionFragment = {
+  __typename?: 'NumberFieldOption'
+} & Pick<
+  NumberFieldOption,
+  'lowest' | 'highest' | 'isIntegerOnly' | 'limitNumberBy'
+> & { defaultNumber: NumberFieldOption['defaultValue'] }
+
 export type ProductInfoFragment = { __typename?: 'Product' } & Pick<
   Product,
   'entityId' | 'name' | 'path' | 'description'
@@ -2781,34 +2805,59 @@ export type ProductInfoFragment = { __typename?: 'Product' } & Pick<
               node:
                 | ({ __typename: 'CheckboxOption' } & Pick<
                     CheckboxOption,
-                    'entityId' | 'displayName'
+                    | 'entityId'
+                    | 'displayName'
+                    | 'isVariantOption'
+                    | 'isRequired'
                   > &
                     CheckboxOptionFragment)
                 | ({ __typename: 'DateFieldOption' } & Pick<
                     DateFieldOption,
-                    'entityId' | 'displayName'
-                  >)
+                    | 'entityId'
+                    | 'displayName'
+                    | 'isVariantOption'
+                    | 'isRequired'
+                  > &
+                    DateFieldOptionFragment)
                 | ({ __typename: 'FileUploadFieldOption' } & Pick<
                     FileUploadFieldOption,
-                    'entityId' | 'displayName'
+                    | 'entityId'
+                    | 'displayName'
+                    | 'isVariantOption'
+                    | 'isRequired'
                   >)
                 | ({ __typename: 'MultiLineTextFieldOption' } & Pick<
                     MultiLineTextFieldOption,
-                    'entityId' | 'displayName'
-                  >)
+                    | 'entityId'
+                    | 'displayName'
+                    | 'isVariantOption'
+                    | 'isRequired'
+                  > &
+                    MultiLineTextFieldOptionFragment)
                 | ({ __typename: 'MultipleChoiceOption' } & Pick<
                     MultipleChoiceOption,
-                    'entityId' | 'displayName'
+                    | 'entityId'
+                    | 'displayName'
+                    | 'isVariantOption'
+                    | 'isRequired'
                   > &
                     MultipleChoiceOptionFragment)
                 | ({ __typename: 'NumberFieldOption' } & Pick<
                     NumberFieldOption,
-                    'entityId' | 'displayName'
-                  >)
+                    | 'entityId'
+                    | 'displayName'
+                    | 'isVariantOption'
+                    | 'isRequired'
+                  > &
+                    NumberFieldOptionFragment)
                 | ({ __typename: 'TextFieldOption' } & Pick<
                     TextFieldOption,
-                    'entityId' | 'displayName'
-                  >)
+                    | 'entityId'
+                    | 'displayName'
+                    | 'isVariantOption'
+                    | 'isRequired'
+                  > &
+                    TextFieldOptionFragment)
             }
           >
         >
