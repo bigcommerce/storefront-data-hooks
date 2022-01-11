@@ -1097,6 +1097,61 @@ type FileUploadFieldOption implements CatalogProductOption {
 }
 
 """
+Gift wrapping for product
+"""
+type GiftWrapping {
+  """
+  Gift wrapping id.
+  """
+  entityId: Int!
+
+  """
+  Gift wrapping name.
+  """
+  name: String!
+
+  """
+  Indicates whether commenting is allowed for the gift wrapping.
+  """
+  allowComments: Boolean!
+
+  """
+  Gift wrapping preview image url.
+  """
+  previewImageUrl: String
+}
+
+"""
+A connection to a list of items.
+"""
+type GiftWrappingConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  A list of edges.
+  """
+  edges: [GiftWrappingEdge]
+}
+
+"""
+An edge in a connection.
+"""
+type GiftWrappingEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: GiftWrapping!
+
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+}
+
+"""
 Image
 """
 type Image {
@@ -1524,7 +1579,7 @@ type NumberFieldOption implements CatalogProductOption {
   """
   Allow whole numbers only.
   """
-  isIntegerOnly: Float
+  isIntegerOnly: Boolean!
 
   """
   Limit numbers by several options.
@@ -1957,6 +2012,7 @@ type Product implements Node {
     after: String
     first: Int
     last: Int
+    hideOutOfStock: Boolean
   ): RelatedProductsConnection!
 
   """
@@ -2013,6 +2069,21 @@ type Product implements Node {
   Product SEO details.
   """
   seo: SeoDetails!
+
+  """
+  Gift wrapping options available for the product.
+  """
+  giftWrappingOptions(
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): GiftWrappingConnection!
+
+  """
+  Product condition
+  """
+  condition: ProductConditionType
 }
 
 input ProductAttributeSearchFilterInput {
@@ -2057,6 +2128,12 @@ type ProductAvailable implements ProductAvailability {
   A few words telling the customer how long it will normally take to ship this product, such as 'Usually ships in 24 hours'.
   """
   description: String!
+}
+
+enum ProductConditionType {
+  NEW
+  USED
+  REFURBISHED
 }
 
 """

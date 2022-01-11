@@ -725,6 +725,37 @@ export type FileUploadFieldOption = CatalogProductOption & {
   isVariantOption: Scalars['Boolean']
 }
 
+/** Gift wrapping for product */
+export type GiftWrapping = {
+  __typename?: 'GiftWrapping'
+  /** Gift wrapping id. */
+  entityId: Scalars['Int']
+  /** Gift wrapping name. */
+  name: Scalars['String']
+  /** Indicates whether commenting is allowed for the gift wrapping. */
+  allowComments: Scalars['Boolean']
+  /** Gift wrapping preview image url. */
+  previewImageUrl?: Maybe<Scalars['String']>
+}
+
+/** A connection to a list of items. */
+export type GiftWrappingConnection = {
+  __typename?: 'GiftWrappingConnection'
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<GiftWrappingEdge>>>
+}
+
+/** An edge in a connection. */
+export type GiftWrappingEdge = {
+  __typename?: 'GiftWrappingEdge'
+  /** The item at the end of the edge. */
+  node: GiftWrapping
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']
+}
+
 /** Image */
 export type Image = {
   __typename?: 'Image'
@@ -987,7 +1018,7 @@ export type NumberFieldOption = CatalogProductOption & {
   /** The top limit of possible numbers. */
   highest?: Maybe<Scalars['Float']>
   /** Allow whole numbers only. */
-  isIntegerOnly?: Maybe<Scalars['Float']>
+  isIntegerOnly: Scalars['Boolean']
   /** Limit numbers by several options. */
   limitNumberBy: LimitInputBy
   /** Unique ID for the option. */
@@ -1230,6 +1261,10 @@ export type Product = Node & {
   reviews: ReviewConnection
   /** Product SEO details. */
   seo: SeoDetails
+  /** Gift wrapping options available for the product. */
+  giftWrappingOptions: GiftWrappingConnection
+  /** Product condition */
+  condition?: Maybe<ProductConditionType>
 }
 
 /** Product */
@@ -1305,6 +1340,7 @@ export type ProductRelatedProductsArgs = {
   after?: Maybe<Scalars['String']>
   first?: Maybe<Scalars['Int']>
   last?: Maybe<Scalars['Int']>
+  hideOutOfStock?: Maybe<Scalars['Boolean']>
 }
 
 /** Product */
@@ -1321,6 +1357,14 @@ export type ProductMetafieldsArgs = {
 export type ProductReviewsArgs = {
   sort?: Maybe<ProductReviewsSortInput>
   filters?: Maybe<ProductReviewsFiltersInput>
+  before?: Maybe<Scalars['String']>
+  after?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+}
+
+/** Product */
+export type ProductGiftWrappingOptionsArgs = {
   before?: Maybe<Scalars['String']>
   after?: Maybe<Scalars['String']>
   first?: Maybe<Scalars['Int']>
@@ -1354,6 +1398,12 @@ export type ProductAvailable = ProductAvailability & {
   status: ProductAvailabilityStatus
   /** A few words telling the customer how long it will normally take to ship this product, such as 'Usually ships in 24 hours'. */
   description: Scalars['String']
+}
+
+export enum ProductConditionType {
+  New = 'NEW',
+  Used = 'USED',
+  Refurbished = 'REFURBISHED',
 }
 
 /** A connection to a list of items. */
@@ -2761,6 +2811,17 @@ export type ProductInfoFragment = { __typename?: 'Product' } & Pick<
 > & {
     brand?: Maybe<{ __typename?: 'Brand' } & Pick<Brand, 'entityId' | 'name'>>
     prices?: Maybe<{ __typename?: 'Prices' } & ProductPricesFragment>
+    inventory: { __typename?: 'ProductInventory' } & Pick<
+      ProductInventory,
+      'isInStock'
+    > & {
+        aggregated?: Maybe<
+          { __typename?: 'AggregatedInventory' } & Pick<
+            AggregatedInventory,
+            'warningLevel' | 'availableToSell'
+          >
+        >
+      }
     images: { __typename?: 'ImageConnection' } & {
       edges?: Maybe<
         Array<
