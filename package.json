@@ -33,7 +33,7 @@
     "js-cookie": "2.2.1",
     "lodash.debounce": "4.0.8",
     "lodash.omit": "^4.5.0",
-    "swr": "0.3.6"
+    "swr": "0.5.7"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.19.0",
