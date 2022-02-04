@@ -969,6 +969,8 @@ export type MultipleChoiceOptionValue = CatalogProductOptionValue & {
   label: Scalars['String']
   /** Indicates whether this value is the chosen default selected value. */
   isDefault: Scalars['Boolean']
+  /** List of up to 3 hex encoded colors to associate with a swatch value. */
+  hexColors: Array<Scalars['String']>
 }
 
 /** An object with an ID */
