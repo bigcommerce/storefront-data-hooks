@@ -512,6 +512,18 @@ type Category implements Node {
   Category SEO details.
   """
   seo: SeoDetails!
+  shopByPriceRanges(
+    """
+    Please select a currency
+    """
+    currencyCode: currencyCode
+    includeTax: Boolean = false
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): ShopByPriceConnection!
+    @deprecated(reason: "Alpha version. Do not use in production.")
 }
 
 """
@@ -1979,6 +1991,7 @@ type Product implements Node {
     after: String
     first: Int
     last: Int
+    isPurchasable: Boolean
     entityIds: [Int!] = []
     optionValueIds: [OptionValueId!] = []
   ): VariantConnection!
@@ -2587,16 +2600,60 @@ type SearchProducts {
 }
 
 input SearchProductsFiltersInput {
+  """
+  Textual search term. Used to search for products based on text entered by a shopper, typically in a search box. Searches against several fields on the product including Name, SKU, and Description.
+  """
   searchTerm: String
+
+  """
+  Search by price range. At least a minPrice or maxPrice must be supplied.
+  """
   price: PriceSearchFilterInput
+
+  """
+  Filter by rating. At least a minRating or maxRating must be supplied. This filter will do nothing unless your store has the Product Filtering feature available on your plan and enabled. If it is supplied when your store does not have the feature enabled, it will be silently ignored.
+  """
   rating: RatingSearchFilterInput
+
+  """
+  Filter by products belonging to a single Category. This is intended for use when presenting a Category page in a PLP experience. This argument must be used in order for custom product sorts and custom product filtering settings targeted at a particular category to take effect.
+  """
   categoryEntityId: Int
+
+  """
+  Filter by products belonging to any of the specified Categories. Intended for Advanced Search and Faceted Search/Product Filtering use cases, not for a page for a specific Category.
+  """
   categoryEntityIds: [Int!]
+
+  """
+  Boolean argument to determine whether products within sub-Categories will be returned when filtering products by Category. Defaults to False if not supplied.
+  """
+  searchSubCategories: Boolean
+
+  """
+  Filter by products belonging to any of the specified Brands.
+  """
   brandEntityIds: [Int!]
+
+  """
+  Filter by the attributes of products such as Product Options and Product Custom Fields. This filter will do nothing unless your store has the Product Filtering feature available on your plan and enabled. If it is supplied when your store does not have the feature enabled, it will be silently ignored.
+  """
   productAttributes: [ProductAttributeSearchFilterInput!]
+
+  """
+  Filters by Products which have explicit Free Shipping configured within the catalog. If not supplied, the Free Shipping status of products will not be considered when returning the list of products.
+  """
   isFreeShipping: Boolean
+
+  """
+  Filters by Products which have explicitly been marked as Featured within the catalog. If not supplied, the Featured status of products will not be considered when returning the list of products.
+  """
   isFeatured: Boolean
-  isInStock: Boolean
+
+  """
+  When set to True, hides products which are out of stock. Defaults to False. This filter will do nothing unless your store has the Product Filtering feature available on your plan and enabled. If it is supplied when your store does not have the feature enabled, it will be silently ignored.
+  """
+  hideOutOfStock: Boolean
 }
 
 enum SearchProductsSortInput {
@@ -2608,6 +2665,7 @@ enum SearchProductsSortInput {
   Z_TO_A
   LOWEST_PRICE
   HIGHEST_PRICE
+  RELEVANCE
 }
 
 type SearchQueries {
@@ -2616,6 +2674,10 @@ type SearchQueries {
   """
   searchProducts(
     filters: SearchProductsFiltersInput!
+
+    """
+    The results are sorted by relevance if the sort argument is not provided.
+    """
     sort: SearchProductsSortInput
   ): SearchProducts!
 }
@@ -2692,6 +2754,46 @@ type Settings {
 }
 
 """
+A connection to a list of items.
+"""
+type ShopByPriceConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  A list of edges.
+  """
+  edges: [ShopByPriceEdge]
+}
+
+"""
+An edge in a connection.
+"""
+type ShopByPriceEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: ShopByPriceRange!
+
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+}
+
+"""
+Category shop by price money ranges
+"""
+type ShopByPriceRange {
+  """
+  Category shop by price range.
+  """
+  ranges: MoneyRange!
+}
+
+"""
 A site
 """
 type Site {
@@ -2699,7 +2801,6 @@ type Site {
   The Search queries.
   """
   search: SearchQueries!
-    @deprecated(reason: "Alpha version. Do not use in production.")
   categoryTree(rootEntityId: Int): [CategoryTreeItem!]!
 
   """
@@ -3034,6 +3135,7 @@ type Variant implements Node {
   Global trade item number.
   """
   gtin: String
+  isPurchasable: Boolean!
 }
 
 """
