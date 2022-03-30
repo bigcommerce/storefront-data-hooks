@@ -3,7 +3,7 @@ import { getConfig } from '..'
 import { BigcommerceApiError, BigcommerceNetworkError } from './errors'
 import fetch from './fetch'
 
-export default async function fetchStoreApi<T>(
+export default async function fetchStoreApi<T>(1
   endpoint: string,
   options?: RequestInit
 ): Promise<T> {
@@ -22,7 +22,9 @@ export default async function fetchStoreApi<T>(
     })
   } catch (error) {
     throw new BigcommerceNetworkError(
-      `Fetch to Bigcommerce failed: ${error.message}`
+      `Fetch to Bigcommerce [${config.storeApiUrl + endpoint}] failed: ${
+        error.message
+      }`
     )
   }
 
