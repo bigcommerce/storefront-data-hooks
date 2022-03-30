@@ -1,3 +1,7 @@
+## 1.7.1-beta.7 (2022-01-11)
+
+## 1.7.1-beta.6 (2021-10-21)
+
 # 1.7.0
 
 ## Set `OptionSelection` as an array
