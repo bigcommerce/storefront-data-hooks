@@ -360,6 +360,8 @@ export type Category = Node & {
   metafields: MetafieldConnection
   /** Category SEO details. */
   seo: SeoDetails
+  /** @deprecated Alpha version. Do not use in production. */
+  shopByPriceRanges: ShopByPriceConnection
 }
 
 /** Category */
@@ -385,6 +387,16 @@ export type CategoryProductsArgs = {
 export type CategoryMetafieldsArgs = {
   namespace: Scalars['String']
   keys?: Maybe<Array<Scalars['String']>>
+  before?: Maybe<Scalars['String']>
+  after?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+}
+
+/** Category */
+export type CategoryShopByPriceRangesArgs = {
+  currencyCode?: Maybe<CurrencyCode>
+  includeTax?: Maybe<Scalars['Boolean']>
   before?: Maybe<Scalars['String']>
   after?: Maybe<Scalars['String']>
   first?: Maybe<Scalars['Int']>
@@ -1313,6 +1325,7 @@ export type ProductVariantsArgs = {
   after?: Maybe<Scalars['String']>
   first?: Maybe<Scalars['Int']>
   last?: Maybe<Scalars['Int']>
+  isPurchasable?: Maybe<Scalars['Boolean']>
   entityIds?: Maybe<Array<Scalars['Int']>>
   optionValueIds?: Maybe<Array<OptionValueId>>
 }
@@ -1699,16 +1712,28 @@ export type SearchProductsProductsArgs = {
 }
 
 export type SearchProductsFiltersInput = {
+  /** Textual search term. Used to search for products based on text entered by a shopper, typically in a search box. Searches against several fields on the product including Name, SKU, and Description. */
   searchTerm?: Maybe<Scalars['String']>
+  /** Search by price range. At least a minPrice or maxPrice must be supplied. */
   price?: Maybe<PriceSearchFilterInput>
+  /** Filter by rating. At least a minRating or maxRating must be supplied. This filter will do nothing unless your store has the Product Filtering feature available on your plan and enabled. If it is supplied when your store does not have the feature enabled, it will be silently ignored. */
   rating?: Maybe<RatingSearchFilterInput>
+  /** Filter by products belonging to a single Category. This is intended for use when presenting a Category page in a PLP experience. This argument must be used in order for custom product sorts and custom product filtering settings targeted at a particular category to take effect. */
   categoryEntityId?: Maybe<Scalars['Int']>
+  /** Filter by products belonging to any of the specified Categories. Intended for Advanced Search and Faceted Search/Product Filtering use cases, not for a page for a specific Category. */
   categoryEntityIds?: Maybe<Array<Scalars['Int']>>
+  /** Boolean argument to determine whether products within sub-Categories will be returned when filtering products by Category. Defaults to False if not supplied. */
+  searchSubCategories?: Maybe<Scalars['Boolean']>
+  /** Filter by products belonging to any of the specified Brands. */
   brandEntityIds?: Maybe<Array<Scalars['Int']>>
+  /** Filter by the attributes of products such as Product Options and Product Custom Fields. This filter will do nothing unless your store has the Product Filtering feature available on your plan and enabled. If it is supplied when your store does not have the feature enabled, it will be silently ignored. */
   productAttributes?: Maybe<Array<ProductAttributeSearchFilterInput>>
+  /** Filters by Products which have explicit Free Shipping configured within the catalog. If not supplied, the Free Shipping status of products will not be considered when returning the list of products. */
   isFreeShipping?: Maybe<Scalars['Boolean']>
+  /** Filters by Products which have explicitly been marked as Featured within the catalog. If not supplied, the Featured status of products will not be considered when returning the list of products. */
   isFeatured?: Maybe<Scalars['Boolean']>
-  isInStock?: Maybe<Scalars['Boolean']>
+  /** When set to True, hides products which are out of stock. Defaults to False. This filter will do nothing unless your store has the Product Filtering feature available on your plan and enabled. If it is supplied when your store does not have the feature enabled, it will be silently ignored. */
+  hideOutOfStock?: Maybe<Scalars['Boolean']>
 }
 
 export enum SearchProductsSortInput {
@@ -1720,6 +1745,7 @@ export enum SearchProductsSortInput {
   ZToA = 'Z_TO_A',
   LowestPrice = 'LOWEST_PRICE',
   HighestPrice = 'HIGHEST_PRICE',
+  Relevance = 'RELEVANCE',
 }
 
 export type SearchQueries = {
@@ -1768,13 +1794,35 @@ export type Settings = {
   search: Search
 }
 
+/** A connection to a list of items. */
+export type ShopByPriceConnection = {
+  __typename?: 'ShopByPriceConnection'
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<ShopByPriceEdge>>>
+}
+
+/** An edge in a connection. */
+export type ShopByPriceEdge = {
+  __typename?: 'ShopByPriceEdge'
+  /** The item at the end of the edge. */
+  node: ShopByPriceRange
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']
+}
+
+/** Category shop by price money ranges */
+export type ShopByPriceRange = {
+  __typename?: 'ShopByPriceRange'
+  /** Category shop by price range. */
+  ranges: MoneyRange
+}
+
 /** A site */
 export type Site = {
   __typename?: 'Site'
-  /**
-   * The Search queries.
-   * @deprecated Alpha version. Do not use in production.
-   */
+  /** The Search queries. */
   search: SearchQueries
   categoryTree: Array<CategoryTreeItem>
   /** Retrieve a category object by the id. */
@@ -1999,6 +2047,7 @@ export type Variant = Node & {
   mpn?: Maybe<Scalars['String']>
   /** Global trade item number. */
   gtin?: Maybe<Scalars['String']>
+  isPurchasable: Scalars['Boolean']
 }
 
 /** Variant */
