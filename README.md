@@ -543,6 +543,23 @@ The recommended method is the [Embedded Checkout](https://developer.bigcommerce.
 </details>
 
 ## Contributing
+
+### Configuration 
+
+You will need to crate a `.env` file from the `.env.example` with the following keys.
+- BIGCOMMERCE_STOREFRONT_API_TOKEN 
+- BIGCOMMERCE_STOREFRONT_API_URL
+
+The token and url will be crated in your BC Store admin section: Advanced Settings -> API Accounts.
+Once you have added the `.env` configuration, run:
+
+- `yarn generate` to generate your new schema.
+- `yarn build` to build a new set of compiled files.
+
+Link the package locally to your app with `yarn link` or by using the [YALC](https://www.npmjs.com/package/yalc) tool.
+
+### Pull Requests
+
 Pull requests, issues and comments are welcome! See [Contributing](CONTRIBUTING.md) for more details.
 
 Many thanks to all [contributors](https://github.com/bigcommerce/storefront-data-hooks/contributors)!
