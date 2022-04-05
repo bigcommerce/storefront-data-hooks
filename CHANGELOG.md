@@ -1,12 +1,16 @@
-## 1.7.1-beta.11 (2022-07-15)
+## 1.8.0
 
-## 1.7.1-beta.10 (2022-05-24)
+## Add inventory fragments
+- Adds in inventory levels into product fragment
+- Update graphql schema
 
-## 1.7.1-beta.9 (2022-04-27)
+## Add product options
+- Add support for `DateFieldOption`
+- Add support for `TextFieldOption` and `MultiLineTextFieldOption`
+- Add support for `NumberField`
+## Fix gift recipient typo
 
-## 1.7.1-beta.7 (2022-01-11)
-
-## 1.7.1-beta.6 (2021-10-21)
+Fixes gift recipient typo.
 
 # 1.7.0
 
