@@ -103,7 +103,7 @@ export type Gift_Certificate = {
     name?: string
     email?: string
   }
-  receipt: {
+  recipient: {
     name?: string
     email?: string
   }

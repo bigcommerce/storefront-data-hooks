@@ -1,3 +1,17 @@
+## 1.8.0
+
+## Add inventory fragments
+- Adds in inventory levels into product fragment
+- Update graphql schema
+
+## Add product options
+- Add support for `DateFieldOption`
+- Add support for `TextFieldOption` and `MultiLineTextFieldOption`
+- Add support for `NumberField`
+## Fix gift recipient typo
+
+Fixes gift recipient typo.
+
 # 1.7.0
 
 ## Set `OptionSelection` as an array
