@@ -30,7 +30,7 @@ const fetchGraphqlApi: GraphQLFetcher = async (
     throw new BigcommerceNetworkError(
       `Fetch to Bigcommerce GraphQL [${
         config.commerceUrl + (preview ? '/preview' : '')
-      }] failed: ${error.message}`
+      }] failed: ${error}`
     )
   }
 
