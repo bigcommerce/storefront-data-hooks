@@ -51,7 +51,7 @@ function extendHook(customFetcher: typeof fetcher, cfg?: { wait?: number }) {
     )
 
     return useCallback(
-      debounce(async (newItem: UpdateItemInput) => {
+      async (newItem: UpdateItemInput) => {
         const data = await fn({
           itemId: newItem.id ?? item?.id,
           item: {
@@ -63,7 +63,7 @@ function extendHook(customFetcher: typeof fetcher, cfg?: { wait?: number }) {
         })
         await mutate(data, false)
         return data
-      }, cfg?.wait ?? 500),
+      },
       [fn, mutate]
     )
   }
