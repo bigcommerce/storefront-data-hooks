@@ -23,6 +23,7 @@
   "dependencies": {
     "@vercel/fetch": "6.1.0",
     "cookie": "0.4.1",
+    "iron-session": "^6.0.5",
     "js-cookie": "2.2.1",
     "lodash.debounce": "4.0.8",
     "lodash.omit": "^4.5.0",

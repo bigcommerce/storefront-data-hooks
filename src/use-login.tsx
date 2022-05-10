@@ -20,7 +20,7 @@ export const fetcher: HookFetcher<null, LoginBody> = (
   if (!(email && password)) {
     throw new CommerceError({
       message:
-        'A first name, last name, email and password are required to login',
+        'An email and password are required to login',
     })
   }
 
@@ -35,6 +35,7 @@ export const fetcher: HookFetcher<null, LoginBody> = (
   })
 }
 
+// this is convenience for your store-front
 export function extendHook(customFetcher: typeof fetcher) {
 
   function useLogin(): (input: LoginInput) => Promise<null>;
