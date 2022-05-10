@@ -10,11 +10,16 @@ export const loginMutation = /* GraphQL */ `
   mutation login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       result
+      customer {
+        entityId
+      }
     }
   }
 `
 
-export type LoginResult<T extends { result?: any } = { result?: string }> = T
+export type LoginResult<
+  T extends { result?: any } = { result?: string; customerId: number }
+> = T
 
 export type LoginVariables = LoginMutationVariables
 
@@ -53,6 +58,7 @@ async function login({
     { variables }
   )
 
+  // TODO: eventually we can remove once all apis ported to graphql
   const cookies = [
     getLoginCookie(res.headers.get('Set-Cookie'), request.headers.host),
     getLoginCookie(
@@ -71,6 +77,7 @@ async function login({
 
   return {
     result: data.login?.result,
+    customerId: data.login?.customer?.entityId || -1,
   }
 }
 

@@ -53,11 +53,14 @@ yarn add @bigcommerce/storefront-data-hooks
 After install, the first thing you do is: <b>set your environment variables</b> in `.env.local`
 
 ```sh
-BIGCOMMERCE_STOREFRONT_API_URL=<>
-BIGCOMMERCE_STOREFRONT_API_TOKEN=<>
-BIGCOMMERCE_STORE_API_URL=<>
-BIGCOMMERCE_STORE_API_TOKEN=<>
-BIGCOMMERCE_STORE_API_CLIENT_ID=<>
+BIGCOMMERCE_CHANNEL_ID=
+BIGCOMMERCE_STOREFRONT_API_TOKEN=
+BIGCOMMERCE_STOREFRONT_API_URL=
+BIGCOMMERCE_STORE_API_CLIENT_ID=
+BIGCOMMERCE_STORE_API_TOKEN=
+BIGCOMMERCE_STORE_API_URL=
+BIGCOMMERCE_STORE_HASH=
+SECRET_COOKIE_PASSWORD=
 ```
 
 ## General Usage
@@ -544,10 +547,10 @@ The recommended method is the [Embedded Checkout](https://developer.bigcommerce.
 
 ## Contributing
 
-### Configuration 
+### Configuration
 
 You will need to crate a `.env` file from the `.env.example` with the following keys.
-- BIGCOMMERCE_STOREFRONT_API_TOKEN 
+- BIGCOMMERCE_STOREFRONT_API_TOKEN
 - BIGCOMMERCE_STOREFRONT_API_URL
 
 The token and url will be crated in your BC Store admin section: Advanced Settings -> API Accounts.
