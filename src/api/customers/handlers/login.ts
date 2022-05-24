@@ -1,6 +1,9 @@
 import { FetcherError } from '../../.././commerce/utils/errors'
 import login from '../../operations/login'
 import type { LoginHandlers } from '../login'
+import { getIronSession } from 'iron-session'
+import { sessionOptions } from '../../../lib/session'
+import getCustomerImpersonationToken from '../../operations/get-customer-impersonation-token'
 
 const invalidCredentials = /invalid credentials/i
 
@@ -28,6 +31,17 @@ const loginHandler: LoginHandlers['login'] = async ({
       req,
       res,
     })
+
+    // get customer impersonation token (cit)
+    const token = await getCustomerImpersonationToken({ config })
+
+    // store user id, cit in session
+    const session = await getIronSession(req, res, sessionOptions)
+    session.customerId = data.customerId
+    session.token = token
+
+    await session.save()
+
     res.status(200).json({ data })
   } catch (error) {
     // Check if the email and password didn't match an existing account
