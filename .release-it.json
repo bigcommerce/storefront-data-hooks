@@ -1,4 +1,8 @@
 {
+  "git": {
+    "commitMessage": "chore: release ${version} [no ci]",
+    "tagName": "v${version}"
+  },
   "plugins": {
     "@release-it/conventional-changelog": {
       "infile": "CHANGELOG.md",
