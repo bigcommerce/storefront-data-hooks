@@ -10,7 +10,7 @@ export interface BigcommerceConfig extends CommerceAPIConfig {
   storeApiUrl: string
   storeApiToken: string
   storeApiClientId: string
-  storeChannelId?: string
+  storeChannelId?: number
   storeApiFetch<T>(endpoint: string, options?: RequestInit): Promise<T>
 }
 
