@@ -170,7 +170,7 @@ Hook for bigcommerce user signup, returns `signup` function to handle user signu
 
 ```jsx
 ...
-import useSignup from '@bigcommerce/storefront-data-hooks/use-login'
+import useSignup from '@bigcommerce/storefront-data-hooks/use-signup'
 
 const SignupView = () => {
   const signup = useSignup()
