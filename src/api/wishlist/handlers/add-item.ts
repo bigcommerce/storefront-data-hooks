@@ -1,4 +1,4 @@
-import type { WishlistHandlers } from '..'
+import type { WishlistHandlers, Wishlist } from '..'
 import getCustomerId from '../../operations/get-customer-id'
 import getCustomerWishlist from '../../operations/get-customer-wishlist'
 import { parseWishlistItem } from '../../utils/parse-item'
@@ -47,8 +47,11 @@ const addItem: WishlistHandlers['addItem'] = async ({
   }
 
   const { data } = wishlist
-    ? await config.storeApiFetch(`/v3/wishlists/${wishlist.id}/items`, options)
-    : await config.storeApiFetch('/v3/wishlists', options)
+    ? await config.storeApiFetch<{ data: Wishlist }>(
+        `/v3/wishlists/${wishlist.id}/items`,
+        options
+      )
+    : await config.storeApiFetch<{ data: Wishlist }>('/v3/wishlists', options)
 
   res.status(200).json({ data })
 }
