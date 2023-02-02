@@ -7,6 +7,11 @@ import { BigcommerceApiError } from './utils/errors'
 const METHODS = ['GET']
 const fullCheckout = false
 
+interface RedirectUrls {
+  checkout_url: string
+  embedded_checkout_url: string
+}
+
 // TODO: a complete implementation should have schema validation for `req.body`
 const checkoutApi: BigcommerceApiHandler<any> = async (req, res, config) => {
   if (!isAllowedMethod(req, res, METHODS)) return
@@ -20,7 +25,7 @@ const checkoutApi: BigcommerceApiHandler<any> = async (req, res, config) => {
       return
     }
 
-    const { data } = await config.storeApiFetch(
+    const { data } = await config.storeApiFetch<{ data: RedirectUrls }>(
       `/v3/carts/${cartId}/redirect_urls`,
       {
         method: 'POST',

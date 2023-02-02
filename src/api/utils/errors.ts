@@ -2,34 +2,32 @@ import type { Response } from '@vercel/fetch'
 
 // Used for GraphQL errors
 export class BigcommerceGraphQLError extends Error {
-  constructor(msg: string) {
-    super(msg)
-    // Necessary to compile to ES5: https://github.com/microsoft/TypeScript/issues/22585
-    Object.setPrototypeOf(this, BigcommerceGraphQLError.prototype);
+  constructor(public readonly message: string) {
+    super()
   }
 }
 
-export class BigcommerceApiError extends Error {
-  status: number
-  res: Response
-  data: any
+export class BigcommerceApiError<Data> extends Error {
+  public readonly name = 'BigcommerceApiError'
+  public readonly status: number
 
-  constructor(msg: string, res: Response, data?: any) {
-    super(msg)
-    // Necessary to compile to ES5: https://github.com/microsoft/TypeScript/issues/22585
-    Object.setPrototypeOf(this, BigcommerceApiError.prototype);
-    this.name = 'BigcommerceApiError'
-    this.status = res.status
-    this.res = res
-    this.data = data
+  constructor(
+    public readonly message: string,
+    public readonly response: Response,
+    public readonly data?: Data
+  ) {
+    super()
+
+    this.status = response.status
   }
 }
 
 export class BigcommerceNetworkError extends Error {
-  constructor(msg: string) {
-    super(msg)
-    // Necessary to compile to ES5: https://github.com/microsoft/TypeScript/issues/22585
-    Object.setPrototypeOf(this, BigcommerceNetworkError.prototype);
+  public readonly name = 'BigcommerceNetworkError'
+
+  constructor(public readonly message: string) {
+    super()
+
     this.name = 'BigcommerceNetworkError'
   }
 }

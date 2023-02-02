@@ -21,9 +21,7 @@ export default async function fetchStoreApi<T>(
       },
     })
   } catch (error) {
-    throw new BigcommerceNetworkError(
-      `Fetch to Bigcommerce failed: ${error.message}`
-    )
+    throw new BigcommerceNetworkError(`Fetch to Bigcommerce failed: ${error}`)
   }
 
   const contentType = res.headers.get('Content-Type')
