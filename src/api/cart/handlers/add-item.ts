@@ -1,7 +1,7 @@
 import getCustomerId from '../../operations/get-customer-id'
 import { parseCartItem } from '../../utils/parse-item'
 import getCartCookie from '../../utils/get-cart-cookie'
-import type { CartHandlers } from '..'
+import type { Cart, CartHandlers } from '..'
 
 // Return current cart info
 const addItem: CartHandlers['addItem'] = async ({
@@ -41,7 +41,7 @@ const addItem: CartHandlers['addItem'] = async ({
       ...(!cartId ? { locale } : {}),
     }),
   }
-  const { data } = await config.storeApiFetch(
+  const { data } = await config.storeApiFetch<{ data: Cart }>(
     url.pathname + url.search,
     options
   )

@@ -1,6 +1,6 @@
 import { parseCartItem } from '../../utils/parse-item'
 import getCartCookie from '../../utils/get-cart-cookie'
-import type { CartHandlers } from '..'
+import type { Cart, CartHandlers } from '..'
 
 // Return current cart info
 const updateItem: CartHandlers['updateItem'] = async ({
@@ -19,7 +19,7 @@ const updateItem: CartHandlers['updateItem'] = async ({
   const url = new URL(`/v3/carts/${cartId}/items/${itemId}`, 'http://a')
   if (include) url.searchParams.set('include', include)
 
-  const { data } = await config.storeApiFetch(
+  const { data } = await config.storeApiFetch<{ data: Cart }>(
     url.pathname + url.search,
     {
       method: 'PUT',
