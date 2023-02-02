@@ -29,5 +29,6 @@ export class BigcommerceNetworkError extends Error {
     super()
 
     this.name = 'BigcommerceNetworkError'
+    this.message = msg
   }
 }
