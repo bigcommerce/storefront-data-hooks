@@ -1,22 +1,15 @@
 {
   "name": "@bigcommerce/storefront-data-hooks",
   "version": "1.8.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "repository": "git@github.com:bigcommerce/storefront-data-hooks.git",
   "license": "MIT",
   "files": [
-    "*.js",
-    "*.d.ts",
-    "address",
-    "api",
-    "cart",
-    "commerce",
-    "products",
-    "wishlist"
+    "dist"
   ],
   "scripts": {
-    "clean": "rimraf *.js *.d.ts api cart commerce products scripts wishlist address",
-    "build": "npm run clean && tsc && cp src/schema.d.ts schema.d.ts",
+    "clean": "rimraf dist",
+    "build": "npm run clean && tsc && cp src/schema.d.ts dist/schema.d.ts",
     "start": "npm run clean && tsc -w",
     "prepublish": "npm run build",
     "generate": "graphql-codegen -r dotenv/config",
