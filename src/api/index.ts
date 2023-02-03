@@ -10,7 +10,7 @@ export interface BigcommerceConfig extends CommerceAPIConfig {
   storeApiUrl: string
   storeApiToken: string
   storeApiClientId: string
-  storeChannelId?: string
+  storeChannelId?: number
   storeApiFetch<T>(endpoint: string, options?: RequestInit): Promise<T>
 }
 
@@ -19,7 +19,7 @@ const API_TOKEN = process.env.BIGCOMMERCE_STOREFRONT_API_TOKEN
 const STORE_API_URL = process.env.BIGCOMMERCE_STORE_API_URL
 const STORE_API_TOKEN = process.env.BIGCOMMERCE_STORE_API_TOKEN
 const STORE_API_CLIENT_ID = process.env.BIGCOMMERCE_STORE_API_CLIENT_ID
-const STORE_CHANNEL_ID = process.env.BIGCOMMERCE_CHANNEL_ID
+const STORE_CHANNEL_ID = parseInt(process.env.BIGCOMMERCE_CHANNEL_ID || '')
 
 if (!API_URL) {
   throw new Error(

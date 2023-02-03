@@ -23,13 +23,14 @@
   "dependencies": {
     "@vercel/fetch": "6.1.0",
     "cookie": "0.4.1",
+    "iron-session": "^6.0.5",
     "js-cookie": "2.2.1",
     "lodash.debounce": "4.0.8",
     "lodash.omit": "^4.5.0",
     "swr": "0.3.6"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^1.19.0",
+    "@graphql-codegen/cli": "^2.6.2",
     "@graphql-codegen/schema-ast": "^1.17.8",
     "@graphql-codegen/typescript": "^1.17.11",
     "@graphql-codegen/typescript-operations": "^1.17.8",
