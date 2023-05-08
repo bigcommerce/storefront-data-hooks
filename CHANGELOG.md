@@ -1,3 +1,19 @@
+
+
+# [1.8.0](https://github.com/bigcommerce/storefront-data-hooks/compare/v1.7.0...v1.8.0) (2023-05-08)
+
+
+
+## [1.7.1-beta.6](https://github.com/bigcommerce/storefront-data-hooks/compare/v1.7.0...v1.8.0) (2021-10-21)
+
+
+### Features
+
+* add common properties ([8d3d3e6](https://github.com/bigcommerce/storefront-data-hooks/commit/8d3d3e6f99a18bcfac1cf7585e6fd21297cec018))
+* add datefield specific properties ([a3b4836](https://github.com/bigcommerce/storefront-data-hooks/commit/a3b48368adbc23f82f9a0829180605f0e900aab3))
+* add number specific properties ([614aaa5](https://github.com/bigcommerce/storefront-data-hooks/commit/614aaa568bff9f1bdf488e090c0fe750da301e12))
+* add textfield specific properties ([9643ada](https://github.com/bigcommerce/storefront-data-hooks/commit/9643ada8629caf7ee4702c1ee74b0d6feeb44eb1))
+
 ## 1.8.0
 
 ## Add inventory fragments
